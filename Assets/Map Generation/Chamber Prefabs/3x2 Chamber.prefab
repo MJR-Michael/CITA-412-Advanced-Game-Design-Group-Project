@@ -1,0 +1,411 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &6038563605734300934
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 6552573386744955908}
+  m_Layer: 0
+  m_Name: 3x2 Chamber
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &6552573386744955908
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6038563605734300934}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 1247610767352086924}
+  - {fileID: 3008266927222468891}
+  - {fileID: 4916332383141417795}
+  - {fileID: 6880836579884578268}
+  - {fileID: 8634427936918290476}
+  - {fileID: 3760523274221139929}
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1001 &1049985141361224614
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 6552573386744955908}
+    m_Modifications:
+    - target: {fileID: 5379577987402496229, guid: 1320431411cb54c43a5feef0a9e4b439, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5379577987402496229, guid: 1320431411cb54c43a5feef0a9e4b439, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5379577987402496229, guid: 1320431411cb54c43a5feef0a9e4b439, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5379577987402496229, guid: 1320431411cb54c43a5feef0a9e4b439, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5379577987402496229, guid: 1320431411cb54c43a5feef0a9e4b439, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5379577987402496229, guid: 1320431411cb54c43a5feef0a9e4b439, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5379577987402496229, guid: 1320431411cb54c43a5feef0a9e4b439, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5379577987402496229, guid: 1320431411cb54c43a5feef0a9e4b439, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5379577987402496229, guid: 1320431411cb54c43a5feef0a9e4b439, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5379577987402496229, guid: 1320431411cb54c43a5feef0a9e4b439, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8506975959476404895, guid: 1320431411cb54c43a5feef0a9e4b439, type: 3}
+      propertyPath: m_Name
+      value: Chamber Grid Placehodler (1)
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 1320431411cb54c43a5feef0a9e4b439, type: 3}
+--- !u!4 &4916332383141417795 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 5379577987402496229, guid: 1320431411cb54c43a5feef0a9e4b439, type: 3}
+  m_PrefabInstance: {fileID: 1049985141361224614}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1001 &1573372297051000121
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 6552573386744955908}
+    m_Modifications:
+    - target: {fileID: 5379577987402496229, guid: 1320431411cb54c43a5feef0a9e4b439, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5379577987402496229, guid: 1320431411cb54c43a5feef0a9e4b439, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5379577987402496229, guid: 1320431411cb54c43a5feef0a9e4b439, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5379577987402496229, guid: 1320431411cb54c43a5feef0a9e4b439, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5379577987402496229, guid: 1320431411cb54c43a5feef0a9e4b439, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5379577987402496229, guid: 1320431411cb54c43a5feef0a9e4b439, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5379577987402496229, guid: 1320431411cb54c43a5feef0a9e4b439, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5379577987402496229, guid: 1320431411cb54c43a5feef0a9e4b439, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5379577987402496229, guid: 1320431411cb54c43a5feef0a9e4b439, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5379577987402496229, guid: 1320431411cb54c43a5feef0a9e4b439, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8506975959476404895, guid: 1320431411cb54c43a5feef0a9e4b439, type: 3}
+      propertyPath: m_Name
+      value: Chamber Grid Placehodler (4)
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 1320431411cb54c43a5feef0a9e4b439, type: 3}
+--- !u!4 &6880836579884578268 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 5379577987402496229, guid: 1320431411cb54c43a5feef0a9e4b439, type: 3}
+  m_PrefabInstance: {fileID: 1573372297051000121}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1001 &4430345606943979721
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 6552573386744955908}
+    m_Modifications:
+    - target: {fileID: 5379577987402496229, guid: 1320431411cb54c43a5feef0a9e4b439, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5379577987402496229, guid: 1320431411cb54c43a5feef0a9e4b439, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5379577987402496229, guid: 1320431411cb54c43a5feef0a9e4b439, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 5379577987402496229, guid: 1320431411cb54c43a5feef0a9e4b439, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5379577987402496229, guid: 1320431411cb54c43a5feef0a9e4b439, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5379577987402496229, guid: 1320431411cb54c43a5feef0a9e4b439, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5379577987402496229, guid: 1320431411cb54c43a5feef0a9e4b439, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5379577987402496229, guid: 1320431411cb54c43a5feef0a9e4b439, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5379577987402496229, guid: 1320431411cb54c43a5feef0a9e4b439, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5379577987402496229, guid: 1320431411cb54c43a5feef0a9e4b439, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8506975959476404895, guid: 1320431411cb54c43a5feef0a9e4b439, type: 3}
+      propertyPath: m_Name
+      value: Chamber Grid Placehodler (2)
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 1320431411cb54c43a5feef0a9e4b439, type: 3}
+--- !u!4 &8634427936918290476 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 5379577987402496229, guid: 1320431411cb54c43a5feef0a9e4b439, type: 3}
+  m_PrefabInstance: {fileID: 4430345606943979721}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1001 &6627186268887038313
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 6552573386744955908}
+    m_Modifications:
+    - target: {fileID: 5379577987402496229, guid: 1320431411cb54c43a5feef0a9e4b439, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5379577987402496229, guid: 1320431411cb54c43a5feef0a9e4b439, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5379577987402496229, guid: 1320431411cb54c43a5feef0a9e4b439, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5379577987402496229, guid: 1320431411cb54c43a5feef0a9e4b439, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5379577987402496229, guid: 1320431411cb54c43a5feef0a9e4b439, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5379577987402496229, guid: 1320431411cb54c43a5feef0a9e4b439, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5379577987402496229, guid: 1320431411cb54c43a5feef0a9e4b439, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5379577987402496229, guid: 1320431411cb54c43a5feef0a9e4b439, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5379577987402496229, guid: 1320431411cb54c43a5feef0a9e4b439, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5379577987402496229, guid: 1320431411cb54c43a5feef0a9e4b439, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8506975959476404895, guid: 1320431411cb54c43a5feef0a9e4b439, type: 3}
+      propertyPath: m_Name
+      value: Chamber Grid Placehodler
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 1320431411cb54c43a5feef0a9e4b439, type: 3}
+--- !u!4 &1247610767352086924 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 5379577987402496229, guid: 1320431411cb54c43a5feef0a9e4b439, type: 3}
+  m_PrefabInstance: {fileID: 6627186268887038313}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1001 &7140346680729422334
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 6552573386744955908}
+    m_Modifications:
+    - target: {fileID: 5379577987402496229, guid: 1320431411cb54c43a5feef0a9e4b439, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5379577987402496229, guid: 1320431411cb54c43a5feef0a9e4b439, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5379577987402496229, guid: 1320431411cb54c43a5feef0a9e4b439, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5379577987402496229, guid: 1320431411cb54c43a5feef0a9e4b439, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5379577987402496229, guid: 1320431411cb54c43a5feef0a9e4b439, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5379577987402496229, guid: 1320431411cb54c43a5feef0a9e4b439, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5379577987402496229, guid: 1320431411cb54c43a5feef0a9e4b439, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5379577987402496229, guid: 1320431411cb54c43a5feef0a9e4b439, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5379577987402496229, guid: 1320431411cb54c43a5feef0a9e4b439, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5379577987402496229, guid: 1320431411cb54c43a5feef0a9e4b439, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8506975959476404895, guid: 1320431411cb54c43a5feef0a9e4b439, type: 3}
+      propertyPath: m_Name
+      value: Chamber Grid Placehodler (3)
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 1320431411cb54c43a5feef0a9e4b439, type: 3}
+--- !u!4 &3008266927222468891 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 5379577987402496229, guid: 1320431411cb54c43a5feef0a9e4b439, type: 3}
+  m_PrefabInstance: {fileID: 7140346680729422334}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1001 &9122065591197814588
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 6552573386744955908}
+    m_Modifications:
+    - target: {fileID: 5379577987402496229, guid: 1320431411cb54c43a5feef0a9e4b439, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5379577987402496229, guid: 1320431411cb54c43a5feef0a9e4b439, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5379577987402496229, guid: 1320431411cb54c43a5feef0a9e4b439, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 5379577987402496229, guid: 1320431411cb54c43a5feef0a9e4b439, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5379577987402496229, guid: 1320431411cb54c43a5feef0a9e4b439, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5379577987402496229, guid: 1320431411cb54c43a5feef0a9e4b439, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5379577987402496229, guid: 1320431411cb54c43a5feef0a9e4b439, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5379577987402496229, guid: 1320431411cb54c43a5feef0a9e4b439, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5379577987402496229, guid: 1320431411cb54c43a5feef0a9e4b439, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5379577987402496229, guid: 1320431411cb54c43a5feef0a9e4b439, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8506975959476404895, guid: 1320431411cb54c43a5feef0a9e4b439, type: 3}
+      propertyPath: m_Name
+      value: Chamber Grid Placehodler (5)
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 1320431411cb54c43a5feef0a9e4b439, type: 3}
+--- !u!4 &3760523274221139929 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 5379577987402496229, guid: 1320431411cb54c43a5feef0a9e4b439, type: 3}
+  m_PrefabInstance: {fileID: 9122065591197814588}
+  m_PrefabAsset: {fileID: 0}
