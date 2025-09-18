@@ -11,12 +11,6 @@ public class Enemy1_States : MonoBehaviour
     private float groundTransitionTimer = 1f;
     public GameObject phase2Enemy1;
 
-    void Start()
-    {
-        currentHealth = maxHealth;
-        DevTestDie();
-    }
-
     public void TakeDamage(int damageAmount)
     {
         currentHealth -= damageAmount;
@@ -82,7 +76,7 @@ public class Enemy1_States : MonoBehaviour
             {
                 elapsedTime += Time.deltaTime;
                 TakeDamage(25);
-                Debug.log("Current health is", currentHealth);
+                Debug.Log("Current health is " + currentHealth);
             }
         }
     }
