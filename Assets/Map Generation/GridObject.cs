@@ -4,6 +4,9 @@ using UnityEngine;
 public class GridObject
 {
     public GridPosition gridPosition;
+    public GridObject connectedTo;
+
+    public bool isExplored;
 
     public bool isPartOfChamber;
     public bool isPartOfHallway;
@@ -34,5 +37,20 @@ public class GridObject
     {
         this.isChamberPlaceable = isChamberPlaceable;
         isPartOfChamber = false;
+    }
+
+    public void ConnectToObject(GridObject other)
+    {
+        connectedTo = other;        
+    }
+    public void ResetConnection()
+    {
+        connectedTo = null;
+    }
+
+    public void ResetExploration()
+    {
+        isExplored = false;
+        connectedTo = null;
     }
 }

@@ -1,4 +1,5 @@
 using System;
+using Unity.VisualScripting;
 
 [System.Serializable]
 public struct GridPosition : IEquatable<GridPosition>
@@ -55,5 +56,15 @@ public struct GridPosition : IEquatable<GridPosition>
     public static GridPosition operator -(GridPosition a, GridPosition b)
     {
         return new GridPosition(a.x - b.x, a.z - b.z);
+    }
+
+    public float Distance(GridPosition other)
+    {
+        //a^2 + b^2 = c^2 => c = +-sqrt(a^2 + b^2)
+        float xSquared = MathF.Pow(x - other.x, 2);
+        float zSquared = MathF.Pow(z - other.z, 2);
+
+        float c = MathF.Sqrt(xSquared + zSquared);
+        return c;
     }
 }

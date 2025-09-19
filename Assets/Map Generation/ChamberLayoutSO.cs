@@ -80,4 +80,35 @@ public class ChamberLayoutSO : ScriptableObject
 
         return gridPositions;
     }
+
+    public Dictionary<GridPosition, GridPosition> GetAbsoluteHallwayConnectorPositions(GridPosition originGridPosition)
+    {
+        Dictionary<GridPosition, GridPosition> hallwayConnectors = new Dictionary<GridPosition, GridPosition>();
+
+        foreach (ChamberNode chamberNode in chamberNodes)
+        {
+            //Conditions where there is no hallway connector positions
+            if (chamberNode.hallwayConnectorPositions == null)
+            {
+                continue;
+            }
+            if (chamberNode.hallwayConnectorPositions.Length == 0)
+            {
+                continue;
+            }
+
+            //Get the absolute position for the current node
+            GridPosition absoluteChamberNodePosition = chamberNode.chamberGridPosition + originGridPosition;
+
+            foreach (GridPosition hallwayConnectorPosition in chamberNode.hallwayConnectorPositions)
+            {
+                //Get the absolute position of the hallway connector position
+                GridPosition absoluteHallwayConnectorPosition = absoluteChamberNodePosition + hallwayConnectorPosition;
+                //Store the position in the dicitonary
+                hallwayConnectors[absoluteHallwayConnectorPosition] = absoluteChamberNodePosition;
+            }
+        }
+
+        return hallwayConnectors;
+    }
 }
