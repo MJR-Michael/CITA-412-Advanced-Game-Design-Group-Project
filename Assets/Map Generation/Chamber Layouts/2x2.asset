@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: 2x2
   m_EditorClassIdentifier: Assembly-CSharp::ChamberLayoutSO
   chamberNodes:
-  - chamberGridPosition:
+  - relativeChamberNodeGridPosition:
       x: 0
       z: 0
     hallwayConnectorPositions:
@@ -21,7 +21,7 @@ MonoBehaviour:
       z: 0
     - x: 0
       z: -1
-  - chamberGridPosition:
+  - relativeChamberNodeGridPosition:
       x: 1
       z: 0
     hallwayConnectorPositions:
@@ -29,7 +29,7 @@ MonoBehaviour:
       z: 0
     - x: 0
       z: -1
-  - chamberGridPosition:
+  - relativeChamberNodeGridPosition:
       x: 0
       z: 1
     hallwayConnectorPositions:
@@ -37,7 +37,7 @@ MonoBehaviour:
       z: 0
     - x: 0
       z: 1
-  - chamberGridPosition:
+  - relativeChamberNodeGridPosition:
       x: 1
       z: 1
     hallwayConnectorPositions:

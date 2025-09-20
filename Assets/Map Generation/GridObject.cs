@@ -9,6 +9,7 @@ public class GridObject
     public bool isExplored;
 
     public bool isPartOfChamber;
+    public bool isPartOfAChamberHallway;
     public bool isPartOfHallway;
 
     public bool isChamberPlaceable;
@@ -52,5 +53,13 @@ public class GridObject
     {
         isExplored = false;
         connectedTo = null;
+    }
+
+    public void MakeObjectAHallway()
+    {
+        isChamberPlaceable = false;
+        isHallwayPlaceable = false;
+        isPartOfHallway = true;
+        isPartOfChamber = false;
     }
 }

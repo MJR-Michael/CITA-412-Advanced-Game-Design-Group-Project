@@ -21,7 +21,7 @@ public class ChamberLayoutSO : ScriptableObject
         {
             ChamberNode currentChamberNode = chamberNodes[i];
 
-            int heightIndexOfChamber = currentChamberNode.chamberGridPosition.z;
+            int heightIndexOfChamber = currentChamberNode.relativeChamberNodeGridPosition.z;
             //Get the tallest height based on hallway connectors, if applicable
             for ( int j = 0; j < currentChamberNode.hallwayConnectorPositions.Length; j++)
             {
@@ -49,7 +49,7 @@ public class ChamberLayoutSO : ScriptableObject
         {
             ChamberNode currentChamberNode = chamberNodes[i];
 
-            int rightMostIndexOfChamber = currentChamberNode.chamberGridPosition.x;
+            int rightMostIndexOfChamber = currentChamberNode.relativeChamberNodeGridPosition.x;
             //Get the tallest height based on hallway connectors, if applicable
             for (int j = 0; j < currentChamberNode.hallwayConnectorPositions.Length; j++)
             {
@@ -75,7 +75,7 @@ public class ChamberLayoutSO : ScriptableObject
 
         foreach (ChamberNode chamberNode in chamberNodes)
         {
-            gridPositions.Add(chamberNode.chamberGridPosition);
+            gridPositions.Add(chamberNode.relativeChamberNodeGridPosition);
         }
 
         return gridPositions;
@@ -98,12 +98,12 @@ public class ChamberLayoutSO : ScriptableObject
             }
 
             //Get the absolute position for the current node
-            GridPosition absoluteChamberNodePosition = chamberNode.chamberGridPosition + originGridPosition;
+            GridPosition absoluteChamberNodePosition = chamberNode.relativeChamberNodeGridPosition + originGridPosition;
 
-            foreach (GridPosition hallwayConnectorPosition in chamberNode.hallwayConnectorPositions)
+            foreach (GridPosition relativeHallwayConnectorPosition in chamberNode.hallwayConnectorPositions)
             {
                 //Get the absolute position of the hallway connector position
-                GridPosition absoluteHallwayConnectorPosition = absoluteChamberNodePosition + hallwayConnectorPosition;
+                GridPosition absoluteHallwayConnectorPosition = absoluteChamberNodePosition + relativeHallwayConnectorPosition;
                 //Store the position in the dicitonary
                 hallwayConnectors[absoluteHallwayConnectorPosition] = absoluteChamberNodePosition;
             }

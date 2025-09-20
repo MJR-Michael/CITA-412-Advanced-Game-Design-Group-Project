@@ -38,10 +38,16 @@ public class GridSystem : MonoBehaviour
     Dictionary<GridPosition, ChamberLayoutSO> chamberPositions = new Dictionary<GridPosition, ChamberLayoutSO>();
     Dictionary<GridPosition, GridObject> availableChamberPositions = new Dictionary<GridPosition, GridObject>();
     List<Chamber> chambers = new List<Chamber>();
+
+    List<Chamber> chambersConnectedToStart = new List<Chamber>();
+
     int mapArea;
 
-    Chamber startingChamberPosition;
+    Chamber startingChamber;
     Chamber bossChamber;
+
+    MinEdgePriorityQueue minPQ = new MinEdgePriorityQueue();
+
 
     static GridPosition[] adjacentGridPositions =
     {
@@ -50,6 +56,16 @@ public class GridSystem : MonoBehaviour
         new GridPosition(-1,0),  //Left
         new GridPosition(0,-1),  //Down
     };
+
+
+    //Debugging times
+    float timeSpentPerformingBFS = 0;
+    float timeSpentBuildingPaths = 0;
+    float timeSpentBuildingChamberEdges = 0;
+    float timeSpentTestingIfChambersConnect = 0;
+    float timeSpentGettingBestEdgeConnectorsForChambers = 0;
+    float timeSpentGettingLengthOfPaths = 0;
+
 
     private void Awake()
     {
@@ -98,29 +114,66 @@ public class GridSystem : MonoBehaviour
         float timeToGenerateChambers = Time.realtimeSinceStartup - timeToGenerateBossChamber;
 
         InitializeChamberObjects();
+        float timeToInitializeChamberObjects = Time.realtimeSinceStartup - timeToGenerateChambers;
 
         ConnectChambers();
-        float timeToGenerateConnectors = Time.realtimeSinceStartup - timeToGenerateChambers;
+        float timeToGenerateConnectors = Time.realtimeSinceStartup - timeToInitializeChamberObjects;
 
         float timeToGenerateMap = Time.realtimeSinceStartup - timeMapStartedGenerating;
 
         if (debugging)
         {
             Debug.Log($"Time to generate map: {timeToGenerateMap}s");
-            Debug.Log($"Time to generate boss chamber: {timeToGenerateBossChamber}");
+            Debug.Log($"Time to generate boss nextChamber: {timeToGenerateBossChamber}");
             Debug.Log($"Time to generate other chambers: {timeToGenerateChambers}");
+            Debug.Log($"Time to initialize chambers: {timeToInitializeChamberObjects}");
             Debug.Log($"Time to generate connectors: {timeToGenerateConnectors}");
+
+            Debug.Log("--------------------------------------------------------------------");
+            Debug.Log($"Time spent performing BFS: {timeSpentPerformingBFS}");
+            Debug.Log($"Time spent building paths: {timeSpentBuildingPaths}");
+            Debug.Log($"Time spent building chamber edges: {timeSpentBuildingChamberEdges}");
+            Debug.Log($"Time spent testing if chambers can connect: {timeSpentTestingIfChambersConnect}");
+            Debug.Log($"Time spent getting best edge connectors for chambers: {timeSpentGettingBestEdgeConnectorsForChambers}");
+            Debug.Log($"Time spent getting lengths of paths: {timeSpentGettingLengthOfPaths}");
+
+            if (timeToGenerateMap > 15)
+            {
+                Debug.LogWarning($"You need to optimize the grid system! {timeToGenerateMap}s is too long a wait for players!!!");
+            }
         }
     }
 
     private void InitializeChamberObjects()
     {
+        List<GridPosition> edgeConnectorsToRemove = new List<GridPosition>();
+
         //Chamber has an origin, hallway connectors, connections to other chambers, and a flag for if it's a boss chamber
         foreach(KeyValuePair<GridPosition, ChamberLayoutSO> chamberPair in chamberPositions)
         {
-            //Get the hallway connectors
+            //Get the hallway connectors for current chamber pair
             Dictionary<GridPosition, GridPosition> hallwayConnectors = chamberPair.Value.GetAbsoluteHallwayConnectorPositions(chamberPair.Key);
             bool isBossChamber = bossRoomLayouts.Contains(chamberPair.Value);
+
+            //Tell the map that the grid object at the hallway grid positions is connected to a chamebr
+            foreach(GridPosition hallwayConnector in hallwayConnectors.Keys.ToList())
+            {
+                if (map.ContainsKey(hallwayConnector))
+                {
+                    map[hallwayConnector].isPartOfAChamberHallway = true;
+                }
+                else
+                {
+                    //Hallway connector does not exist in the map. REMOVE IT!!!
+                    edgeConnectorsToRemove.Add(hallwayConnector);
+                }
+            }
+
+            //Remove bad edge connectors from chamber
+            foreach(GridPosition gridPosition in edgeConnectorsToRemove)
+            {
+                hallwayConnectors.Remove(gridPosition);
+            }
 
             //Generate the chamber object
             Chamber chamber = new Chamber(chamberPair.Key, hallwayConnectors, isBossChamber);
@@ -143,7 +196,8 @@ public class GridSystem : MonoBehaviour
 
         //Get random starting point
         int randomStartingChamberIndex = Random.Range(0, chambers.Count);
-        Chamber startingChamber = chambers[randomStartingChamberIndex];
+        startingChamber = chambers[randomStartingChamberIndex];
+
         if (startingChamber.IsBossChamber())
         {
             //Get a new starting chamber index (+1 if index is 0. -1 otherwise)
@@ -159,280 +213,360 @@ public class GridSystem : MonoBehaviour
             startingChamber = chambers[randomStartingChamberIndex];
         }
 
-        Debug.Log($"Starting chamber: {startingChamber.OriginGridPosition}");
-
-        //Pathfind from starting chamber to boss chamber
-        ConnectFromStartChamberToBoss(startingChamber, bossChamber);
-
+        BeginConnectingChambers(startingChamber);
     }
 
-    private void ConnectFromStartChamberToBoss(Chamber startingChamber, Chamber bossChamber)
+    private void BeginConnectingChambers(Chamber startingChamber)
     {
-        Queue<Chamber> frontier = new Queue<Chamber>();
-        frontier.Enqueue(startingChamber);
-        int degreesOfSeparationFromBossChamber = 4;
+        /*
+         * 1) From the starting chamber, make edge connections to EVERY other chamber in the map.
+         * 2) Enqueue all of these edges into the minPQ
+         * 3) loop through the minPQ until it is out of entries (unlikely), or until every chamber has been visited (very likely)
+         * 4) for each dequeue, build the edge connection from chamber A (the chamber already visited) to chamber B (the one not visited yet)
+         * 5) After building the connection, tell chamber B to make all of its edges to every unvisited chamber. Queue these edges up for building
+         * 6) Make sure to mark chamber B as visited.
+         * 7) If an edge connect to chamber B, and chamber B has already been visited, skip this edge. No looping allowed yet
+         * 8) Be sure to use the chamber's connection when building the edge. Also be sure to check if the edge connector exists before building the edge. If it doesn't exist, then skip it.
+         */
 
-        bool isConnectedToBossChamber = false;
-        int loops = 10000;
+        //Clear minPQ just in case
+        minPQ.Clear();
 
-        while (loops > 0)
+        //1) make edge connections to other chambers from starting chamber:
+        //2) Handled within the method
+        CreateAndQueueEdgesForChamber(startingChamber);
+
+        //starting chamber visited by default
+        startingChamber.SetIsVisited(true);
+
+        //3) Loop through minPQ until out of eges or all chambers visited
+        int loops = 100000; //failsafe
+        while (minPQ.Count() > 0 && !AllChambersVisited() && loops > 0)
         {
             loops--;
-            //Get current chamber
-            Chamber currentChamber = frontier.Dequeue();
 
-            //Get the 3 closest chambers from this chamber
-            Dictionary<Chamber, float> closestChambers = new Dictionary<Chamber, float>();
+            //Get current edge
+            Edge currentEdge = minPQ.Dequeue();
 
-            //Get 3 closest chambers
-            foreach (Chamber chamber in chambers)
-            {
-                //Ignore if chamber is this chamber
-                if (chamber == currentChamber)
-                {
-                    continue;
-                }
-                //Ignore if chamber is already connected
-                if (chamber.ConnectTo().Contains(currentChamber.OriginGridPosition))
-                {
-                    continue;
-                }
+            //Get chambers in the edge
+            Chamber chamberA = currentEdge.GetChamberA();
+            Chamber chamberB = currentEdge.GetChamberB();
 
-                //calculate distance to from current chamber to the given chamber
-                float chamberDistance = currentChamber.OriginGridPosition.Distance(chamber.OriginGridPosition);
+            //If chamber B (the supposed unvisited one) has already been visited, then skip this edge. No looping allowed yet
+            if (chamberB.IsVisited()) continue;
 
-                //Check if it can be added
-                if (closestChambers.Count < 3)
-                {
-                    //Not enough chambers to warrant replacing
-                    closestChambers.Add(chamber, chamberDistance);
-                }
-                else
-                {
-                    //Get the furthest distance from current chamber in the dictionary
-                    Chamber farthestChamber = null;
-                    float furthestChamberDistance = 0;
+            //Chamber have been visited
+            chamberA.SetIsVisited(true); //Should be redundant
+            chamberB.SetIsVisited(true);
 
-                    foreach (KeyValuePair<Chamber, float> chamberPair in closestChambers)
-                    {
-                        if (chamberPair.Value > furthestChamberDistance)
-                        {
-                            //Replace furthest chamber with current one
-                            farthestChamber = chamberPair.Key;
-                            furthestChamberDistance = chamberPair.Value;
-                        }
-                    }
+            //4) Build edge path between chamber A's and B's edge connectors
+            List<GridPosition> path = PerformBFS(currentEdge.GetEdgeConnectorForChamberA(), currentEdge.GetEdgeConnectorForChamberB());
+            BuildPath(path);
 
-                    //Test if the current chamber is closer than the furthest chamber
-                    if (chamberDistance < furthestChamberDistance)
-                    {
-                        closestChambers.Remove(farthestChamber);
-                        closestChambers.Add(chamber, chamberDistance);
-                    }
-                }
+            //Tell chamber A and B their respective edge connector was consumed
+            chamberA.UseHallwayConnector(currentEdge.GetEdgeConnectorForChamberA());
+            chamberB.UseHallwayConnector(currentEdge.GetEdgeConnectorForChamberB());
 
-
-            }
-
-
-            //Check if the closest chambers contains the boss chamber
-            if (closestChambers.ContainsKey(bossChamber))
-            {
-                //Make sure that it is separated far enough
-                if (degreesOfSeparationFromBossChamber <= 0)
-                {
-                    //Connect to current chamber and exit
-                    currentChamber.AddConnection(bossChamber.OriginGridPosition);
-                    isConnectedToBossChamber = true;
-                    break;
-                }
-                else
-                {
-                    //Remove the boss chamber from connection
-                    closestChambers.Remove(bossChamber);
-                }
-            }
-
-            //Connect to a random other chamber
-            List<Chamber> closestChamberKeys = closestChambers.Keys.ToList();
-            int randomClosestChamberIndex = Random.Range(0, closestChamberKeys.Count);
-            Chamber randomChamber = closestChamberKeys[randomClosestChamberIndex];
-
-            if (randomChamber.OriginGridPosition == new GridPosition(65, 8))
-                Debug.Log("Random chamber: " + randomChamber.OriginGridPosition);
-
-            //Add connection to the random chamber
-            ConnectChambers(currentChamber, randomChamber);
-
-            //Enqueue random chamber for path exploration
-            frontier.Enqueue(randomChamber);
-            degreesOfSeparationFromBossChamber--;
+            //5) Tell chamber B to make and add its edges to every unvisited chamber.
+            CreateAndQueueEdgesForChamber(chamberB);
         }
-
-        if (debugging)
+        if (loops <= 0)
         {
-            if (isConnectedToBossChamber)
-            {
-                Debug.Log("Connected to boss chamber!");
-            }
-            else
-            {
-                Debug.LogWarning("Warning: tried to connect to boss chamber, but couldn't");
-            }
+            Debug.LogError("Error: Tried to connect chambers, but looped too many times");
         }
     }
 
-    private void ConnectChambers(Chamber currentChamber, Chamber otherChamber)
+    private bool AllChambersVisited()
     {
-        currentChamber.AddConnection(otherChamber.OriginGridPosition);
-        otherChamber.AddConnection(currentChamber.OriginGridPosition);
-
-        Debug.Log($"Connecting chamber at {currentChamber.OriginGridPosition} to {otherChamber.OriginGridPosition}");
-
-        GridPosition bestHallwayConnectorForCurrentChamber = currentChamber.HallwayConnectors().First().Key;
-        GridPosition bestHallwayConnectorForOtherChamber = otherChamber.HallwayConnectors().First().Key;
-
-        float closestHallwayDistance = Mathf.Infinity;
-
-        //Test all available hallway connections.
-        foreach(GridPosition currentChamberHallwayGridPosition in currentChamber.HallwayConnectors().Keys)
+        //Loop through all chambers. If a single one has not been visited, return false
+        foreach(Chamber chamber in chambers)
         {
-            //Test for closest distance to other hallway connectors
-            foreach (GridPosition otherChamberHallwayGridPosition in otherChamber.HallwayConnectors().Keys)
-            {
-                //Determine distances
-                float connectorDistance = currentChamberHallwayGridPosition.Distance(otherChamberHallwayGridPosition);
-                if (connectorDistance < closestHallwayDistance)
-                {
-                    closestHallwayDistance = connectorDistance;
-                    bestHallwayConnectorForCurrentChamber = currentChamberHallwayGridPosition;
-                    bestHallwayConnectorForOtherChamber = otherChamberHallwayGridPosition;
-                }
-            }
+            if (!chamber.IsVisited()) return false;
         }
 
-        //Store the best chamber position connected to the hallway before using (and removing) the hallway connector at this spot
-        Dictionary<GridPosition, GridPosition> hallwayConnectors = currentChamber.HallwayConnectors();
-        GridPosition bestHallwayConnector = hallwayConnectors[bestHallwayConnectorForCurrentChamber];
+        return true;
+    }
 
-        //Best connectors found. Remove them from respective chambers
-        if (!currentChamber.UseHallwayConnector(bestHallwayConnectorForCurrentChamber))
+    private void BuildPath(List<GridPosition> path)
+    {
+        float timeStartBuildingPath = Time.realtimeSinceStartup;
+
+        //TODO: update this to handle path corners, and replace temp prefab with actual hallway prefabs
+
+        //Loop through each path position
+        foreach(GridPosition gridPosition in path)
         {
-            Debug.LogWarning($"Warning: tried to use hallway connector position for {currentChamber}, but {bestHallwayConnectorForCurrentChamber} is not a valid grid position");
-        }
-        if (!otherChamber.UseHallwayConnector(bestHallwayConnectorForOtherChamber))
-        {
-            Debug.LogWarning($"Warning: tried to use hallway connector position for {otherChamber}, but {bestHallwayConnectorForOtherChamber} is not a valid grid position");
-        }
+            GameObject hallwayObj = Instantiate(tempHallwayGridObject, GetWorldPositionFromGridPosition(gridPosition), Quaternion.identity);
+            hallwayObj.name = $"{gridPosition} Hallway";
 
-
-        Debug.Log($"Best connectors found. Best hallway connector in current chamber is {bestHallwayConnectorForCurrentChamber} and other chamber is {bestHallwayConnectorForOtherChamber}");
-
-        //Make the connection from current chamber to other chamber
-        Queue<GridPosition> frontier = new Queue<GridPosition>();
-        frontier.Enqueue(bestHallwayConnectorForCurrentChamber);
-
-        //get the object of the chamber that connects to the hallway
-
-        GridObject chamberConnectionGridObject = map[bestHallwayConnector];
-
-        //Debug.Log($"Best hallway connector for current chamber: {bestHallwayConnectorForCurrentChamber}");
-        //Debug.Log($"This connects to the actual chamber at {chamberConnectionGridObject.gridPosition}");
-
-        //Connect the hallway to the chamber
-        map[bestHallwayConnectorForCurrentChamber].connectedTo = chamberConnectionGridObject;
-        bool connectionCreated = false;
-
-        int numOfLoops = 10000;
-
-        Debug.Log("Connecting the chambers together...");
-
-        while (frontier.Count > 0 && !connectionCreated && numOfLoops > 0)
-        {
-            numOfLoops--;
-            //Pathfind to other chamber
-            GridPosition currentPosition = frontier.Dequeue();
-
-            Debug.Log($"Current position: {currentPosition}");
-
-            //Connect adjacent available grid positions to this object
-            foreach (GridPosition relativeAdjacentGridPosition in adjacentGridPositions)
-            {
-                GridPosition absoluteAdjacentGridPosition = currentPosition + relativeAdjacentGridPosition;
-
-                //Check if grid position is within bounds of map
-                if (!map.ContainsKey(absoluteAdjacentGridPosition))
-                {
-                    continue; //out of bounds
-                }
-                if (map[absoluteAdjacentGridPosition].isExplored)
-                {
-                    continue;
-                }
-
-                //This object was explored
-                map[absoluteAdjacentGridPosition].isExplored = true;
-
-                if (map[absoluteAdjacentGridPosition].isHallwayPlaceable)
-                {
-                    map[absoluteAdjacentGridPosition].connectedTo = map[currentPosition];
-                    frontier.Enqueue(absoluteAdjacentGridPosition);
-                    Debug.Log($"{absoluteAdjacentGridPosition} is connected to {currentPosition}. Adding that to queue for exploration...");
-                    if (currentPosition == bestHallwayConnectorForOtherChamber)
-                    {
-                        //Connection created!
-                        connectionCreated = true;
-                        Debug.Log("Connection between chambers created!");
-                        break;
-                    }
-                }
-            }
+            //update the map with the new hallway objects
+            map[gridPosition].MakeObjectAHallway();
         }
 
-        if (connectionCreated)
+        float timeEndBuildingPaths = Time.realtimeSinceStartup;
+        timeSpentBuildingPaths += timeEndBuildingPaths - timeStartBuildingPath;
+    }
+
+    private void CreateAndQueueEdgesForChamber(Chamber givenChamber)
+    {
+        float timeStartBuildingEdges = Time.realtimeSinceStartup;
+
+        //Loop through all chambers on the map, exclude given chamber & chamber that cannot be connected to
+        foreach(Chamber chamber in chambers)
         {
-            Debug.Log("With the connection created, now creating the actual hallway object");
+            if (chamber == givenChamber) continue;
+            if (!CanConnectChambers(givenChamber, chamber)) continue;
+            if (chamber.IsVisited()) continue;
 
-            GridObject currentObj = map[bestHallwayConnectorForOtherChamber];
-            GridPosition currentPosition = bestHallwayConnectorForOtherChamber;
+            //Chambers can be connected. Get the best edge connectors for each chamber and its edge cost
+            (GridPosition bestChamberAEdgeConnector, GridPosition bestChamberBEdgeConnector) = GetBestEdgeConnectors(givenChamber, chamber);
 
-            numOfLoops = 10000;
+            List<GridPosition> path = PerformBFS(bestChamberAEdgeConnector, bestChamberBEdgeConnector);
+            int edgeCost = GetPathLength(path);
 
-            while (currentObj.connectedTo != null && numOfLoops > 0)
-            {
-                Debug.Log($"Current position: {currentPosition}");
+            //Build the edge
+            Edge edge = new Edge(
+                path,
+                bestChamberAEdgeConnector,
+                bestChamberBEdgeConnector,
+                givenChamber,
+                chamber,
+                edgeCost
+                );
+            //Queue edge for exploration
+            minPQ.Enqueue(edge);
+        }
 
-                Debug.Log($"current position: {currentObj.gridPosition}");
-                Debug.Log($"Connecting to: {currentObj.connectedTo.gridPosition}");
+        float timeEndBuildingEdges = Time.realtimeSinceStartup;
+        timeSpentBuildingChamberEdges += timeEndBuildingEdges - timeStartBuildingEdges;
+    }
 
-                numOfLoops--;
-                //Make the hallways
-                Debug.Log("Making hallway at " + currentPosition);
-                GameObject hallwayObj = Instantiate(tempHallwayGridObject, GetWorldPositionFromGridPosition(currentPosition), Quaternion.identity);
-                hallwayObj.name = $"{currentPosition} Hallway";
+    bool CanConnectChambers(Chamber chamberA, Chamber chamberB)
+    {
+        float timeStartTestingIfChambersConnect = Time.realtimeSinceStartup;
+        float timeEndTestingIfChambersConnect;
 
-                currentObj = currentObj.connectedTo;
-                currentPosition = currentObj.gridPosition;
-            }
+        bool canConnectChambers = false;
 
+        //Get best hallway connectors for chamber connection
+        (GridPosition bestHallwayConnectorForStartChamber, GridPosition bestHallwayConnectorForOtherChamber) = GetBestEdgeConnectors(chamberA, chamberB);
+
+        if (bestHallwayConnectorForStartChamber == GridPosition.Invalid || bestHallwayConnectorForOtherChamber == GridPosition.Invalid)
+        {
+            timeEndTestingIfChambersConnect = Time.realtimeSinceStartup;
+            timeSpentTestingIfChambersConnect += timeEndTestingIfChambersConnect - timeStartTestingIfChambersConnect;
+
+            //Connection does not exist
+            return false;
+        }
+
+        List<GridPosition> path = PerformBFS(bestHallwayConnectorForStartChamber, bestHallwayConnectorForOtherChamber);
+        if (path == null)
+        {
+            //No path exists
+            canConnectChambers = false;
         }
         else
         {
-            Debug.LogWarning($"Warning: tried to connect chambers ({currentChamber.OriginGridPosition}, {otherChamber.OriginGridPosition}), but connection was unsuceessfully created");
+            //Path exists
+            canConnectChambers = true;
         }
 
-        //Reset all map exploration states
-        foreach(KeyValuePair<GridPosition, GridObject> gridPositionPair in map)
+        timeEndTestingIfChambersConnect = Time.realtimeSinceStartup;
+        timeSpentTestingIfChambersConnect += timeEndTestingIfChambersConnect - timeStartTestingIfChambersConnect;
+
+        return canConnectChambers;
+    }
+
+    (GridPosition bestHallwayConnectorForStartChamber, GridPosition bestHallwayConnectorForOtherChamber) GetBestEdgeConnectors(
+        Chamber startChamber, 
+        Chamber otherChamber
+        )
+    {
+        float timeStartGettingEdgeConnectors = Time.realtimeSinceStartup;
+
+        //If there are no hallway connectors for either chamber, then return null objects
+        if (startChamber.HallwayConnectors().Count <= 0 || otherChamber.HallwayConnectors().Count <= 0)
         {
-            gridPositionPair.Value.ResetExploration();
+            return (GridPosition.Invalid, GridPosition.Invalid);
         }
+
+        //Get best hallway connectors for chamber connection
+        GridPosition bestHallwayConnectorForStartChamber = startChamber.HallwayConnectors().Keys.First();
+        GridPosition bestHallwayConnectorForOtherChamber = otherChamber.HallwayConnectors().Keys.First();
+
+        int shortestDistanceForHallwayConnectors = int.MaxValue;
+
+        //Determine the shortest path between hallway connectors
+        foreach (GridPosition startHallwayConnectorPosition in startChamber.HallwayConnectors().Keys.ToList())
+        {
+            //If the hallway connector is outside the map, then skip it
+            if (!map.ContainsKey(startHallwayConnectorPosition)) { continue; }
+
+            foreach (GridPosition otherHallwayConnectorPosition in otherChamber.HallwayConnectors().Keys.ToList())
+            {
+                //If the hallway connector is outside the map, then skip it
+                if (!map.ContainsKey(otherHallwayConnectorPosition)) { continue; }
+
+                int pathLength = GetPathLength(startHallwayConnectorPosition, otherHallwayConnectorPosition);
+                if (pathLength < shortestDistanceForHallwayConnectors)
+                {
+                    bestHallwayConnectorForStartChamber = startHallwayConnectorPosition;
+                    bestHallwayConnectorForOtherChamber = otherHallwayConnectorPosition;
+                    shortestDistanceForHallwayConnectors = pathLength;
+                }
+            }
+        }
+
+        float timeEndGettingEdgeConnectors = Time.realtimeSinceStartup;
+        timeSpentGettingBestEdgeConnectorsForChambers += timeEndGettingEdgeConnectors - timeStartGettingEdgeConnectors;
+
+        return (bestHallwayConnectorForStartChamber, bestHallwayConnectorForOtherChamber);
+    }
+
+    private int GetPathLength(GridPosition chamberAEdgeConnector, GridPosition chamberBEdgeConnector)
+    {
+        float timeStartGettingPathLength = Time.realtimeSinceStartup;
+
+        List<GridPosition> path = PerformBFS(chamberAEdgeConnector, chamberBEdgeConnector);
+
+        float timeEndGettignPathLength = Time.realtimeSinceStartup;
+        timeSpentGettingLengthOfPaths += timeEndGettignPathLength - timeStartGettingPathLength;
+
+        return GetPathLength(path);
+    }
+
+    int GetPathLength(List<GridPosition> path)
+    {
+        float timeStartGettingPathLength = Time.realtimeSinceStartup;
+        float timeEndGettignPathLength;
+
+        //Check if path was created
+        if (path == null)
+        {
+            timeEndGettignPathLength = Time.realtimeSinceStartup;
+            timeSpentGettingLengthOfPaths += timeEndGettignPathLength - timeStartGettingPathLength;
+
+            return int.MaxValue;
+        }
+
+        timeEndGettignPathLength = Time.realtimeSinceStartup;
+        timeSpentGettingLengthOfPaths += timeEndGettignPathLength - timeStartGettingPathLength;
+
+        //Get path length
+        return path.Count;
+    }
+
+    List<GridPosition> PerformBFS(GridPosition chamberAEdgeConnector, GridPosition chamberBEdgeConnector)
+    {
+        float timeStartedBFS = Time.realtimeSinceStartup;
+
+        List<GridPosition> path = new List<GridPosition>();
+
+        //Reset pathfinding exploration in the map
+        foreach(GridObject gridObject in map.Values.ToList())
+        {
+            gridObject.isExplored = false;
+            gridObject.connectedTo = null;
+        }
+
+        //Perform BFS
+        Queue<GridPosition> frontier = new Queue<GridPosition>();
+        map[chamberAEdgeConnector].isExplored = true;
+        frontier.Enqueue(chamberAEdgeConnector);
+
+        //If the starting position is the ending position, then there is no need to continue pathfinding
+        if (chamberAEdgeConnector == chamberBEdgeConnector)
+        {
+            map[chamberBEdgeConnector].connectedTo = map[chamberAEdgeConnector];
+            path.Add(chamberAEdgeConnector);
+            return path;
+        }
+
+        GridPosition currentPos = chamberAEdgeConnector;
+
+        bool pathWasCreated = false;
+        int loops = 10000; //failsafe
+        while (frontier.Count > 0 && loops > 0)
+        {
+            loops--;
+            currentPos = frontier.Dequeue();
+
+            //If the current position is the end, then pathfinding is complete
+            if (currentPos == chamberBEdgeConnector)
+            {
+                //Path created
+                pathWasCreated = true;
+                break;
+            }
+
+            //Explore neighbors
+            foreach (GridPosition relativeNeighborPos in adjacentGridPositions)
+            {
+                GridPosition absoluteNeighborGridPos = relativeNeighborPos + currentPos;
+
+                //Conditions to ignore position
+                if (!map.ContainsKey(absoluteNeighborGridPos))
+                {
+                    continue;
+                }
+                if (map[absoluteNeighborGridPos].isExplored)
+                {
+                    continue;
+                }
+                if (!map[absoluteNeighborGridPos].isHallwayPlaceable)
+                {
+                    continue;
+                }
+                if (map[absoluteNeighborGridPos].isPartOfAChamberHallway && absoluteNeighborGridPos != chamberBEdgeConnector)
+                {
+                    continue;
+                }
+
+                //Neighbor position explored
+                map[absoluteNeighborGridPos].isExplored = true;
+                //Connect to current pos
+                map[absoluteNeighborGridPos].connectedTo = map[currentPos];
+
+                //Queue for exploration
+                frontier.Enqueue(absoluteNeighborGridPos);
+            }
+        }
+
+        if (loops <= 0)
+        {
+            Debug.LogError("Error: Too many loops while performing BFS!");
+        }
+
+        if (!pathWasCreated)
+        {
+            //Path does not exist
+            return null;
+        }
+
+        //Build the path
+        while (currentPos != chamberAEdgeConnector)
+        {
+            path.Add(currentPos);
+            currentPos = map[currentPos].connectedTo.gridPosition;
+        }
+
+        //Add the starting edge connector (not included in looping process)
+        path.Add(chamberAEdgeConnector);
+        //Reverse order from chamber A to chamber B
+        path.Reverse();
+
+        float timeEndedBFS = Time.realtimeSinceStartup;
+        timeSpentPerformingBFS += timeEndedBFS - timeStartedBFS;
+
+        return path;
     }
 
     private void PlaceBossChamberOnMap()
     {
         if (debugging)
         {
-            Debug.Log("Placing boss chamber on map");
+            Debug.Log("Placing boss nextChamber on map");
         }
 
         //Get a random boss chamber
@@ -440,21 +574,21 @@ public class GridSystem : MonoBehaviour
         ChamberLayoutSO bossRoomChamberLayout = bossRoomLayouts[randomBossChamber];
 
         //Get the grid positions for available chamber positions
-        List<GridPosition> availableGridPositionsForChambers = availableChamberPositions.Keys.ToList();
-        List<GridPosition> availableGridPositions = GetListOfAvailableGridPositionsForChamber(bossRoomChamberLayout, availableGridPositionsForChambers);
+        List<GridPosition> availableGridPositionsForChamber = availableChamberPositions.Keys.ToList();
+        List<GridPosition> availableGridPositionsForBossChamber = GetListOfAvailableGridPositionsForChamber(bossRoomChamberLayout, availableGridPositionsForChamber);
         
         //Get random position
-        int randomChamberGridPositionIndex = Random.Range(0, availableGridPositions.Count);
-        GridPosition randomChamberGridPosition = availableGridPositions[randomChamberGridPositionIndex];
+        int randomChamberGridPositionIndex = Random.Range(0, availableGridPositionsForBossChamber.Count);
+        GridPosition randomChamberGridPosition = availableGridPositionsForBossChamber[randomChamberGridPositionIndex];
 
         //Current grid position is no longer being tested for current chamber placement
-        availableGridPositions.Remove(randomChamberGridPosition);
+        availableGridPositionsForBossChamber.Remove(randomChamberGridPosition);
 
         //Try adding the chamber to the map
         if (ChamberCanBePlacedAtPosition(bossRoomChamberLayout, randomChamberGridPosition))
         {
             //Tell the map that the positions that this chamber takes up is no longer available for other chambers
-            AddChamberToMap(bossRoomChamberLayout, randomChamberGridPosition, availableGridPositionsForChambers);
+            AddChamberToMap(bossRoomChamberLayout, randomChamberGridPosition, availableGridPositionsForChamber);
         }
         else
         {
@@ -477,18 +611,8 @@ public class GridSystem : MonoBehaviour
         //Loop through until all chambers are placed, or there are no more positions to place chambers
         while (numOfChambersToPlace > 0 && availableGridPositionsForChambers.Count > 0)
         {
-            //if (debugging)
-            //{
-            //    Debug.Log($"Num of chambers: {numOfChambersToPlace}\navailable chamber grid positions: {availableGridPositionsForChambers.Count}");
-            //}
-
             //Get a random chamber layout to place
             ChamberLayoutSO chamberLayout = GetRandomChamberLayout();
-
-            //if (debugging)
-            //{
-            //    Debug.Log($"Random chamber layout retrieved: {chamberLayout}");
-            //}
 
             //List of grid positions not yet tested for adding the current chamber
             List<GridPosition> gridPositionsToTest = GetListOfAvailableGridPositionsForChamber(chamberLayout, availableGridPositionsForChambers);
@@ -497,14 +621,9 @@ public class GridSystem : MonoBehaviour
             //Try adding the chamber until out of grid positions to test.
             while (gridPositionsToTest.Count > 0 && chamberIsNotPlaced)
             {
-                //if (debugging)
-                //{
-                //    Debug.Log($"num of grid positions to test: {gridPositionsToTest.Count}\nis the chamber placed: {!chamberIsNotPlaced}");
-                //}
-
                 //Get random grid position for the origin of the chamber
-                int randomChamberOriginPosition = Random.Range(0, gridPositionsToTest.Count);
-                GridPosition originChamberNodeGridPosition = gridPositionsToTest[randomChamberOriginPosition];
+                int randomChamberOriginPositionIndex = Random.Range(0, gridPositionsToTest.Count);
+                GridPosition originChamberNodeGridPosition = gridPositionsToTest[randomChamberOriginPositionIndex];
 
                 //Current grid position is no longer being tested for current chamber placement
                 gridPositionsToTest.Remove(originChamberNodeGridPosition);
@@ -522,7 +641,7 @@ public class GridSystem : MonoBehaviour
 
             if (chamberIsNotPlaced)
             {
-                Debug.LogWarning("Warning: Tried adding chamber to map, but the chamber could not be placed!");
+                Debug.LogWarning("Warning: Tried adding nextChamber to map, but the nextChamber could not be placed!");
             }
 
             numOfChambersToPlace--;
@@ -534,23 +653,9 @@ public class GridSystem : MonoBehaviour
             GridPosition gridPosition = chamberKeyValuePair.Key;
             Vector3 chamberWorldPos = GetWorldPositionFromGridPosition(gridPosition);
 
-            GameObject newChamber = Instantiate(chamberPositions[gridPosition].chamberPrefab, chamberWorldPos, Quaternion.identity);
+            GameObject newChamber = Instantiate(chamberKeyValuePair.Value.chamberPrefab, chamberWorldPos, Quaternion.identity);
             newChamber.name = $"{gridPosition} Chamber";
         }
-
-        //if (debugging)
-        //{
-        //    Debug.Log($"Remaining chamber to place: {numOfChambersToPlace}");
-        //    Debug.Log($"Remaining chamber positions: {availableGridPositionsForChambers.Count}");
-
-
-        //    Debug.Log("Map generation complete!");
-        //    Debug.Log("Chambers were generated at positions:");
-        //    foreach (GridPosition gridPosition in chamberPositions.Keys)
-        //    {
-        //        Debug.Log(gridPosition);
-        //    }
-        //}
     }
 
 
@@ -561,10 +666,6 @@ public class GridSystem : MonoBehaviour
     /// <param name="originGridPosition"></param>
     private void AddChamberToMap(ChamberLayoutSO chamberLayout, GridPosition originGridPosition, List<GridPosition> availableGridPositionForChambers)
     {
-        //if (debugging)
-        //{
-        //    Debug.Log($"Placing chamber, {chamberLayout}, on map at origin, {originGridPosition}.");
-        //}
 
         //Add the chamber to the dictionary of chamber positions
         chamberPositions[originGridPosition] = chamberLayout;
@@ -573,14 +674,10 @@ public class GridSystem : MonoBehaviour
         List<GridPosition> absoluteChamberGridPositions = GetAbsoluteChamberGridPositions(chamberLayout.GetChamberLayoutGridPositions(), originGridPosition);
         foreach(GridPosition chamberGridPosition in absoluteChamberGridPositions)
         {
-            //if (debugging)
-            //{
-            //    Debug.Log($"Making grid position {chamberGridPosition} part of chamber");
-            //    Debug.Log($"Does this chamber exist? {availableGridPositionForChambers.Contains(chamberGridPosition)}");
-            //}
 
             //Current grid position is no longer chamber placeable.
             availableChamberPositions[chamberGridPosition].MakeObjectPartOfChamber();
+            map[chamberGridPosition].MakeObjectPartOfChamber();
 
             availableGridPositionForChambers.Remove(chamberGridPosition);
 
@@ -635,11 +732,19 @@ public class GridSystem : MonoBehaviour
                 gridPositionsToRemove.Add(gridPosition);
                 continue;
             }
-            if (gridPosition.z > maxZIndexForChamber)
+            else if (gridPosition.z > maxZIndexForChamber)
             {
                 //Not enough height for chamber
                 gridPositionsToRemove.Add(gridPosition);
                 continue;
+            }
+            else if (map.ContainsKey(gridPosition))
+            {
+                if (!map[gridPosition].isChamberPlaceable)
+                {
+                    //Cannot place chamber here
+                    gridPositionsToRemove.Add(gridPosition);
+                }
             }
         }
 
@@ -660,12 +765,12 @@ public class GridSystem : MonoBehaviour
     {
         if (chamberLayouts == null)
         {
-            Debug.LogWarning("Warning: chamber layouts was not initialized!");
+            Debug.LogWarning("Warning: nextChamber layouts was not initialized!");
             return null;
         }
         if (chamberLayouts.Length == 0)
         {
-            Debug.LogWarning("Warning: no chamber layouts given to create map!");
+            Debug.LogWarning("Warning: no nextChamber layouts given to create map!");
             return null;
         }
 
@@ -703,7 +808,7 @@ public class GridSystem : MonoBehaviour
             }
 
             //Get the real grid position of the hallway connector
-            GridPosition chamberNodeGridPosition = chamberNode.chamberGridPosition + originGridPositionOnMap;
+            GridPosition chamberNodeGridPosition = chamberNode.relativeChamberNodeGridPosition + originGridPositionOnMap;
 
             //Loop through each hallway connector position for the current chamber node
             for (int j = 0; j < chamberNode.hallwayConnectorPositions.Length; j++)
@@ -737,7 +842,7 @@ public class GridSystem : MonoBehaviour
                 return false;
             }
 
-            if (!availableChamberPositions[gridPositionOnMap].isChamberPlaceable)
+            if (!map[gridPositionOnMap].isChamberPlaceable)
             {
                 //the position is not placeable; chamber cannot be placed here
                 return false;
