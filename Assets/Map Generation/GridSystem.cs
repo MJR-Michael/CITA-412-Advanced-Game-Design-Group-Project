@@ -5,6 +5,16 @@ using UnityEngine;
 
 public class GridSystem : MonoBehaviour
 {
+    public enum PathfindingAlgorithm
+    {
+        AStar,
+        BreadthFirstSearch,
+        JumpPointSearch
+    }
+
+    [SerializeField]
+    PathfindingAlgorithm pathfindingAlgorithmToUse = PathfindingAlgorithm.AStar;
+
     //The actual map being generated
     [SerializeField]
     ChamberLayoutSO[] chamberLayouts;
@@ -33,7 +43,11 @@ public class GridSystem : MonoBehaviour
     [SerializeField]
     bool debugging;
 
-    Dictionary<GridPosition, GridObject> map = new Dictionary<GridPosition, GridObject>();
+
+    //Map Data Structures
+    GridObject[,] map;
+
+
     //Dictionary<GridPosition, GridObject> chamberPositions = new Dictionary<GridPosition, GridObject>();
     Dictionary<GridPosition, ChamberLayoutSO> chamberPositions = new Dictionary<GridPosition, ChamberLayoutSO>();
     Dictionary<GridPosition, GridObject> availableChamberPositions = new Dictionary<GridPosition, GridObject>();
@@ -46,7 +60,7 @@ public class GridSystem : MonoBehaviour
     Chamber startingChamber;
     Chamber bossChamber;
 
-    MinEdgePriorityQueue minPQ = new MinEdgePriorityQueue();
+    MinPriorityQueue<Edge> minPQ = new MinPriorityQueue<Edge>();
 
 
     static GridPosition[] adjacentGridPositions =
@@ -57,6 +71,7 @@ public class GridSystem : MonoBehaviour
         new GridPosition(0,-1),  //Down
     };
 
+    int lastVisitID = 0;
 
     //Debugging times
     float timeSpentPerformingBFS = 0;
@@ -65,11 +80,13 @@ public class GridSystem : MonoBehaviour
     float timeSpentTestingIfChambersConnect = 0;
     float timeSpentGettingBestEdgeConnectorsForChambers = 0;
     float timeSpentGettingLengthOfPaths = 0;
-
+    float timeSpentPerformingAStar = 0;
 
     private void Awake()
     {
         Debug.Log("Generating map");
+        map = new GridObject[mapLength, mapWidth];
+
 
         //Add the grid objects
         for (int i = 0; i < mapWidth; i++)
@@ -77,9 +94,9 @@ public class GridSystem : MonoBehaviour
             for (int j = 0; j < mapLength; j++)
             {
                 //Make the grid position
-                GridPosition gridPos = new GridPosition(i,j);
+                GridPosition gridPos = new GridPosition(i, j);
 
-                map[gridPos] = new GridObject(gridPos);
+                map[i, j] = new GridObject(gridPos);
             }
         }
 
@@ -91,9 +108,9 @@ public class GridSystem : MonoBehaviour
             for (int j = 0; j < mapWidth; j++)
             {
                 GridPosition currentPos = new GridPosition(i, j);
-                if (map[currentPos].isChamberPlaceable)
+                if (map[currentPos.x, currentPos.z].isChamberPlaceable)
                 {
-                    availableChamberPositions.Add(currentPos, map[currentPos]);
+                    availableChamberPositions.Add(currentPos, map[currentPos.x, currentPos.z]);
 
                     //debug testing
                     if (debugging)
@@ -131,6 +148,7 @@ public class GridSystem : MonoBehaviour
 
             Debug.Log("--------------------------------------------------------------------");
             Debug.Log($"Time spent performing BFS: {timeSpentPerformingBFS}");
+            Debug.Log($"Time spent performing A*: {timeSpentPerformingAStar}");
             Debug.Log($"Time spent building paths: {timeSpentBuildingPaths}");
             Debug.Log($"Time spent building chamber edges: {timeSpentBuildingChamberEdges}");
             Debug.Log($"Time spent testing if chambers can connect: {timeSpentTestingIfChambersConnect}");
@@ -149,18 +167,18 @@ public class GridSystem : MonoBehaviour
         List<GridPosition> edgeConnectorsToRemove = new List<GridPosition>();
 
         //Chamber has an origin, hallway connectors, connections to other chambers, and a flag for if it's a boss chamber
-        foreach(KeyValuePair<GridPosition, ChamberLayoutSO> chamberPair in chamberPositions)
+        foreach (KeyValuePair<GridPosition, ChamberLayoutSO> chamberPair in chamberPositions)
         {
             //Get the hallway connectors for current chamber pair
             Dictionary<GridPosition, GridPosition> hallwayConnectors = chamberPair.Value.GetAbsoluteHallwayConnectorPositions(chamberPair.Key);
             bool isBossChamber = bossRoomLayouts.Contains(chamberPair.Value);
 
             //Tell the map that the grid object at the hallway grid positions is connected to a chamebr
-            foreach(GridPosition hallwayConnector in hallwayConnectors.Keys.ToList())
+            foreach (GridPosition hallwayConnector in hallwayConnectors.Keys.ToList())
             {
-                if (map.ContainsKey(hallwayConnector))
+                if (IsValidMapPosition(hallwayConnector))
                 {
-                    map[hallwayConnector].isPartOfAChamberHallway = true;
+                    map[hallwayConnector.x, hallwayConnector.z].isPartOfAChamberHallway = true;
                 }
                 else
                 {
@@ -170,7 +188,7 @@ public class GridSystem : MonoBehaviour
             }
 
             //Remove bad edge connectors from chamber
-            foreach(GridPosition gridPosition in edgeConnectorsToRemove)
+            foreach (GridPosition gridPosition in edgeConnectorsToRemove)
             {
                 hallwayConnectors.Remove(gridPosition);
             }
@@ -240,7 +258,7 @@ public class GridSystem : MonoBehaviour
         startingChamber.SetIsVisited(true);
 
         //3) Loop through minPQ until out of eges or all chambers visited
-        int loops = 100000; //failsafe
+        int loops = 1000000; //failsafe
         while (minPQ.Count() > 0 && !AllChambersVisited() && loops > 0)
         {
             loops--;
@@ -259,8 +277,18 @@ public class GridSystem : MonoBehaviour
             chamberA.SetIsVisited(true); //Should be redundant
             chamberB.SetIsVisited(true);
 
-            //4) Build edge path between chamber A's and B's edge connectors
-            List<GridPosition> path = PerformBFS(currentEdge.GetEdgeConnectorForChamberA(), currentEdge.GetEdgeConnectorForChamberB());
+            //4) Build edge path between chamber A's and B's edge connectors            
+            List<GridPosition> path = UsePathfindingAlgorithm(
+                currentEdge.GetEdgeConnectorForChamberA(), 
+                currentEdge.GetEdgeConnectorForChamberB()
+                );
+
+            if (path == null)
+            {
+                //path does not exist. Do not build path
+                chamberB.SetIsVisited(false);
+                continue;
+            }
             BuildPath(path);
 
             //Tell chamber A and B their respective edge connector was consumed
@@ -276,10 +304,189 @@ public class GridSystem : MonoBehaviour
         }
     }
 
+    private List<GridPosition> UsePathfindingAlgorithm(GridPosition gridPosition1, GridPosition gridPosition2)
+    {
+        List<GridPosition> path = new List<GridPosition>();
+
+        //Use the requested pathfinding algorithm
+        switch (pathfindingAlgorithmToUse)
+        {
+            case PathfindingAlgorithm.AStar:
+                path = PerformAStar(gridPosition1, gridPosition2);
+                break;
+            case PathfindingAlgorithm.BreadthFirstSearch:
+                path = PerformBFS(gridPosition1, gridPosition2);
+                break;
+            case PathfindingAlgorithm.JumpPointSearch:
+                path = PerformJumpPointSearch(gridPosition1, gridPosition2);
+                break;
+            default:
+                path = PerformAStar(gridPosition1, gridPosition2);
+                break;
+        }
+
+        return path;
+    }
+
+    private List<GridPosition> PerformAStar(GridPosition chamberAEdgeConnector, GridPosition chamberBEdgeConnector)
+    {
+        //Increment last visit ID for unique run
+        lastVisitID++;
+
+        float TimeStartedAStar = Time.realtimeSinceStartup;
+
+        List<GridPosition> path = new List<GridPosition>();
+
+        //Perform A*
+        MinPriorityQueue<(int, int)> frontier = new MinPriorityQueue<(int, int)>();
+
+        //Get starting object
+        GridObject startingObj = map[chamberAEdgeConnector.x, chamberAEdgeConnector.z];
+
+        //If the starting position is the ending position, then there is no need to continue pathfinding
+        if (chamberAEdgeConnector == chamberBEdgeConnector)
+        {
+            map[chamberBEdgeConnector.x, chamberBEdgeConnector.z].connectedTo = map[chamberAEdgeConnector.x, chamberAEdgeConnector.z];
+            path.Add(chamberAEdgeConnector);
+            return path;
+        }
+
+
+        //Set starting Obj gCost, fCost, and hCost
+        startingObj.ResetPathfindingProperties();
+        startingObj.gCost = 0;
+        startingObj.hCost = GridPosition.GetManhattanDistance(chamberBEdgeConnector, startingObj.gridPosition);
+        startingObj.CalculateFCost();
+
+        frontier.Enqueue((startingObj.gridPosition.x, startingObj.gridPosition.z), startingObj.fCost);
+
+        //Search for end
+        bool pathWasCreated = false;
+        int loops = 1000000;
+        (int x, int z) currentPos = (startingObj.gridPosition.x, startingObj.gridPosition.z);
+        while (frontier.Count() > 0 && loops > 0)
+        {
+            loops--;
+            currentPos = frontier.Dequeue();
+            GridObject currentObj = map[currentPos.x, currentPos.z];
+
+            //If the current position is the end, then pathfinding is complete
+            if (currentPos.x == chamberBEdgeConnector.x && currentPos.z == chamberBEdgeConnector.z)
+            {
+                //Path created
+                pathWasCreated = true;
+                break;
+            }
+
+            //Check if better path was already found
+            if (currentObj.isClosed)
+            {
+                continue;
+            }
+
+            //Current object has been explored
+            currentObj.isClosed = true;
+
+            //Explore neighbors
+            foreach (GridPosition relativeNeighborPos in adjacentGridPositions)
+            {
+                GridPosition absoluteNeighborGridPos = relativeNeighborPos + new GridPosition(currentPos.x, currentPos.z);
+
+                //Conditions to ignore position
+                if (!IsValidMapPosition(absoluteNeighborGridPos))
+                {
+                    continue;
+                }
+
+                GridObject neighborGridObj = map[absoluteNeighborGridPos.x, absoluteNeighborGridPos.z];
+
+                if (!neighborGridObj.isHallwayPlaceable)
+                {
+                    continue;
+                }
+                if (neighborGridObj.isPartOfAChamberHallway && absoluteNeighborGridPos != chamberBEdgeConnector)
+                {
+                    continue;
+                }
+
+
+                int tentativeGCost = currentObj.gCost + 1;
+                //Check if the neighbor was visited in this A* run
+                if (neighborGridObj.lastVisitedID != lastVisitID)
+                {
+                    //Reset obj for pathfinding
+                    neighborGridObj.ResetPathfindingProperties();
+                    neighborGridObj.lastVisitedID = lastVisitID;
+                }
+
+                //Check if the neighbor node is closed
+                if (neighborGridObj.isClosed)
+                {
+                    continue;
+                }
+
+                //If the # of "steps" from start to neighbor node is less than the previous steps stored, then this is a better path to that neighbor. Calculate fCost & queue up
+                if (tentativeGCost < neighborGridObj.gCost)
+                {
+                    //Calculate A* data
+                    neighborGridObj.gCost = tentativeGCost;
+                    neighborGridObj.hCost = GridPosition.GetManhattanDistance(chamberBEdgeConnector, neighborGridObj.gridPosition);
+                    neighborGridObj.CalculateFCost();
+
+                    //Connect neighbor to current object
+                    neighborGridObj.connectedTo = currentObj;
+
+                    //Neighbor was visited in this A* run
+                    neighborGridObj.lastVisitedID = lastVisitID;
+
+                    //Queue for exploration
+                    frontier.Enqueue((absoluteNeighborGridPos.x, absoluteNeighborGridPos.z), neighborGridObj.fCost);
+                }
+            }
+        }
+        if (loops <= 0)
+        {
+            Debug.LogError("Error: Looped too many times while performing A* algorithm!");
+        }
+
+        if (!pathWasCreated)
+        {
+            //Path does not exist
+            return null;
+        }
+
+        //Build the path
+        while (currentPos.x != chamberAEdgeConnector.x || currentPos.z != chamberAEdgeConnector.z)
+        {
+            path.Add(new GridPosition(currentPos.x, currentPos.z));
+            GridPosition nextPosition = map[currentPos.x, currentPos.z].connectedTo.gridPosition;
+            currentPos = (nextPosition.x, nextPosition.z);
+        }
+
+        //Add the starting edge connector (not included in looping process)
+        path.Add(chamberAEdgeConnector);
+        //Reverse order from chamber A to chamber B
+        path.Reverse();
+
+        float TimeEndAStar = Time.realtimeSinceStartup;
+        timeSpentPerformingAStar += TimeEndAStar - TimeStartedAStar;
+
+        return path;
+    }
+
+    private List<GridPosition> PerformJumpPointSearch(GridPosition gridPosition1, GridPosition gridPosition2)
+    {
+        List<GridPosition> path = new List<GridPosition>();
+
+        
+
+        return path;
+    }
+
     private bool AllChambersVisited()
     {
         //Loop through all chambers. If a single one has not been visited, return false
-        foreach(Chamber chamber in chambers)
+        foreach (Chamber chamber in chambers)
         {
             if (!chamber.IsVisited()) return false;
         }
@@ -294,13 +501,13 @@ public class GridSystem : MonoBehaviour
         //TODO: update this to handle path corners, and replace temp prefab with actual hallway prefabs
 
         //Loop through each path position
-        foreach(GridPosition gridPosition in path)
+        foreach (GridPosition gridPosition in path)
         {
             GameObject hallwayObj = Instantiate(tempHallwayGridObject, GetWorldPositionFromGridPosition(gridPosition), Quaternion.identity);
             hallwayObj.name = $"{gridPosition} Hallway";
 
             //update the map with the new hallway objects
-            map[gridPosition].MakeObjectAHallway();
+            map[gridPosition.x, gridPosition.z].MakeObjectAHallway();
         }
 
         float timeEndBuildingPaths = Time.realtimeSinceStartup;
@@ -312,7 +519,7 @@ public class GridSystem : MonoBehaviour
         float timeStartBuildingEdges = Time.realtimeSinceStartup;
 
         //Loop through all chambers on the map, exclude given chamber & chamber that cannot be connected to
-        foreach(Chamber chamber in chambers)
+        foreach (Chamber chamber in chambers)
         {
             if (chamber == givenChamber) continue;
             if (!CanConnectChambers(givenChamber, chamber)) continue;
@@ -321,8 +528,8 @@ public class GridSystem : MonoBehaviour
             //Chambers can be connected. Get the best edge connectors for each chamber and its edge cost
             (GridPosition bestChamberAEdgeConnector, GridPosition bestChamberBEdgeConnector) = GetBestEdgeConnectors(givenChamber, chamber);
 
-            List<GridPosition> path = PerformBFS(bestChamberAEdgeConnector, bestChamberBEdgeConnector);
-            int edgeCost = GetPathLength(path);
+            List<GridPosition> path = UsePathfindingAlgorithm(bestChamberAEdgeConnector, bestChamberBEdgeConnector);
+            int edgeCost = GetEdgeLength(path);
 
             //Build the edge
             Edge edge = new Edge(
@@ -334,7 +541,7 @@ public class GridSystem : MonoBehaviour
                 edgeCost
                 );
             //Queue edge for exploration
-            minPQ.Enqueue(edge);
+            minPQ.Enqueue(edge, edgeCost);
         }
 
         float timeEndBuildingEdges = Time.realtimeSinceStartup;
@@ -360,7 +567,7 @@ public class GridSystem : MonoBehaviour
             return false;
         }
 
-        List<GridPosition> path = PerformBFS(bestHallwayConnectorForStartChamber, bestHallwayConnectorForOtherChamber);
+        List<GridPosition> path = UsePathfindingAlgorithm(bestHallwayConnectorForStartChamber, bestHallwayConnectorForOtherChamber);
         if (path == null)
         {
             //No path exists
@@ -379,7 +586,7 @@ public class GridSystem : MonoBehaviour
     }
 
     (GridPosition bestHallwayConnectorForStartChamber, GridPosition bestHallwayConnectorForOtherChamber) GetBestEdgeConnectors(
-        Chamber startChamber, 
+        Chamber startChamber,
         Chamber otherChamber
         )
     {
@@ -401,12 +608,12 @@ public class GridSystem : MonoBehaviour
         foreach (GridPosition startHallwayConnectorPosition in startChamber.HallwayConnectors().Keys.ToList())
         {
             //If the hallway connector is outside the map, then skip it
-            if (!map.ContainsKey(startHallwayConnectorPosition)) { continue; }
+            if (!IsValidMapPosition(startHallwayConnectorPosition)) { continue; }
 
             foreach (GridPosition otherHallwayConnectorPosition in otherChamber.HallwayConnectors().Keys.ToList())
             {
                 //If the hallway connector is outside the map, then skip it
-                if (!map.ContainsKey(otherHallwayConnectorPosition)) { continue; }
+                if (!IsValidMapPosition(otherHallwayConnectorPosition)) { continue; }
 
                 int pathLength = GetPathLength(startHallwayConnectorPosition, otherHallwayConnectorPosition);
                 if (pathLength < shortestDistanceForHallwayConnectors)
@@ -426,17 +633,10 @@ public class GridSystem : MonoBehaviour
 
     private int GetPathLength(GridPosition chamberAEdgeConnector, GridPosition chamberBEdgeConnector)
     {
-        float timeStartGettingPathLength = Time.realtimeSinceStartup;
-
-        List<GridPosition> path = PerformBFS(chamberAEdgeConnector, chamberBEdgeConnector);
-
-        float timeEndGettignPathLength = Time.realtimeSinceStartup;
-        timeSpentGettingLengthOfPaths += timeEndGettignPathLength - timeStartGettingPathLength;
-
-        return GetPathLength(path);
+        return GridPosition.GetManhattanDistance(chamberAEdgeConnector, chamberBEdgeConnector);
     }
 
-    int GetPathLength(List<GridPosition> path)
+    int GetEdgeLength(List<GridPosition> path)
     {
         float timeStartGettingPathLength = Time.realtimeSinceStartup;
         float timeEndGettignPathLength;
@@ -459,41 +659,37 @@ public class GridSystem : MonoBehaviour
 
     List<GridPosition> PerformBFS(GridPosition chamberAEdgeConnector, GridPosition chamberBEdgeConnector)
     {
+        //Increment last visit ID for unique run
+        lastVisitID++;
+
         float timeStartedBFS = Time.realtimeSinceStartup;
 
         List<GridPosition> path = new List<GridPosition>();
 
-        //Reset pathfinding exploration in the map
-        foreach(GridObject gridObject in map.Values.ToList())
-        {
-            gridObject.isExplored = false;
-            gridObject.connectedTo = null;
-        }
-
         //Perform BFS
-        Queue<GridPosition> frontier = new Queue<GridPosition>();
-        map[chamberAEdgeConnector].isExplored = true;
-        frontier.Enqueue(chamberAEdgeConnector);
+        Queue<(int x, int z)> frontier = new Queue<(int x, int z)>();
+        map[chamberAEdgeConnector.x, chamberAEdgeConnector.z].lastVisitedID = lastVisitID;
+        frontier.Enqueue((chamberAEdgeConnector.x, chamberAEdgeConnector.z));
 
         //If the starting position is the ending position, then there is no need to continue pathfinding
         if (chamberAEdgeConnector == chamberBEdgeConnector)
         {
-            map[chamberBEdgeConnector].connectedTo = map[chamberAEdgeConnector];
+            map[chamberBEdgeConnector.x, chamberBEdgeConnector.z].connectedTo = map[chamberAEdgeConnector.x, chamberAEdgeConnector.z];
             path.Add(chamberAEdgeConnector);
             return path;
         }
 
-        GridPosition currentPos = chamberAEdgeConnector;
+        (int x, int z) currentPos = (chamberAEdgeConnector.x, chamberAEdgeConnector.z);
 
         bool pathWasCreated = false;
-        int loops = 10000; //failsafe
+        int loops = 1000000; //failsafe
         while (frontier.Count > 0 && loops > 0)
         {
             loops--;
             currentPos = frontier.Dequeue();
 
             //If the current position is the end, then pathfinding is complete
-            if (currentPos == chamberBEdgeConnector)
+            if (currentPos.x == chamberBEdgeConnector.x && currentPos.z == chamberBEdgeConnector.z)
             {
                 //Path created
                 pathWasCreated = true;
@@ -503,33 +699,34 @@ public class GridSystem : MonoBehaviour
             //Explore neighbors
             foreach (GridPosition relativeNeighborPos in adjacentGridPositions)
             {
-                GridPosition absoluteNeighborGridPos = relativeNeighborPos + currentPos;
+                GridPosition absoluteNeighborGridPos = relativeNeighborPos + new GridPosition(currentPos.x, currentPos.z);
 
                 //Conditions to ignore position
-                if (!map.ContainsKey(absoluteNeighborGridPos))
+                if (!IsValidMapPosition(absoluteNeighborGridPos))
                 {
                     continue;
                 }
-                if (map[absoluteNeighborGridPos].isExplored)
+                //Already visited on this BFS algorithm
+                if (map[absoluteNeighborGridPos.x, absoluteNeighborGridPos.z].lastVisitedID == lastVisitID)
                 {
                     continue;
                 }
-                if (!map[absoluteNeighborGridPos].isHallwayPlaceable)
+                if (!map[absoluteNeighborGridPos.x, absoluteNeighborGridPos.z].isHallwayPlaceable)
                 {
                     continue;
                 }
-                if (map[absoluteNeighborGridPos].isPartOfAChamberHallway && absoluteNeighborGridPos != chamberBEdgeConnector)
+                if (map[absoluteNeighborGridPos.x, absoluteNeighborGridPos.z].isPartOfAChamberHallway && absoluteNeighborGridPos != chamberBEdgeConnector)
                 {
                     continue;
                 }
 
                 //Neighbor position explored
-                map[absoluteNeighborGridPos].isExplored = true;
+                map[absoluteNeighborGridPos.x, absoluteNeighborGridPos.z].lastVisitedID = lastVisitID;
                 //Connect to current pos
-                map[absoluteNeighborGridPos].connectedTo = map[currentPos];
+                map[absoluteNeighborGridPos.x, absoluteNeighborGridPos.z].connectedTo = map[currentPos.x, currentPos.z];
 
                 //Queue for exploration
-                frontier.Enqueue(absoluteNeighborGridPos);
+                frontier.Enqueue((absoluteNeighborGridPos.x, absoluteNeighborGridPos.z));
             }
         }
 
@@ -545,10 +742,11 @@ public class GridSystem : MonoBehaviour
         }
 
         //Build the path
-        while (currentPos != chamberAEdgeConnector)
+        while (currentPos.x != chamberAEdgeConnector.x || currentPos.z != chamberAEdgeConnector.z)
         {
-            path.Add(currentPos);
-            currentPos = map[currentPos].connectedTo.gridPosition;
+            path.Add(new GridPosition(currentPos.x, currentPos.z));
+            GridPosition nextPosition = map[currentPos.x, currentPos.z].connectedTo.gridPosition;
+            currentPos = (nextPosition.x, nextPosition.z);
         }
 
         //Add the starting edge connector (not included in looping process)
@@ -576,7 +774,7 @@ public class GridSystem : MonoBehaviour
         //Get the grid positions for available chamber positions
         List<GridPosition> availableGridPositionsForChamber = availableChamberPositions.Keys.ToList();
         List<GridPosition> availableGridPositionsForBossChamber = GetListOfAvailableGridPositionsForChamber(bossRoomChamberLayout, availableGridPositionsForChamber);
-        
+
         //Get random position
         int randomChamberGridPositionIndex = Random.Range(0, availableGridPositionsForBossChamber.Count);
         GridPosition randomChamberGridPosition = availableGridPositionsForBossChamber[randomChamberGridPositionIndex];
@@ -648,7 +846,7 @@ public class GridSystem : MonoBehaviour
         }
 
         //Place the chambers at the grid positions
-        foreach(KeyValuePair<GridPosition, ChamberLayoutSO> chamberKeyValuePair in chamberPositions)
+        foreach (KeyValuePair<GridPosition, ChamberLayoutSO> chamberKeyValuePair in chamberPositions)
         {
             GridPosition gridPosition = chamberKeyValuePair.Key;
             Vector3 chamberWorldPos = GetWorldPositionFromGridPosition(gridPosition);
@@ -672,17 +870,17 @@ public class GridSystem : MonoBehaviour
 
         //Tell all adjacent chamber positions and the positions of the chamber that they are no longer placeable for other chambers
         List<GridPosition> absoluteChamberGridPositions = GetAbsoluteChamberGridPositions(chamberLayout.GetChamberLayoutGridPositions(), originGridPosition);
-        foreach(GridPosition chamberGridPosition in absoluteChamberGridPositions)
+        foreach (GridPosition chamberGridPosition in absoluteChamberGridPositions)
         {
 
             //Current grid position is no longer chamber placeable.
             availableChamberPositions[chamberGridPosition].MakeObjectPartOfChamber();
-            map[chamberGridPosition].MakeObjectPartOfChamber();
+            map[chamberGridPosition.x, chamberGridPosition.z].MakeObjectPartOfChamber();
 
             availableGridPositionForChambers.Remove(chamberGridPosition);
 
             //Loop through all adjacent grid positions
-            foreach(GridPosition relativeAdjacentGridPosition in adjacentGridPositions)
+            foreach (GridPosition relativeAdjacentGridPosition in adjacentGridPositions)
             {
                 GridPosition absoluteAdjacentGridPosition = relativeAdjacentGridPosition + chamberGridPosition;
                 //Test if the adjacent position is a chamber position. Skip if it is
@@ -724,7 +922,7 @@ public class GridSystem : MonoBehaviour
         //Filter out unavailable grid positions
         List<GridPosition> gridPositionsToRemove = new List<GridPosition>();
 
-        foreach(GridPosition gridPosition in availableGridPositions)
+        foreach (GridPosition gridPosition in availableGridPositions)
         {
             if (gridPosition.x > maxXIndexForChamber)
             {
@@ -738,9 +936,9 @@ public class GridSystem : MonoBehaviour
                 gridPositionsToRemove.Add(gridPosition);
                 continue;
             }
-            else if (map.ContainsKey(gridPosition))
+            else if (IsValidMapPosition(gridPosition))
             {
-                if (!map[gridPosition].isChamberPlaceable)
+                if (!map[gridPosition.x, gridPosition.z].isChamberPlaceable)
                 {
                     //Cannot place chamber here
                     gridPositionsToRemove.Add(gridPosition);
@@ -748,7 +946,7 @@ public class GridSystem : MonoBehaviour
             }
         }
 
-        foreach(GridPosition gridPosition in gridPositionsToRemove)
+        foreach (GridPosition gridPosition in gridPositionsToRemove)
         {
             availableGridPositions.Remove(gridPosition);
         }
@@ -780,50 +978,6 @@ public class GridSystem : MonoBehaviour
     }
 
     /// <summary>
-    /// Method to get the positions of the chamber's hallway connector positions on the grid.
-    /// </summary>
-    /// <param name="chamberLayout">The sscriptable object of the chamebr</param>
-    /// <param name="originGridPositionOnMap">the position of the chamber's origin on the real map</param>
-    /// <returns>the positions of the hallway connector positions</returns>
-    List<GridPosition> GetChamberHallwayConnectorPositionsInGrid(ChamberLayoutSO chamberLayout, GridPosition originGridPositionOnMap)
-    {
-        List<GridPosition> chamberHallwayPositions = new List<GridPosition>();
-
-        //Loop through each chamber node (0,0), (0,1), ...
-        for (int i = 0; i < chamberLayout.chamberNodes.Length; i++)
-        {
-            ChamberNode chamberNode = chamberLayout.chamberNodes[i];
-
-            //Check if node has any hallway connectors
-            if (chamberNode.hallwayConnectorPositions == null)
-            {
-                //Hallway connectors doesn't exist
-                Debug.LogWarning($"Warning: Chamber {chamberLayout.name} is missing hallway connector position array! Something may be wrong.");
-                continue;
-            }
-            if (chamberNode.hallwayConnectorPositions.Length == 0)
-            {
-                //No hallway connectors to add
-                continue;
-            }
-
-            //Get the real grid position of the hallway connector
-            GridPosition chamberNodeGridPosition = chamberNode.relativeChamberNodeGridPosition + originGridPositionOnMap;
-
-            //Loop through each hallway connector position for the current chamber node
-            for (int j = 0; j < chamberNode.hallwayConnectorPositions.Length; j++)
-            {
-                GridPosition hallwayConnectorGridPosition = chamberNodeGridPosition + chamberNode.hallwayConnectorPositions[j];
-
-                //Add the chamber hallway connector position (real position on grid) to list
-                chamberHallwayPositions.Add(hallwayConnectorGridPosition);
-            }
-        }
-
-        return chamberHallwayPositions;
-    }
-
-    /// <summary>
     /// Tests to see if the chamber can be placed at the given grid position for the chamber's origin position
     /// </summary>
     /// <param name="chamberLayout">The scriptable object for the chamber</param>
@@ -842,7 +996,7 @@ public class GridSystem : MonoBehaviour
                 return false;
             }
 
-            if (!map[gridPositionOnMap].isChamberPlaceable)
+            if (!map[gridPositionOnMap.x, gridPositionOnMap.z].isChamberPlaceable)
             {
                 //the position is not placeable; chamber cannot be placed here
                 return false;
@@ -863,5 +1017,21 @@ public class GridSystem : MonoBehaviour
         }
 
         return absoluteGridPositions;
-    } 
+    }
+
+    bool IsValidMapPosition(GridPosition pos)
+    {
+        //Negative values invalid
+        if (pos.x < 0 || pos.z < 0)
+        {
+            return false;
+        }
+        //Outside upper bounds
+        if (pos.x >= mapLength || pos.z >= mapWidth)
+        {
+            return false;
+        }
+
+        return true;
+    }
 }

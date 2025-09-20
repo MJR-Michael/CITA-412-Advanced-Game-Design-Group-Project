@@ -5,15 +5,30 @@ public class GridObject
 {
     public GridPosition gridPosition;
     public GridObject connectedTo;
-
-    public bool isExplored;
-
     public bool isPartOfChamber;
     public bool isPartOfAChamberHallway;
     public bool isPartOfHallway;
 
     public bool isChamberPlaceable;
     public bool isHallwayPlaceable;
+
+    public int lastVisitedID;
+    public bool isClosed = false;
+
+    //Jump Point Search / A* Requirements
+    /// <summary>
+    /// gCost + hCost
+    /// </summary>
+    public int fCost;
+    /// <summary>
+    /// The number of "steps" from start node
+    /// </summary>
+    public int gCost = int.MaxValue;
+    /// <summary>
+    /// The Manhattan distance from start node (delta x + delta y)
+    /// </summary>
+    public int hCost;
+
 
     public GridObject(GridPosition gridPosition)
     {
@@ -49,17 +64,23 @@ public class GridObject
         connectedTo = null;
     }
 
-    public void ResetExploration()
-    {
-        isExplored = false;
-        connectedTo = null;
-    }
-
     public void MakeObjectAHallway()
     {
         isChamberPlaceable = false;
         isHallwayPlaceable = false;
         isPartOfHallway = true;
         isPartOfChamber = false;
+    }
+
+    public void CalculateFCost()
+    {
+        fCost = gCost + hCost;
+    }
+
+    internal void ResetPathfindingProperties()
+    {
+        gCost = int.MaxValue;
+        connectedTo = null;
+        isClosed = false;
     }
 }
