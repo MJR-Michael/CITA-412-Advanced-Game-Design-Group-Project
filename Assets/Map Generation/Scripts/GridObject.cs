@@ -40,7 +40,6 @@ public class GridObject
         isChamberPlaceable = true;
         isHallwayPlaceable = true;
     }
-
     public void MakeObjectPartOfChamber()
     {
         isPartOfChamber = true;
@@ -48,22 +47,11 @@ public class GridObject
         isChamberPlaceable = false;
         isHallwayPlaceable = false;
     }
-
     public void SetChamberPlaceable(bool isChamberPlaceable)
     {
         this.isChamberPlaceable = isChamberPlaceable;
         isPartOfChamber = false;
     }
-
-    public void ConnectToObject(GridObject other)
-    {
-        connectedTo = other;        
-    }
-    public void ResetConnection()
-    {
-        connectedTo = null;
-    }
-
     public void MakeObjectAHallway()
     {
         isChamberPlaceable = false;
@@ -71,13 +59,11 @@ public class GridObject
         isPartOfHallway = true;
         isPartOfChamber = false;
     }
-
     public void CalculateFCost()
     {
         fCost = gCost + hCost;
     }
-
-    internal void ResetPathfindingProperties()
+    public void ResetPathfindingProperties()
     {
         gCost = int.MaxValue;
         connectedTo = null;

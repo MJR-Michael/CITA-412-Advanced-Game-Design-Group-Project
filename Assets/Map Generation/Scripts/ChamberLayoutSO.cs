@@ -80,7 +80,6 @@ public class ChamberLayoutSO : ScriptableObject
 
         return gridPositions;
     }
-
     public Dictionary<GridPosition, GridPosition> GetAbsoluteHallwayConnectorPositions(GridPosition originGridPosition)
     {
         Dictionary<GridPosition, GridPosition> hallwayConnectors = new Dictionary<GridPosition, GridPosition>();

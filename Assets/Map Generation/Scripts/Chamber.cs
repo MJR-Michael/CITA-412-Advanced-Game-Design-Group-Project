@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 
 public class Chamber
@@ -8,6 +9,10 @@ public class Chamber
     /// Key = hallway connector to the chamber (absolute position). Value = the chamber that connects to a hallway (absolute position)
     /// </summary>
     Dictionary<GridPosition, GridPosition> _originalHallwayConnectors;
+
+    /// <summary>
+    /// Key = hallway connector to the chamber (absolute position). Value = the chamber that connects to a hallway (absolute position)
+    /// </summary>
     Dictionary<GridPosition, GridPosition> hallwayConnectors;
 
     bool isBossChamber;
@@ -21,13 +26,12 @@ public class Chamber
     /// <param name="isBossChamber"></param>
     public Chamber(GridPosition originGridPosition, Dictionary<GridPosition, GridPosition> hallwayConnectors, bool isBossChamber)
     {
-        this.isBossChamber = isBossChamber;
-
-        isVisited = false;
-
         this.hallwayConnectors = new Dictionary<GridPosition, GridPosition>(hallwayConnectors);
         _originalHallwayConnectors = new Dictionary<GridPosition, GridPosition>(hallwayConnectors);
         connectedTo = new List<Chamber>();
+
+        this.isBossChamber = isBossChamber;
+        isVisited = false;
     }
     public GridPosition GetPositionOfChamberConnectorFromHallwayPosition(GridPosition hallwayConnectorPosition)
     {
@@ -42,10 +46,7 @@ public class Chamber
     {
         return hallwayConnectors.Remove(connectorGridPosition);
     }
-    public void AddConnection(Chamber otherChamber)
-    {
-        connectedTo.Add(otherChamber);
-    }
+    public void AddConnection(Chamber otherChamber) => connectedTo.Add(otherChamber);
     public bool IsBossChamber() => isBossChamber;
     public bool IsConnectedTo(Chamber givenChamber) => connectedTo.Contains(givenChamber);
     /// <summary>
@@ -54,4 +55,9 @@ public class Chamber
     public Dictionary<GridPosition, GridPosition> HallwayConnectors() => hallwayConnectors;
     public bool IsVisited() => isVisited;
     public void SetIsVisited(bool isVisited) => this.isVisited = isVisited;
+
+    public bool ContainsHallwayConnector(GridPosition gridPosition)
+    {
+        return hallwayConnectors.ContainsKey(gridPosition);
+    }
 }
