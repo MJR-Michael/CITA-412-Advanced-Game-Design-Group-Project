@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Unity.VisualScripting;
+using UnityEditor;
 using UnityEngine;
 
 public class GridSystem : MonoBehaviour
@@ -43,25 +44,31 @@ public class GridSystem : MonoBehaviour
     [SerializeField]
     bool debugging;
 
+    [Header("Generating Additional Chamber Connections")]
+    [SerializeField]
+    int maxPathLengthForConnection = 15;
+    [SerializeField]
+    [Range(0,1)]
+    float chanceForAdditionalConnection = 0.15f;
+    [SerializeField]
+    int maxNumOfExtraConnections = 20;
+    [SerializeField]
+    int numOfAdditionalConnectionsToTest = 500;
 
     //Map Data Structures
     GridObject[,] map;
-
-
-    //Dictionary<GridPosition, GridObject> chamberPositions = new Dictionary<GridPosition, GridObject>();
     Dictionary<GridPosition, ChamberLayoutSO> chamberPositions = new Dictionary<GridPosition, ChamberLayoutSO>();
     Dictionary<GridPosition, GridObject> availableChamberPositions = new Dictionary<GridPosition, GridObject>();
     List<Chamber> chambers = new List<Chamber>();
 
-    List<Chamber> chambersConnectedToStart = new List<Chamber>();
-
-    int mapArea;
-
     Chamber startingChamber;
     Chamber bossChamber;
 
+
     MinPriorityQueue<Edge> minPQ = new MinPriorityQueue<Edge>();
 
+    //Pathfinding Properties
+    int lastVisitID = 0;
 
     static GridPosition[] adjacentGridPositions =
     {
@@ -70,8 +77,6 @@ public class GridSystem : MonoBehaviour
         new GridPosition(-1,0),  //Left
         new GridPosition(0,-1),  //Down
     };
-
-    int lastVisitID = 0;
 
     //Debugging times
     float timeSpentPerformingBFS = 0;
@@ -100,8 +105,6 @@ public class GridSystem : MonoBehaviour
             }
         }
 
-        mapArea = mapLength * mapWidth;
-
         //Add all available chamber positions onto the map
         for (int i = 0; i < mapLength; i++)
         {
@@ -123,7 +126,6 @@ public class GridSystem : MonoBehaviour
 
         float timeMapStartedGenerating = Time.realtimeSinceStartup;
 
-        //Place chambers
         PlaceBossChamberOnMap();
         float timeToGenerateBossChamber = Time.realtimeSinceStartup - timeMapStartedGenerating;
 
@@ -136,6 +138,9 @@ public class GridSystem : MonoBehaviour
         ConnectChambers();
         float timeToGenerateConnectors = Time.realtimeSinceStartup - timeToInitializeChamberObjects;
 
+        GenerateAdditionalChamberConnections();
+        float timeSpentGeneratingAdditionalChamberConnections = Time.realtimeSinceStartup - timeToGenerateConnectors;
+
         float timeToGenerateMap = Time.realtimeSinceStartup - timeMapStartedGenerating;
 
         if (debugging)
@@ -145,6 +150,7 @@ public class GridSystem : MonoBehaviour
             Debug.Log($"Time to generate other chambers: {timeToGenerateChambers}");
             Debug.Log($"Time to initialize chambers: {timeToInitializeChamberObjects}");
             Debug.Log($"Time to generate connectors: {timeToGenerateConnectors}");
+            Debug.Log($"Time to generate additional connectors: {timeSpentGeneratingAdditionalChamberConnections}");
 
             Debug.Log("--------------------------------------------------------------------");
             Debug.Log($"Time spent performing BFS: {timeSpentPerformingBFS}");
@@ -159,6 +165,74 @@ public class GridSystem : MonoBehaviour
             {
                 Debug.LogWarning($"You need to optimize the grid system! {timeToGenerateMap}s is too long a wait for players!!!");
             }
+        }
+    }
+
+    private void GenerateAdditionalChamberConnections()
+    {
+        /*
+         * When to stop generating extra chamber connections:
+         * 
+         * 1) If there are physically no more edges to connect (minPQ runs out)
+         * 2) If # of extra connections allowed has been exceeded
+         */
+
+        //Reuse the min PQ from the first connection phase to generate chambers
+        int extraConnectionsGenerated = 0;
+        while (minPQ.Count() > 0 && extraConnectionsGenerated < maxNumOfExtraConnections && numOfAdditionalConnectionsToTest > 0)
+        {
+            /*
+             * Conditions to skip the extra edge connection
+             *  1) If the chance does not favor the edge connection
+             *  2) If the length of the edge exceeds the maximum allowed for additional edges
+             *  3) If the chamber cannot physcially handle more connections (already handled)
+             */
+
+            //Get current edge
+            Edge currentEdge = minPQ.Dequeue();
+
+            //Get chambers in the edge
+            Chamber chamberA = currentEdge.GetChamberA();
+            Chamber chamberB = currentEdge.GetChamberB();
+
+            //1) roll for edge generation
+            if (Random.Range(0f, 1f) > (chanceForAdditionalConnection * chamberA.HallwayConnectors().Count)) continue;
+
+            numOfAdditionalConnectionsToTest--;
+
+            //If chamber B (the supposed unvisited one) is the boss chamber, do not add extra connections
+            if (chamberB.IsBossChamber()) continue;
+
+            //Build edge path between chamber A's and B's edge connectors            
+            List<GridPosition> path = UsePathfindingAlgorithm(
+                currentEdge.GetEdgeConnectorForChamberA(),
+                currentEdge.GetEdgeConnectorForChamberB()
+                );
+
+            if (path == null)
+            {
+                //path does not exist. Do not build path
+                continue;
+            }
+
+            //2) if path is too long, skip the path
+            if (path.Count > maxPathLengthForConnection) continue;
+
+            BuildPath(path);
+
+            //Tell chamber A and B their respective edge connector was consumed
+            chamberA.UseHallwayConnector(currentEdge.GetEdgeConnectorForChamberA());
+            chamberB.UseHallwayConnector(currentEdge.GetEdgeConnectorForChamberB());
+
+            //Tell chamber A and B they are connected to one another
+            chamberA.AddConnection(chamberB);
+            chamberB.AddConnection(chamberA);
+
+            //Extra connection made
+            extraConnectionsGenerated++;
+
+            //Tell chamber B to make and add its edges to every unvisited chamber.
+            CreateAndQueueEdgesForChamber(chamberB);
         }
     }
 
@@ -294,6 +368,16 @@ public class GridSystem : MonoBehaviour
             //Tell chamber A and B their respective edge connector was consumed
             chamberA.UseHallwayConnector(currentEdge.GetEdgeConnectorForChamberA());
             chamberB.UseHallwayConnector(currentEdge.GetEdgeConnectorForChamberB());
+
+            //Tell chamber A and B they are connected to one another
+            chamberA.AddConnection(chamberB);
+            chamberB.AddConnection(chamberA);
+
+            //If chamber B is boss chamber, do not add it to queue (only 1 connection to boss chamber rule)
+            if (chamberB.IsBossChamber())
+            {
+                continue;
+            }
 
             //5) Tell chamber B to make and add its edges to every unvisited chamber.
             CreateAndQueueEdgesForChamber(chamberB);

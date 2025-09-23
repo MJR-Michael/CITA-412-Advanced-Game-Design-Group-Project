@@ -1,13 +1,9 @@
-using NUnit.Framework;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using UnityEngine;
 
 public class Chamber
 {
     GridPosition originGridPosition;
-    List<GridPosition> positionsConnectedTo;
+    List<Chamber> connectedTo;
 
 
     Chamber pathfindingConnectedTo;
@@ -18,7 +14,7 @@ public class Chamber
     Dictionary<GridPosition, GridPosition> _originalHallwayConnectors;
     Dictionary<GridPosition, GridPosition> hallwayConnectors;
 
-
+    int lastVisitID = 0;
     bool isBossChamber;
     bool isVisited;
     bool isConnectedToStart;
@@ -32,13 +28,16 @@ public class Chamber
     public Chamber(GridPosition originGridPosition, Dictionary<GridPosition, GridPosition> hallwayConnectors, bool isBossChamber)
     {
         this.originGridPosition = originGridPosition;
+        this.isBossChamber = isBossChamber;
+
+        pathfindingConnectedTo = null;
+
+        isVisited = false;
+        isConnectedToStart = false;
+
         this.hallwayConnectors = new Dictionary<GridPosition, GridPosition>(hallwayConnectors);
         _originalHallwayConnectors = new Dictionary<GridPosition, GridPosition>(hallwayConnectors);
-        positionsConnectedTo = new List<GridPosition>();
-        this.isBossChamber = isBossChamber;
-        isVisited = false;
-        pathfindingConnectedTo = null;
-        isConnectedToStart = false;
+        connectedTo = new List<Chamber>();
     }
 
     public bool UseHallwayConnector(GridPosition connectorGridPosition)
@@ -46,20 +45,24 @@ public class Chamber
         return hallwayConnectors.Remove(connectorGridPosition);
     }
 
-    public void AddConnection(GridPosition otherOriginGridPosition)
+    public void AddConnection(Chamber otherChamber)
     {
-        positionsConnectedTo.Add(otherOriginGridPosition);
+        connectedTo.Add(otherChamber);
     }
-    public void RemoveConnection(GridPosition otherOriginGridPosition)
+    public void RemoveConnection(Chamber otherChamber)
     {
-        positionsConnectedTo.Remove(otherOriginGridPosition);
+        connectedTo.Remove(otherChamber);
     }
     public bool IsBossChamber() => isBossChamber;
-    public List<GridPosition> ConnectTo() => positionsConnectedTo;
+
+    public bool IsConnectedTo(Chamber givenChamber) => connectedTo.Contains(givenChamber);
     /// <summary>
     /// Key = hallway connector to the chamber (absolute position). Value = the chamber that connects to a hallway (absolute position)
     /// </summary>
     public Dictionary<GridPosition, GridPosition> HallwayConnectors() => hallwayConnectors;
+
+    public int LastVisitID() => lastVisitID;
+    public void SetLastVisitID(int newID) => lastVisitID = newID;
 
     public bool IsVisited() => isVisited;
 
@@ -95,4 +98,6 @@ public class Chamber
     }
 
     public bool IsConnectedToStartChamber() => isConnectedToStart;
+
+    public int GetNumOfHallwayConnectors() => hallwayConnectors.Count;
 }
