@@ -8,7 +8,7 @@ public class DeathExplosion : MonoBehaviour, IDeathBehavior
 
     public void OnDeath(Enemy enemy)
     {
-        // Spawn explosion effect
+        // Spawn explosion 
         if (explosionPrefab != null)
         {
             Instantiate(explosionPrefab, transform.position, Quaternion.identity);

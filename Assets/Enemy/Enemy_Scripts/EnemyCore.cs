@@ -2,8 +2,8 @@ using UnityEngine;
 
 public class Enemy : MonoBehaviour
 {
-    [SerializeField] private int maxHealth = 100;
-    [SerializeField] private int currentHealth = 100;
+    [SerializeField] private float maxHealth = 100f;
+    [SerializeField] private float currentHealth = 100f;
 
     private IDeathBehavior[] deathBehaviors;
 
@@ -12,9 +12,11 @@ public class Enemy : MonoBehaviour
         deathBehaviors = GetComponents<IDeathBehavior>();
     }
 
-    public void TakeDamage(int damage)
+    public void TakeDamage(float damage)
     {
         currentHealth -= damage;
+        Debug.Log($"Enemy took {damage} damage. Remaining HP: {currentHealth}");
+
         if (currentHealth <= 0)
         {
             Die();
