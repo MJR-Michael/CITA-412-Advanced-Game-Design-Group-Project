@@ -1,0 +1,44 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b5a70d8f3cf4f5d4b8118d3eee607ce0, type: 3}
+  m_Name: 1x4
+  m_EditorClassIdentifier: Assembly-CSharp::ChamberLayoutSO
+  chamberNodes:
+  - relativeChamberNodeGridPosition:
+      x: 0
+      z: 0
+    hallwayConnectorPositions:
+    - x: -1
+      z: 0
+  - relativeChamberNodeGridPosition:
+      x: 1
+      z: 0
+    hallwayConnectorPositions:
+    - x: 0
+      z: 1
+    - x: 0
+      z: -1
+  - relativeChamberNodeGridPosition:
+      x: 2
+      z: 0
+    hallwayConnectorPositions:
+    - x: 0
+      z: 1
+    - x: 0
+      z: -1
+  - relativeChamberNodeGridPosition:
+      x: 3
+      z: 0
+    hallwayConnectorPositions:
+    - x: 1
+      z: 0
+  chamberPrefab: {fileID: 3598174833355540396, guid: 4888b1fea70324a479b12f50cf8530c1, type: 3}

@@ -1,0 +1,70 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &5450541843665217283
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2247558039490215115}
+  - component: {fileID: 1268447211260291659}
+  m_Layer: 0
+  m_Name: Map Generator
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2247558039490215115
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5450541843665217283}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1268447211260291659
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5450541843665217283}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 36fbc490706bc3749b81ed8bc368bf51, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::GridSystem
+  chamberLayouts:
+  - {fileID: 11400000, guid: c34a1440429d1ab4f94175e4aeb653a3, type: 2}
+  - {fileID: 11400000, guid: 24bf8f4f6da99a24da3f3ebc21b26efb, type: 2}
+  - {fileID: 11400000, guid: fb68349c2ee21ff48bd5c813e148c900, type: 2}
+  - {fileID: 11400000, guid: ba27548906c0f5b4bba53e263cf915b8, type: 2}
+  bossRoomLayouts:
+  - {fileID: 11400000, guid: 9d9ef09c576ca024584b93e8586f06d0, type: 2}
+  hallwayForwardPlaceholder: {fileID: 267189692758797770, guid: 24435770de3aa9846946a1349aecea0c, type: 3}
+  hallwayRightwardPlaceholder: {fileID: 605575840435015194, guid: 3c2727acbfae28040bff1e24a188f7af, type: 3}
+  hallwayLeftForwardPlaceholder: {fileID: 6976329857697233528, guid: a98dbca079331d74db9e986656616baa, type: 3}
+  hallwayRightForwardPlaceholder: {fileID: 4007644820880023035, guid: 080bf3c9bfda69b42b4d6e1f7e02bb83, type: 3}
+  hallwayLeftBackwardPlaceholder: {fileID: 5312688410686796964, guid: e1211f17d98f09747bb6fffab54bee81, type: 3}
+  hallwayRightBackwardPlaceholder: {fileID: 9057072413331640689, guid: 3c34f3fbfa460de47a310b58dd9743f0, type: 3}
+  mapLength: 100
+  mapWidth: 100
+  minNumOfChambers: 50
+  maxNumOfChambers: 100
+  maxPathLengthForAdditionalConnection: 23
+  chanceForAdditionalConnection: 0.15
+  maxNumOfExtraConnections: 50
+  numOfAdditionalConnectionsToTest: 500
+  mapScale: 10
+  pathfindingAlgorithmToUse: 0
+  debugging: 0
