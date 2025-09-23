@@ -7497,10 +7497,6 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 2748070103715999594, guid: 6da3e48c1d6ee3c4cb5440372869cfc2, type: 3}
-      propertyPath: m_Actions
-      value: 
-      objectReference: {fileID: -944628639613478452, guid: fc273d28723ccf841a5ed862a9894757, type: 3}
     - target: {fileID: 3194971436564039929, guid: 6da3e48c1d6ee3c4cb5440372869cfc2, type: 3}
       propertyPath: m_Name
       value: Player
@@ -7545,48 +7541,11 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 8626860729832196007, guid: 6da3e48c1d6ee3c4cb5440372869cfc2, type: 3}
-      propertyPath: RotationSpeed
-      value: 500
-      objectReference: {fileID: 0}
-    m_RemovedComponents:
-    - {fileID: 1520428643588546480, guid: 6da3e48c1d6ee3c4cb5440372869cfc2, type: 3}
+    m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 3194971436564039929, guid: 6da3e48c1d6ee3c4cb5440372869cfc2, type: 3}
-      insertIndex: 1
-      addedObject: {fileID: 8997996946059014574}
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 6da3e48c1d6ee3c4cb5440372869cfc2, type: 3}
---- !u!114 &8616685847633586960 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 8626860729832196007, guid: 6da3e48c1d6ee3c4cb5440372869cfc2, type: 3}
-  m_PrefabInstance: {fileID: 655551176471901815}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8616685847633586967}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 55919ac34a26952479f3fc91f777b2fa, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!1 &8616685847633586967 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 3194971436564039929, guid: 6da3e48c1d6ee3c4cb5440372869cfc2, type: 3}
-  m_PrefabInstance: {fileID: 655551176471901815}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &8997996946059014574
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8616685847633586967}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 19eaa7e12a2452140a57043fdd2f8274, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::Player
-  playerFirstPersonController: {fileID: 8616685847633586960}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

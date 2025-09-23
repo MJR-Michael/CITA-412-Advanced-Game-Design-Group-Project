@@ -16,10 +16,11 @@ namespace StarterAssets
 		public float MoveSpeed = 4.0f;
 		[Tooltip("Sprint speed of the character in m/s")]
 		public float SprintSpeed = 6.0f;
-		[Tooltip("Rotation speed of the character")]
-		public float RotationSpeed = 1.0f;
+
 		[Tooltip("Acceleration and deceleration")]
 		public float SpeedChangeRate = 10.0f;
+		[SerializeField, Range(0, 1000)]
+		float mouseSensitivity;
 
 		[Space(10)]
 		[Tooltip("The height the player can jump")]
@@ -146,8 +147,8 @@ namespace StarterAssets
 				//Don't multiply mouse input by Time.deltaTime
 				float deltaTimeMultiplier = IsCurrentDeviceMouse ? 1.0f : Time.deltaTime;
 				
-				_cinemachineTargetPitch += look.y * RotationSpeed * deltaTimeMultiplier;
-				_rotationVelocity = look.x * RotationSpeed * deltaTimeMultiplier;
+				_cinemachineTargetPitch += look.y * deltaTimeMultiplier * mouseSensitivity;
+				_rotationVelocity = look.x * deltaTimeMultiplier * mouseSensitivity;
 
 				// clamp our pitch rotation
 				_cinemachineTargetPitch = ClampAngle(_cinemachineTargetPitch, BottomClamp, TopClamp);
