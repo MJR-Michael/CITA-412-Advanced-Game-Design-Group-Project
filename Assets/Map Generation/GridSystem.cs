@@ -44,6 +44,25 @@ public class GridSystem : MonoBehaviour
     [SerializeField]
     bool debugging;
 
+    //Hallway placeholder prefabs
+    [SerializeField]
+    GameObject hallwayForwardPlaceholder;
+
+    [SerializeField]
+    GameObject hallwayRightwardPlaceholder;
+
+    [SerializeField]
+    GameObject hallwayLeftForwardPlaceholder;
+
+    [SerializeField]
+    GameObject hallwayRightForwardPlaceholder;
+
+    [SerializeField]
+    GameObject hallwayLeftBackwardPlaceholder;
+
+    [SerializeField]
+    GameObject hallwayRightBackwardPlaceholder;
+
     [Header("Generating Additional Chamber Connections")]
     [SerializeField]
     int maxPathLengthForConnection = 15;
@@ -54,6 +73,12 @@ public class GridSystem : MonoBehaviour
     int maxNumOfExtraConnections = 20;
     [SerializeField]
     int numOfAdditionalConnectionsToTest = 500;
+
+
+    [SerializeField]
+    [Tooltip("The scale of the actual objects when placing them in the world. In the Unity editor, reference the size of the small grid. That is the base unit of measurement")]
+    float mapScale = 10f;
+
 
     //Map Data Structures
     GridObject[,] map;
@@ -218,7 +243,7 @@ public class GridSystem : MonoBehaviour
             //2) if path is too long, skip the path
             if (path.Count > maxPathLengthForConnection) continue;
 
-            BuildPath(path);
+            BuildPath(currentEdge, path);
 
             //Tell chamber A and B their respective edge connector was consumed
             chamberA.UseHallwayConnector(currentEdge.GetEdgeConnectorForChamberA());
@@ -363,7 +388,7 @@ public class GridSystem : MonoBehaviour
                 chamberB.SetIsVisited(false);
                 continue;
             }
-            BuildPath(path);
+            BuildPath(currentEdge, path);
 
             //Tell chamber A and B their respective edge connector was consumed
             chamberA.UseHallwayConnector(currentEdge.GetEdgeConnectorForChamberA());
@@ -578,24 +603,132 @@ public class GridSystem : MonoBehaviour
         return true;
     }
 
-    private void BuildPath(List<GridPosition> path)
+    private void BuildPath(Edge edge, List<GridPosition> path)
     {
+        //Note: path is built from chamber A to B.
+        Chamber chamberA = edge.GetChamberA();
+        Chamber chamberB = edge.GetChamberB();
+
         float timeStartBuildingPath = Time.realtimeSinceStartup;
 
         //TODO: update this to handle path corners, and replace temp prefab with actual hallway prefabs
 
         //Loop through each path position
-        foreach (GridPosition gridPosition in path)
+        for(int pathIndex = 0; pathIndex < path.Count; pathIndex++)
         {
-            GameObject hallwayObj = Instantiate(tempHallwayGridObject, GetWorldPositionFromGridPosition(gridPosition), Quaternion.identity);
-            hallwayObj.name = $"{gridPosition} Hallway";
+            //Get previous position of path. If the previous position is out of bounds, then get Chamber A's hallway position to connect to
+            GridPosition previousPosition = pathIndex == 0 ?
+                chamberA.GetPositionOfChamberConnectorFromHallwayPosition(path[0]) : path[pathIndex - 1];
+
+            //Get current position
+            GridPosition currentPosition = path[pathIndex];
+
+            //Get next posiiton. If out of bounds, get chamber B's hallway position to connect to
+            GridPosition nextPosition = pathIndex == path.Count - 1 ?
+                chamberB.GetPositionOfChamberConnectorFromHallwayPosition(path[path.Count - 1]) : path[pathIndex + 1];
+            
+            //Determine which prefab to use
+            GameObject hallwayPrefab = GetHallwayPrefabFromGridPositions(previousPosition, currentPosition, nextPosition);
+
+            //Create the hallway object
+            GameObject hallwayObj = Instantiate(hallwayPrefab, GetWorldPositionFromGridPosition(path[pathIndex]) * mapScale, Quaternion.identity);
+            hallwayObj.name = $"{path[pathIndex]} Hallway";
 
             //update the map with the new hallway objects
-            map[gridPosition.x, gridPosition.z].MakeObjectAHallway();
+            map[path[pathIndex].x, path[pathIndex].z].MakeObjectAHallway();
         }
 
         float timeEndBuildingPaths = Time.realtimeSinceStartup;
         timeSpentBuildingPaths += timeEndBuildingPaths - timeStartBuildingPath;
+    }
+
+    private GameObject GetHallwayPrefabFromGridPositions(GridPosition previousHallwayPosition, GridPosition currentPosition, GridPosition nextPosition)
+    {
+        //Default value
+        GameObject gameObject = hallwayForwardPlaceholder;
+
+        /*
+         * Determine the direction that the hallway will be facing
+         * Forward if previous is below and current is above, or vise versa
+         * Rightward if previous is left and current is right, or vise versa
+         * right up if previous is from right and current is up, or vise vers
+         * and so on.
+         * 
+         * Calculation:
+         * previous - current gives direction for up/down/left/right. (prevDir)
+         * next - current gives another direction for up/down/left/right. (nextDir)
+         * 
+         * component = prevDir + nextDir
+         * 
+         * Caution:
+         * if previous and current on same horizontal value, their values cancel to (0,0). Same with it vertically.
+         * You cannot differentiate its difference from the conditions when it is vertical or horizontal based on this check along
+         * 
+         * Check:
+         * if component is (0,0), check if prevDir or nextDir x-value is 0. If so, then its a forward component. else it's a rightward component
+         */
+
+        Debug.Log("Current hallway connection stats: " + previousHallwayPosition + " " + currentPosition + " " + nextPosition);
+
+        GridPosition prevDir = previousHallwayPosition - currentPosition;
+        GridPosition nextDir = nextPosition - currentPosition;
+        GridPosition componentDir = prevDir + nextDir;
+
+        Debug.Log("Component direction: " + componentDir);
+
+        if (componentDir == GridPosition.LeftForward)
+        {
+            gameObject = hallwayLeftForwardPlaceholder;
+        }
+        else if (componentDir == GridPosition.RightForward)
+        {
+            gameObject = hallwayRightForwardPlaceholder;
+        }
+        else if (componentDir == GridPosition.LeftBackward)
+        {
+            gameObject = hallwayLeftBackwardPlaceholder;
+        }
+        else if (componentDir == GridPosition.RightBackward)
+        {
+            gameObject = hallwayRightBackwardPlaceholder;
+        }
+        else
+        {
+            if (prevDir.x != 0)
+            {
+                //The hallway is horizontal
+                gameObject = hallwayRightwardPlaceholder;
+            }
+            else
+            {
+                //The hallway is vertical
+                gameObject = hallwayForwardPlaceholder;
+            }
+        }
+
+        /*
+            * Fun fact: the code below doesn't work because structs cannot be used in switch-cases... even if you make it equatable...............
+            *         
+        switch (componentDir)
+        {
+            case GridPosition.LeftUp:
+
+                break;
+            case GridPosition.RightUp:
+
+                break;
+            case GridPosition.LeftDown:
+
+                break;
+            case GridPosition.RightDown:
+
+                break;
+            case GridPosition.Zero:
+
+                break;
+        }
+            */
+        return gameObject;
     }
 
     private void CreateAndQueueEdgesForChamber(Chamber givenChamber)
@@ -935,7 +1068,7 @@ public class GridSystem : MonoBehaviour
             GridPosition gridPosition = chamberKeyValuePair.Key;
             Vector3 chamberWorldPos = GetWorldPositionFromGridPosition(gridPosition);
 
-            GameObject newChamber = Instantiate(chamberKeyValuePair.Value.chamberPrefab, chamberWorldPos, Quaternion.identity);
+            GameObject newChamber = Instantiate(chamberKeyValuePair.Value.chamberPrefab, chamberWorldPos * mapScale, Quaternion.identity);
             newChamber.name = $"{gridPosition} Chamber";
         }
     }

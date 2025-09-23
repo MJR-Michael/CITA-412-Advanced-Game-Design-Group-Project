@@ -472,10 +472,17 @@ MonoBehaviour:
   minNumOfChambers: 50
   maxNumOfChambers: 100
   debugging: 1
+  hallwayForwardPlaceholder: {fileID: 267189692758797770, guid: 24435770de3aa9846946a1349aecea0c, type: 3}
+  hallwayRightwardPlaceholder: {fileID: 605575840435015194, guid: 3c2727acbfae28040bff1e24a188f7af, type: 3}
+  hallwayLeftForwardPlaceholder: {fileID: 6976329857697233528, guid: a98dbca079331d74db9e986656616baa, type: 3}
+  hallwayRightForwardPlaceholder: {fileID: 4007644820880023035, guid: 080bf3c9bfda69b42b4d6e1f7e02bb83, type: 3}
+  hallwayLeftBackwardPlaceholder: {fileID: 5312688410686796964, guid: e1211f17d98f09747bb6fffab54bee81, type: 3}
+  hallwayRightBackwardPlaceholder: {fileID: 9057072413331640689, guid: 3c34f3fbfa460de47a310b58dd9743f0, type: 3}
   maxPathLengthForConnection: 23
   chanceForAdditionalConnection: 0.15
   maxNumOfExtraConnections: 25
   numOfAdditionalConnectionsToTest: 500
+  mapScale: 10
 --- !u!4 &1978647056
 Transform:
   m_ObjectHideFlags: 0
