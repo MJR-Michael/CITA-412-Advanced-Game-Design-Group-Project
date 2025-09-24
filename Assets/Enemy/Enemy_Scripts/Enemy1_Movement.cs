@@ -15,13 +15,13 @@ public class Enemy1_Movement : MonoBehaviour
 
     void Start()
     {
-        targetPlayer = GetClosestPlayer();
+        targetPlayer = PlayerTargeting.GetClosestPlayer(transform.position);
         StartCoroutine(MoveRandomly());
     }
 
     void Update()
     {
-        RotateTowardsTarget(targetPlayer);
+        PlayerTargeting.RotateTowardsTarget(transform, targetPlayer, 8f);
     }
 
     IEnumerator MoveRandomly()
@@ -62,37 +62,5 @@ public class Enemy1_Movement : MonoBehaviour
     private float GetRandomPauseDuration()
     {
         return Random.Range(minPauseDuration, maxPauseDuration);
-    }
-
-    private Transform GetClosestPlayer()
-    {
-        GameObject[] players = GameObject.FindGameObjectsWithTag("Player");
-        Transform closest = null;
-        float minDistance = Mathf.Infinity;
-
-        foreach (GameObject p in players)
-        {
-            float dist = Vector3.Distance(transform.position, p.transform.position);
-            if (dist < minDistance)
-            {
-                minDistance = dist;
-                closest = p.transform;
-            }
-        }
-
-        return closest;
-    }
-
-    private void RotateTowardsTarget(Transform target)
-    {
-        if (target != null)
-        {
-            Vector3 direction = (target.position - transform.position).normalized;
-            if (direction != Vector3.zero)
-            {
-                Quaternion targetRotation = Quaternion.LookRotation(direction);
-                transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, Time.deltaTime * 10f);
-            }
-        }
     }
 }
