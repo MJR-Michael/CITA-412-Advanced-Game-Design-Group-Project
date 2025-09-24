@@ -1,12 +1,33 @@
+
 using UnityEngine;
+using System.Collections.Generic;
 
 public class Player : MonoBehaviour
 {
+
+    public static List<Player> AllPlayers = new List<Player>();
+
     [SerializeField] private float maxHealth = 100f;
     [SerializeField] private float currentHealth = 100f;
+    public bool isInvulnerable = false;
+
+    private void OnEnable()
+    {
+        AllPlayers.Add(this);
+    }
+
+    private void OnDisable()
+    {
+        AllPlayers.Remove(this);
+    }
 
     public void TakeDamage(float damage)
     {
+        if (isInvulnerable)
+        {
+            return;
+        }
+
         currentHealth -= damage;
         Debug.Log($"Player took {damage} damage. Remaining HP: {currentHealth}");
 

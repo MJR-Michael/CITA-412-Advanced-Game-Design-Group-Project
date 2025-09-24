@@ -9,7 +9,6 @@ public class Enemy1_Movement : MonoBehaviour
     [SerializeField] public float minPauseDuration = 2f;
     [SerializeField] public float maxPauseDuration = 5f;
 
-
     private Vector3 moveDirection;
     private Transform targetPlayer;
 
@@ -21,7 +20,15 @@ public class Enemy1_Movement : MonoBehaviour
 
     void Update()
     {
-        PlayerTargeting.RotateTowardsTarget(transform, targetPlayer, 8f);
+        if (targetPlayer != null)
+        {
+            PlayerTargeting.RotateTowardsTarget(transform, targetPlayer, 8f);
+        }
+        else
+        {
+            // If the target player died, pick a new one
+            targetPlayer = PlayerTargeting.GetClosestPlayer(transform.position);
+        }
     }
 
     IEnumerator MoveRandomly()
@@ -43,15 +50,13 @@ public class Enemy1_Movement : MonoBehaviour
                 yield return null;
             }
 
-            // Pause before changing direction
             yield return new WaitForSeconds(pauseDuration);
         }
     }
 
     private Vector3 GetRandomDirection()
     {
-        Vector3 dir = Random.onUnitSphere;
-        return dir.normalized;
+        return Random.onUnitSphere.normalized;
     }
 
     private float GetRandomMoveDuration()

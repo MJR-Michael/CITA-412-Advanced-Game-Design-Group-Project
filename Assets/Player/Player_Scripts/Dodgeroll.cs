@@ -1,63 +1,73 @@
 using UnityEngine;
 using System.Collections;
+using StarterAssets;
 
-public class Dodgeroll : MonoBehaviour
+public class DodgeRoll : MonoBehaviour
 {
-    [SerializeField] float dodgerollCooldown = 1f;
-    [SerializeField] float dodgerollDistance = 20f;
-    [SerializeField] float dodgerollSpeed = 5f;
-    [SerializeField] float dodgerollForce;
+    private FirstPersonController fpsController;
+    public Player player;
 
-    private bool canDodgeRoll = true;
-    private bool isDodgeRolling = false;
+    public float rollSpeed = 15f;
+    public float rollDistance = 5f;
+    public float rollCooldown = 1f;
 
-    public Rigidbody rb;
+    private bool canRoll = true;
+    private bool isRolling = false;     //functionally useless unless we have if statements that occur during the dodgeroll, or if we're playing animations.
+
+    void Start()
+    {
+        fpsController = GetComponent<FirstPersonController>();
+    }
 
     void Update()
     {
-        if (InputManager.Instance.PlayerAbility1() == true) //&& canDodgeRoll)
+        if (InputManager.Instance == null) return;
+
+        if (InputManager.Instance.PlayerAbility3() && canRoll)
         {
-            Debug.Log("Ability Used");
-            StartCoroutine(dodgerollAction());
+            Vector2 moveInput = InputManager.Instance.GetPlayerMovement();
+            Vector3 localInput = new Vector3(moveInput.x, 0f, moveInput.y);
+            Vector3 direction = transform.TransformDirection(localInput).normalized;
+
+            if (direction.sqrMagnitude < 0.001f)
+            {
+                // No WASD → roll forward
+                direction = transform.forward;
+            }
+
+            StartCoroutine(Roll(direction));
         }
     }
 
-    private IEnumerator dodgerollAction()
+    private IEnumerator Roll(Vector3 direction)
     {
-        canDodgeRoll = false;
-        isDodgeRolling = true;
+        canRoll = false;
+        isRolling = true;
+        player.isInvulnerable = true;
 
-        rb.linearVelocity = Vector3.zero;
-        // Apply force in the forward direction
-        rb.AddForce(transform.forward * dodgerollForce, ForceMode.VelocityChange);
+        float rollTime = rollDistance / rollSpeed;
+        float startTime = Time.time;
 
-        // Optional: limit dash duration if needed
-        yield return new WaitForSeconds(1f);
+        // Disable normal movement during roll
+        fpsController.CanMove = false;
 
-        isDodgeRolling = false;
+        //Actual Dodgeroll movement
+        while (Time.time < startTime + rollTime)
+        {
+            Vector3 velocity = direction * rollSpeed + new Vector3(0f, fpsController.GetVerticalVelocity(), 0f);
 
-        yield return new WaitForSeconds(dodgerollCooldown);
-        canDodgeRoll = true;
+            fpsController.GetController().Move(velocity * Time.deltaTime);
+
+            yield return null;
+        }
+
+        //Return Controll
+        fpsController.CanMove = true;
+        player.isInvulnerable = false;
+        isRolling = false;
+
+        //Start Cooldown
+        yield return new WaitForSeconds(rollCooldown);
+        canRoll = true;
     }
 }
-
-
-// float dashDuration = dashDistance / dashSpeed;
-
-//         // Save original drag (optional)
-//         float originalDrag = rb.drag;
-
-//         // Remove drag so dash isn't slowed
-//         rb.drag = 0f;
-
-//         // Set velocity directly for consistent dash
-//         rb.velocity = transform.forward * dashSpeed;
-
-//         // Wait for the dash duration
-//         yield return new WaitForSeconds(dashDuration);
-
-//         // Stop dash but keep any momentum you want
-//         rb.velocity = Vector3.zero;
-
-//         // Restore drag
-//         rb.drag = originalDrag;
