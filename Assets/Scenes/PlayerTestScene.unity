@@ -7531,9 +7531,13 @@ PrefabInstance:
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: 1492755669186475814, guid: 6da3e48c1d6ee3c4cb5440372869cfc2, type: 3}
-      propertyPath: rb
+      propertyPath: rollSpeed
+      value: 15
+      objectReference: {fileID: 0}
+    - target: {fileID: 1492755669186475814, guid: 6da3e48c1d6ee3c4cb5440372869cfc2, type: 3}
+      propertyPath: playerCore
       value: 
-      objectReference: {fileID: 8997996946059014585}
+      objectReference: {fileID: 655551176471901816}
     - target: {fileID: 3194971436564039929, guid: 6da3e48c1d6ee3c4cb5440372869cfc2, type: 3}
       propertyPath: m_Name
       value: Player
@@ -7583,6 +7587,17 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 6da3e48c1d6ee3c4cb5440372869cfc2, type: 3}
+--- !u!114 &655551176471901816 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 6262523562294740462, guid: 6da3e48c1d6ee3c4cb5440372869cfc2, type: 3}
+  m_PrefabInstance: {fileID: 655551176471901815}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ddf6901bf59c97e1d9f6032d96b327d5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Player
 --- !u!1001 &5156552790240969068
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -7784,11 +7799,6 @@ PrefabInstance:
       insertIndex: -1
       addedObject: {fileID: 1836272495}
   m_SourcePrefab: {fileID: 100100000, guid: f02a4770c80c4b9f4bf5a759a978f189, type: 3}
---- !u!54 &8997996946059014585 stripped
-Rigidbody:
-  m_CorrespondingSourceObject: {fileID: 2031410212446067549, guid: 6da3e48c1d6ee3c4cb5440372869cfc2, type: 3}
-  m_PrefabInstance: {fileID: 655551176471901815}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
