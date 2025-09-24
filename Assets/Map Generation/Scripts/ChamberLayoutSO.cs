@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -109,5 +110,16 @@ public class ChamberLayoutSO : ScriptableObject
         }
 
         return hallwayConnectors;
+    }
+
+    public GridPosition GetSpawnPosition()
+    {
+        //Get the chamber now that is a spawn position
+        foreach (ChamberNode chamberNode in chamberNodes)
+        {
+            if (chamberNode.isPlayerSpawnPosition) { return chamberNode.relativeChamberNodeGridPosition; }
+        }
+
+        return GridPosition.Invalid;
     }
 }

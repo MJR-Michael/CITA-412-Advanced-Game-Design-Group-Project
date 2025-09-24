@@ -44,6 +44,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 36fbc490706bc3749b81ed8bc368bf51, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GridSystem
+  playerPrefab: {fileID: 3194971436564039929, guid: 6da3e48c1d6ee3c4cb5440372869cfc2, type: 3}
   chamberLayouts:
   - {fileID: 11400000, guid: c34a1440429d1ab4f94175e4aeb653a3, type: 2}
   - {fileID: 11400000, guid: 24bf8f4f6da99a24da3f3ebc21b26efb, type: 2}
@@ -65,6 +66,6 @@ MonoBehaviour:
   chanceForAdditionalConnection: 0.15
   maxNumOfExtraConnections: 50
   numOfAdditionalConnectionsToTest: 500
-  mapScale: 10
+  mapScale: 36
   pathfindingAlgorithmToUse: 0
-  debugging: 0
+  debugging: 1

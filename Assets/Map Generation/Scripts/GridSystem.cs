@@ -13,6 +13,10 @@ public class GridSystem : MonoBehaviour
         JumpPointSearch
     }
 
+    [Header("Player")]
+    [SerializeField]
+    GameObject playerPrefab;
+
     [Header("Chamber References")]
     [SerializeField]
     ChamberLayoutSO[] chamberLayouts;
@@ -172,6 +176,23 @@ public class GridSystem : MonoBehaviour
                 Debug.LogWarning($"You need to optimize the grid system! {timeToGenerateMap}s is too long a wait for players!!!");
             }
         }
+
+        //Generate player into the map
+        Debug.Log("player starting grid position: " + startingChamber.GetPlayerSpawnPosition());
+        GameObject playerObj = Instantiate(playerPrefab, GetPlayerSpawnPosition(startingChamber) + new Vector3(5,3,5), Quaternion.identity);
+    }
+
+    private Vector3 GetPlayerSpawnPosition(Chamber startingChamber)
+    {
+        GridPosition playerSpawnPos = startingChamber.GetPlayerSpawnPosition();
+
+        if (playerSpawnPos == GridPosition.Invalid)
+        {
+            Debug.LogError($"Error: {startingChamber.GetChamberLayoutSO()} does not define a starting position!");
+        }
+
+        //Get the starting spawn position from the chamber
+        return GetWorldPositionFromGridPosition(playerSpawnPos);
     }
 
     //Methods for Chamber Generation
@@ -265,7 +286,7 @@ public class GridSystem : MonoBehaviour
             GridPosition gridPosition = chamberKeyValuePair.Key;
             Vector3 chamberWorldPos = GetWorldPositionFromGridPosition(gridPosition);
 
-            GameObject newChamber = Instantiate(chamberKeyValuePair.Value.chamberPrefab, chamberWorldPos * mapScale, Quaternion.identity);
+            GameObject newChamber = Instantiate(chamberKeyValuePair.Value.chamberPrefab, chamberWorldPos, Quaternion.identity);
             newChamber.name = $"{gridPosition} Chamber";
         }
     }
@@ -454,7 +475,7 @@ public class GridSystem : MonoBehaviour
             }
 
             //Generate the chamber object
-            Chamber chamber = new Chamber(chamberPair.Key, hallwayConnectors, isBossChamber);
+            Chamber chamber = new Chamber(chamberPair.Key, chamberPair.Value, hallwayConnectors, isBossChamber);
 
             //Store chamber in list of chamber objects
             chambers.Add(chamber);
@@ -822,7 +843,7 @@ public class GridSystem : MonoBehaviour
             GameObject hallwayPrefab = GetHallwayPrefabFromGridPositions(previousPosition, currentPosition, nextPosition);
 
             //Create the hallway object
-            GameObject hallwayObj = Instantiate(hallwayPrefab, GetWorldPositionFromGridPosition(path[pathIndex]) * mapScale, Quaternion.identity);
+            GameObject hallwayObj = Instantiate(hallwayPrefab, GetWorldPositionFromGridPosition(path[pathIndex]), Quaternion.identity);
             hallwayObj.name = $"{path[pathIndex]} Hallway";
 
             //update the map with the new hallway objects
@@ -1208,7 +1229,7 @@ public class GridSystem : MonoBehaviour
     //Miscellaneous Methods
     Vector3 GetWorldPositionFromGridPosition(GridPosition gridPosition)
     {
-        return new Vector3(gridPosition.x, 0, gridPosition.z);
+        return new Vector3(gridPosition.x * mapScale, 0, gridPosition.z * mapScale);
     }
     bool IsValidMapPosition(GridPosition pos)
     {
