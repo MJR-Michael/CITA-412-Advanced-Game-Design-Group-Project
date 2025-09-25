@@ -4,6 +4,8 @@ using System.Collections.Generic;
 public class Chamber
 {
     List<Chamber> connectedTo;
+    GridPosition originGridPosition;
+    ChamberLayoutSO chamberLayoutSO;
 
     /// <summary>
     /// Key = hallway connector to the chamber (absolute position). Value = the chamber that connects to a hallway (absolute position)
@@ -24,13 +26,15 @@ public class Chamber
     /// <param name="originGridPosition">absolute position of chamber's origin</param>
     /// <param name="hallwayConnectors">Key = hallway connector to the chamber (absolute position). Value = the chamber that connects to a hallway (absolute position)</param>
     /// <param name="isBossChamber"></param>
-    public Chamber(GridPosition originGridPosition, Dictionary<GridPosition, GridPosition> hallwayConnectors, bool isBossChamber)
+    public Chamber(GridPosition originGridPosition, ChamberLayoutSO chamberLayoutSO, Dictionary<GridPosition, GridPosition> hallwayConnectors, bool isBossChamber)
     {
         this.hallwayConnectors = new Dictionary<GridPosition, GridPosition>(hallwayConnectors);
         _originalHallwayConnectors = new Dictionary<GridPosition, GridPosition>(hallwayConnectors);
         connectedTo = new List<Chamber>();
 
+        this.originGridPosition = originGridPosition;
         this.isBossChamber = isBossChamber;
+        this.chamberLayoutSO = chamberLayoutSO;
         isVisited = false;
     }
     public GridPosition GetPositionOfChamberConnectorFromHallwayPosition(GridPosition hallwayConnectorPosition)
@@ -60,4 +64,12 @@ public class Chamber
     {
         return hallwayConnectors.ContainsKey(gridPosition);
     }
+
+    public GridPosition GetPlayerSpawnPosition()
+    {
+        //Get the spawn position from the prefab
+        return chamberLayoutSO.GetSpawnPosition() + originGridPosition;
+    }
+
+    public object GetChamberLayoutSO() => chamberLayoutSO;
 }

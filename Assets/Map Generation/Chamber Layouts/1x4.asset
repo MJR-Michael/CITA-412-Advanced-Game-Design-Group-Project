@@ -19,6 +19,7 @@ MonoBehaviour:
     hallwayConnectorPositions:
     - x: -1
       z: 0
+    isPlayerSpawnPosition: 1
   - relativeChamberNodeGridPosition:
       x: 1
       z: 0
@@ -27,6 +28,7 @@ MonoBehaviour:
       z: 1
     - x: 0
       z: -1
+    isPlayerSpawnPosition: 0
   - relativeChamberNodeGridPosition:
       x: 2
       z: 0
@@ -35,10 +37,12 @@ MonoBehaviour:
       z: 1
     - x: 0
       z: -1
+    isPlayerSpawnPosition: 0
   - relativeChamberNodeGridPosition:
       x: 3
       z: 0
     hallwayConnectorPositions:
     - x: 1
       z: 0
-  chamberPrefab: {fileID: 3598174833355540396, guid: 4888b1fea70324a479b12f50cf8530c1, type: 3}
+    isPlayerSpawnPosition: 0
+  chamberPrefab: {fileID: 1425586856995685494, guid: ae4c228069c74d942afebb7d27fecc84, type: 3}
