@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 8887015650511031360}
   - component: {fileID: 7790203446288154882}
   - component: {fileID: 4986688578093901091}
+  - component: {fileID: 8071822789188800116}
   m_Layer: 0
   m_Name: CrossBow
   m_TagString: Untagged
@@ -125,9 +126,26 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d4d4460981a4b1a25bced817e9363fbc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Crossbow
-  firePoint: {fileID: 4040041941516668573}
-  projectilePrefab: {fileID: 3966581752233002300, guid: 4111532fd00cfcf5fa147451bd1c2ed6, type: 3}
-  fireRate: 1
+  crossbowFirePoint: {fileID: 4040041941516668573}
+  crossbowProjectile: {fileID: 3966581752233002300, guid: 4111532fd00cfcf5fa147451bd1c2ed6, type: 3}
+  launchSpeed: 60
+  crossbowFireRate: 1.5
+--- !u!114 &8071822789188800116
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 746357998521836200}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 90edfc2359bfc78129cacdbdcf2fcb7d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::AlternateCrossbow
+  crossbowFirePoint: {fileID: 4040041941516668573}
+  AlternatecrossbowProjectilePrefab: {fileID: 3966581752233002300, guid: 4111532fd00cfcf5fa147451bd1c2ed6, type: 3}
+  launchSpeed: 60
+  crossbowFireRate: 1
 --- !u!1 &3187730234212762796
 GameObject:
   m_ObjectHideFlags: 0

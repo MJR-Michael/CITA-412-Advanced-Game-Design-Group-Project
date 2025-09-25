@@ -4789,7 +4789,7 @@ GameObject:
   - component: {fileID: 1318337301}
   - component: {fileID: 1318337300}
   - component: {fileID: 1318337299}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Cube (2)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -7544,7 +7544,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5323217625383176376, guid: 6da3e48c1d6ee3c4cb5440372869cfc2, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -0.54666
+      value: -0.58
       objectReference: {fileID: 0}
     - target: {fileID: 5323217625383176376, guid: 6da3e48c1d6ee3c4cb5440372869cfc2, type: 3}
       propertyPath: m_LocalPosition.y
@@ -7582,6 +7582,14 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 5874765997836842934, guid: 6da3e48c1d6ee3c4cb5440372869cfc2, type: 3}
+      propertyPath: crossbowFireRate
+      value: 1.25
+      objectReference: {fileID: 0}
+    - target: {fileID: 5874765997836842934, guid: 6da3e48c1d6ee3c4cb5440372869cfc2, type: 3}
+      propertyPath: crossbowProjectile
+      value: 
+      objectReference: {fileID: 3966581752233002300, guid: 4111532fd00cfcf5fa147451bd1c2ed6, type: 3}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -7606,6 +7614,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 3396244713043913967, guid: 4111532fd00cfcf5fa147451bd1c2ed6, type: 3}
+      propertyPath: collisionMask.m_Bits
+      value: 1024
+      objectReference: {fileID: 0}
     - target: {fileID: 3966581752233002300, guid: 4111532fd00cfcf5fa147451bd1c2ed6, type: 3}
       propertyPath: m_Name
       value: Projectile
