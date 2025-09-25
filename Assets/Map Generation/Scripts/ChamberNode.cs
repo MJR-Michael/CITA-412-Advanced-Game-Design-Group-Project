@@ -9,4 +9,5 @@ public class ChamberNode
         "For example, if chamebr grid position is (1,0), and the hallway connector is (1,-1), enter (0,-1).\n\n" +
         "Hallway connector is 1 unit below the grid position")]
     public GridPosition[] hallwayConnectorPositions;
+    public bool isPlayerSpawnPosition;
 }
