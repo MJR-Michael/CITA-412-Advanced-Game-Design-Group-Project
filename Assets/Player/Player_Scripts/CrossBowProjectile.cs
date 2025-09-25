@@ -42,5 +42,6 @@ public class CrossbowProjectile : MonoBehaviour
         // Make the arrow look along the flight direction while aligning with surface normal
         transform.rotation = Quaternion.LookRotation(stickDirection, -contact.normal);
         transform.SetParent(collision.transform);
+        Destroy(rb);
     }
 }
