@@ -248,7 +248,7 @@ MonoBehaviour:
   GroundedRadius: 0.5
   GroundLayers:
     serializedVersion: 2
-    m_Bits: 1
+    m_Bits: 1024
   CinemachineCameraTarget: {fileID: 6175320090875109630}
   TopClamp: 89
   BottomClamp: -89
@@ -264,11 +264,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3489f96111cb96068af564197345672a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Dodgeroll
-  dodgerollCooldown: 1
-  dodgerollDistance: 20
-  dodgerollSpeed: 5
   player: {fileID: 6262523562294740462}
-  controller: {fileID: 2112403539474119680}
+  rollSpeed: 15
+  rollDistance: 5
+  rollCooldown: 1
 --- !u!114 &2748070103715999594
 MonoBehaviour:
   m_ObjectHideFlags: 0
