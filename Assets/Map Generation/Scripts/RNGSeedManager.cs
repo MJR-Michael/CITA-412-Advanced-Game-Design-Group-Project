@@ -24,12 +24,15 @@ public class RNGSeedManager : MonoBehaviour
     public void SetGameSeed(int newGameSeed)
     {
         gameSeed = newGameSeed;
+
+        Debug.Log("Game seed: " + gameSeed);
+
         UnityEngine.Random.InitState(gameSeed);
     }
 
     public void SetGameSeedRandom()
     {
-        gameSeed = Random.Range(0, int.MaxValue);
-        UnityEngine.Random.InitState(gameSeed);
+        SetGameSeed(Random.Range(0, int.MaxValue));
+
     }
 }
