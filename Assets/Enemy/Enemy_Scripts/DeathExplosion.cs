@@ -1,5 +1,4 @@
 using UnityEngine;
-
 public class DeathExplosion : MonoBehaviour, IDeathBehavior
 {
     [SerializeField] private GameObject explosionPrefab;

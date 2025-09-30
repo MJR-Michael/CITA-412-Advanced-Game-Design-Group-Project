@@ -1,3 +1,5 @@
+using UnityEngine;
+
 public class DeathKnockback : MonoBehaviour, IDeathBehavior
 {
     [SerializeField] private float knockbackForce = 10f;
