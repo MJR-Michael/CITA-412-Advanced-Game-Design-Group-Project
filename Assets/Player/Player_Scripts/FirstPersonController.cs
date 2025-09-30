@@ -64,6 +64,9 @@ namespace StarterAssets
 		private float _jumpTimeoutDelta;
 		private float _fallTimeoutDelta;
 
+		//Knockback factors
+		private Vector3 _externalForce = Vector3.zero;
+		private float _knockbackDecayRate = 5.0f; // how quickly knockback fades out // higher = faster
 
 #if ENABLE_INPUT_SYSTEM
 		private PlayerInput _playerInput;
@@ -90,7 +93,6 @@ namespace StarterAssets
 			get;
 			set;
 		}
-
 
 		private void Awake()
 		{
@@ -182,7 +184,7 @@ namespace StarterAssets
 			float currentHorizontalSpeed = new Vector3(_controller.velocity.x, 0.0f, _controller.velocity.z).magnitude;
 
 			float speedOffset = 0.1f;
-			float inputMagnitude = 1f;
+			float inputMagnitude = move.magnitude;
 
 			// accelerate or decelerate to target speed
 			if (currentHorizontalSpeed < targetSpeed - speedOffset || currentHorizontalSpeed > targetSpeed + speedOffset)
@@ -210,8 +212,17 @@ namespace StarterAssets
 				inputDirection = transform.right * move.x + transform.forward * move.y;
 			}
 
+			// --- reduce input control while knockback is active ---
+			float knockbackMagnitude = _externalForce.magnitude;
+			float inputControlFactor = Mathf.Clamp01(1f - (knockbackMagnitude / 80f));
+			// tweak denominator (20f) to control how much knockback reduces input
+	
 			// move the player
-			_controller.Move(inputDirection.normalized * (_speed * Time.deltaTime) + new Vector3(0.0f, _verticalVelocity, 0.0f) * Time.deltaTime);
+			_controller.Move(inputDirection.normalized * (_speed * inputControlFactor * Time.deltaTime) + new Vector3(0.0f, _verticalVelocity, 0.0f) * Time.deltaTime + _externalForce * Time.deltaTime);
+			
+			// decay knockback over time
+			_externalForce = Vector3.Lerp(_externalForce, Vector3.zero, Time.deltaTime * _knockbackDecayRate);
+
 		}
 
 		private void JumpAndGravity()
@@ -289,11 +300,15 @@ namespace StarterAssets
 		{
 			return _verticalVelocity;
 		}
-		
+
 		public CharacterController GetController()
 		{
 			return _controller;
 		}
 
+		public void ApplyKnockback(Vector3 force)
+		{
+			_externalForce = force;
+		}
 	}
 }
