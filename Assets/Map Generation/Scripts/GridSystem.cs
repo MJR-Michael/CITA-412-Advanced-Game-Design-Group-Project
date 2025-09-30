@@ -63,7 +63,7 @@ public class GridSystem : MonoBehaviour
     [SerializeField, Min(0), Tooltip("After connecting all the chambers, additional connections will be made. This controls how long those additional connections may be")]
     int maxPathLengthForAdditionalConnection = 15;
 
-    [SerializeField, Range(0,1), Tooltip("The base chance for an additional chamber connection to be generated")]
+    [SerializeField, Range(0, 1), Tooltip("The base chance for an additional chamber connection to be generated")]
     float chanceForAdditionalConnection = 0.15f;
 
     [SerializeField, Min(0), Tooltip("After connecting all the chambers, additional connections will be made. This controls the maximum number of additional connections that will be generated on the map")]
@@ -89,8 +89,10 @@ public class GridSystem : MonoBehaviour
     //Map Data Structures
     GridObject[,] map;
     Dictionary<GridPosition, ChamberLayoutSO> chamberPositions = new Dictionary<GridPosition, ChamberLayoutSO>();
+    Dictionary<GridPosition, GameObject> chamberGameObjects = new Dictionary<GridPosition, GameObject>();
     Dictionary<GridPosition, GridObject> availableChamberPositions = new Dictionary<GridPosition, GridObject>();
     List<Chamber> chambers = new List<Chamber>();
+    List<Edge> edges = new List<Edge>();
     Chamber startingChamber;
     Chamber bossChamber;
 
@@ -179,7 +181,47 @@ public class GridSystem : MonoBehaviour
 
         //Generate player into the map
         Debug.Log("player starting grid position: " + startingChamber.GetPlayerSpawnPosition());
-        GameObject playerObj = Instantiate(playerPrefab, GetPlayerSpawnPosition(startingChamber) + new Vector3(5,3,5), Quaternion.identity);
+        //Debug.Log("player starting grid position: " + startingChamber.GetPlayerSpawnPosition());
+        GameObject playerObj = Instantiate(playerPrefab, GetPlayerSpawnPosition(startingChamber) + new Vector3(5, 3, 5), Quaternion.identity);
+    }
+    private void Start()
+    {
+        InitializeChamberMonobehaviours();
+        InitializeEdgeMonobehaviours();
+    }
+
+    private void InitializeEdgeMonobehaviours()
+    {
+        foreach (Edge edge in edges) //I'm on the edge... of glory
+        {
+            Chamber chamberA = edge.GetChamberA();
+            Chamber chamberB = edge.GetChamberB();
+
+            chamberA.AddEdgeMonobehaviour(edge.GetEdgeMonobehaviour());
+            chamberB.AddEdgeMonobehaviour(edge.GetEdgeMonobehaviour());
+        }
+    }
+
+    private void InitializeChamberMonobehaviours()
+    {
+        foreach (KeyValuePair<GridPosition, GameObject> chamberPositionObjectValuePair in chamberGameObjects)
+        {
+            //Get the monobehaviour attached & initialize it to the chamber at its origin grid position
+            GameObject chamberObj = chamberPositionObjectValuePair.Value;
+            GridPosition chamberPos = chamberPositionObjectValuePair.Key;
+            ChamberMonoBehaviour chamberMonoBehaviour = chamberObj.GetComponent<ChamberMonoBehaviour>();
+
+            Chamber chamber = chambers.FirstOrDefault(c => c.OriginGridPosition() == chamberPos);
+            if (chamber == null)
+            {
+                Debug.LogError($"Error: Chamber at {chamberPos} does not exist, but monobehaviour object needs one!");
+            }
+
+            chamberMonoBehaviour.Initialize(chamber);
+        }
+
+        //Tell starting chamber to initialize as rendered
+        startingChamber.GetMonobehaviour().OnPlayerEnteredChamber();
     }
 
     private Vector3 GetPlayerSpawnPosition(Chamber startingChamber)
@@ -287,6 +329,7 @@ public class GridSystem : MonoBehaviour
             Vector3 chamberWorldPos = GetWorldPositionFromGridPosition(gridPosition);
 
             GameObject newChamber = Instantiate(chamberKeyValuePair.Value.chamberPrefab, chamberWorldPos, Quaternion.identity);
+            chamberGameObjects.Add(gridPosition, newChamber);
             newChamber.name = $"{gridPosition} Chamber";
         }
     }
@@ -562,7 +605,7 @@ public class GridSystem : MonoBehaviour
 
             //4) Build edge path between chamber A's and B's edge connectors            
             List<GridPosition> path = UsePathfindingAlgorithm(
-                currentEdge.GetEdgeConnectorForChamberA(), 
+                currentEdge.GetEdgeConnectorForChamberA(),
                 currentEdge.GetEdgeConnectorForChamberB()
                 );
 
@@ -817,6 +860,8 @@ public class GridSystem : MonoBehaviour
     }
     private void BuildEdge(Edge edge, List<GridPosition> path)
     {
+        edges.Add(edge); //Microsoft Edge
+
         //Note: path is built from chamber A to B.
         Chamber chamberA = edge.GetChamberA();
         Chamber chamberB = edge.GetChamberB();
@@ -825,8 +870,21 @@ public class GridSystem : MonoBehaviour
 
         //TODO: update this to handle path corners, and replace temp prefab with actual hallway prefabs
 
+        //Create parent edge game object
+        GameObject edgeObj = new GameObject();
+        GameObject parentEdgeRenderer = new GameObject();
+
+        //Initialize parent renderer
+        parentEdgeRenderer.transform.parent = edgeObj.transform;
+        parentEdgeRenderer.name = "Parent Renderer";
+
+        //Initialize edge object
+        edgeObj.name = $"Edge {chamberA.OriginGridPosition()} <-> {chamberB.OriginGridPosition()}";
+        EdgeMonoBehaviour edgeMonoBehaviour = edgeObj.AddComponent<EdgeMonoBehaviour>();
+        edgeMonoBehaviour.Initialize(edge, parentEdgeRenderer);
+
         //Loop through each path position
-        for(int pathIndex = 0; pathIndex < path.Count; pathIndex++)
+        for (int pathIndex = 0; pathIndex < path.Count; pathIndex++)
         {
             //Get previous position of path. If the previous position is out of bounds, then get Chamber A's hallway position to connect to
             GridPosition previousPosition = pathIndex == 0 ?
@@ -838,13 +896,14 @@ public class GridSystem : MonoBehaviour
             //Get next posiiton. If out of bounds, get chamber B's hallway position to connect to
             GridPosition nextPosition = pathIndex == path.Count - 1 ?
                 chamberB.GetPositionOfChamberConnectorFromHallwayPosition(path[path.Count - 1]) : path[pathIndex + 1];
-            
+
             //Determine which prefab to use
             GameObject hallwayPrefab = GetHallwayPrefabFromGridPositions(previousPosition, currentPosition, nextPosition);
 
             //Create the hallway object
             GameObject hallwayObj = Instantiate(hallwayPrefab, GetWorldPositionFromGridPosition(path[pathIndex]), Quaternion.identity);
             hallwayObj.name = $"{path[pathIndex]} Hallway";
+            hallwayObj.transform.parent = parentEdgeRenderer.transform;
 
             //update the map with the new hallway objects
             map[path[pathIndex].x, path[pathIndex].z].MakeObjectAHallway();
@@ -1117,7 +1176,7 @@ public class GridSystem : MonoBehaviour
 
         List<GridPosition> path = new List<GridPosition>();
 
-        
+
 
         return path;
     }
@@ -1223,7 +1282,7 @@ public class GridSystem : MonoBehaviour
 
         return path;
     }
-    
+
 
 
     //Miscellaneous Methods
