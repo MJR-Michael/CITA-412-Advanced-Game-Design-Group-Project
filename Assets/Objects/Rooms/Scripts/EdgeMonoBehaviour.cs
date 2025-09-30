@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 public class EdgeMonoBehaviour : MonoBehaviour
@@ -24,5 +25,28 @@ public class EdgeMonoBehaviour : MonoBehaviour
         parentRenderer.SetActive(false);
     }
 
+    public void OnChamberRendered()
+    {
+        UpdateEdgeRender();
+    }
+
+    private void UpdateEdgeRender()
+    {
+        if (edge.GetChamberA().GetMonobehaviour().IsRendered() ||
+            edge.GetChamberB().GetMonobehaviour().IsRendered())
+        {
+            Render();
+        }
+        else
+        {
+            Cull();
+        }
+    }
+
     public Edge GetEdge() => edge;
+
+    public void OnChamberCulled()
+    {
+        UpdateEdgeRender();
+    }
 }
