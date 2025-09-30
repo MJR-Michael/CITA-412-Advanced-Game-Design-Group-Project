@@ -46,9 +46,10 @@ GameObject:
   - component: {fileID: 8692255592006173583}
   - component: {fileID: 5962814363054516429}
   - component: {fileID: -4758924506697721745}
+  - component: {fileID: 1064089403316771382}
   m_Layer: 0
   m_Name: Enemy2
-  m_TagString: Untagged
+  m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -167,14 +168,14 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2173754672973949297}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 647e221916346cb629f6c76bda80f796, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemyShooter
   laserPrefab: {fileID: 1839331193652955715, guid: a41a342dd0960c598baef2025d1cee03, type: 3}
   firePoint: {fileID: 376258350996773454}
-  fireCooldown: 2
+  fireCooldown: 3
 --- !u!114 &-4758924506697721745
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -187,9 +188,22 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 17eda7a3f24aec3498da222c66cb1610, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Enemy2_Movement
-  maxVerticalDistance: 2
-  verticalSpeed: 0.5
-  verticalRandomFactor: 1
-  horizontalSpeed: 0.2
-  horizontalRange: 3
-  horizontalRandomFactor: 1
+  amplitude: 0.7
+  frequency: 0.2
+  horizontalSpeed: 0.1
+  horizontalRange: 2
+  horizontalRandomFactor: 8
+  rotationSpeed: 5
+--- !u!114 &1064089403316771382
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2173754672973949297}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9ceb3881d56dafe87aaa3027af599fff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::DeathKnockback
+  knockbackForce: 10

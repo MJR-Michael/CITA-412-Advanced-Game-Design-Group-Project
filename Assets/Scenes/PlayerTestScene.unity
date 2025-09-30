@@ -7611,26 +7611,6 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 3989554}
     m_Modifications:
-    - target: {fileID: -4758924506697721745, guid: a115041505eb3068db17edd1d8ab1746, type: 3}
-      propertyPath: amplitude
-      value: 0.7
-      objectReference: {fileID: 0}
-    - target: {fileID: -4758924506697721745, guid: a115041505eb3068db17edd1d8ab1746, type: 3}
-      propertyPath: frequency
-      value: 0.2
-      objectReference: {fileID: 0}
-    - target: {fileID: -4758924506697721745, guid: a115041505eb3068db17edd1d8ab1746, type: 3}
-      propertyPath: horizontalRange
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: -4758924506697721745, guid: a115041505eb3068db17edd1d8ab1746, type: 3}
-      propertyPath: horizontalSpeed
-      value: 0.1
-      objectReference: {fileID: 0}
-    - target: {fileID: -4758924506697721745, guid: a115041505eb3068db17edd1d8ab1746, type: 3}
-      propertyPath: horizontalRandomFactor
-      value: 8
-      objectReference: {fileID: 0}
     - target: {fileID: 2173754672973949297, guid: a115041505eb3068db17edd1d8ab1746, type: 3}
       propertyPath: m_Name
       value: Enemy2
@@ -7675,13 +7655,13 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 5962814363054516429, guid: a115041505eb3068db17edd1d8ab1746, type: 3}
-      propertyPath: m_Enabled
-      value: 1
+    - target: {fileID: 8692255592006173583, guid: a115041505eb3068db17edd1d8ab1746, type: 3}
+      propertyPath: maxHealth
+      value: 20
       objectReference: {fileID: 0}
-    - target: {fileID: 5962814363054516429, guid: a115041505eb3068db17edd1d8ab1746, type: 3}
-      propertyPath: fireCooldown
-      value: 3
+    - target: {fileID: 8692255592006173583, guid: a115041505eb3068db17edd1d8ab1746, type: 3}
+      propertyPath: currentHealth
+      value: 20
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
