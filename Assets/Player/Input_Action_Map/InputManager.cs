@@ -1,39 +1,16 @@
-using System;
-using System.Linq;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
 public class InputManager : MonoBehaviour
 {
-    public enum InputControlScheme
-    {
-        Player,
-        UI
-    }
-
-    [System.Serializable]
-    public class SceneControlBinding
-    {
-        public SceneReferenceSO scene;
-        public InputControlScheme inputControlScheme;
-    }
-
-
-    [SerializeField, Tooltip("Stores reference to scenes to handle their initial logic for loading into the scene. For example, " +
-        "loading into the main menu should enable UI control scheme, and loading into the game scene should enable play control scheme")]
-    SceneControlBinding[] scenesInBuildIndex;
-
-
     //Singleton
     public static InputManager Instance;
 
     //Player controls
     Controls controls;
 
-    bool initialized = false;
-
     private void Awake()
     {
+
         //Singleton Pattern
         if (Instance == null)
         {
@@ -48,12 +25,10 @@ public class InputManager : MonoBehaviour
 
         //Craete player controls
         controls = new Controls();
-
-        initialized = true;
-
         //Set controls to default
         EnableDefaultControls();
     }
+
 
     //Input debugging
     /*
@@ -87,70 +62,10 @@ public class InputManager : MonoBehaviour
 
     */
 
-    private void OnEnable()
-    {
-        SceneManager.sceneLoaded += HandleSceneLoaded;
-    }
-
-    private void OnDisable()
-    {
-        if (!initialized) { return; }
-
-        controls.Player.Disable();
-        controls.UI.Disable();
-        SceneManager.sceneLoaded -= HandleSceneLoaded;
-    }
-
     private void OnDestroy()
     {
-        if (!initialized) { return; }
-
         controls.Player.Disable();
         controls.UI.Disable();
-        SceneManager.sceneLoaded -= HandleSceneLoaded;
-
-        controls.Dispose();
-    }
-
-    //Subscription events
-    private void HandleSceneLoaded(Scene newScene, LoadSceneMode arg1)
-    {
-        bool controlSchemeApplied = false;
-
-        //Check if the scene has a certain control scheme to initialize as
-        foreach (SceneControlBinding sceneControlBinding in scenesInBuildIndex)
-        {
-            //Get the scene name
-            string sceneName = sceneControlBinding.scene.SceneName;
-
-            //Check if the scene name is the same as the new scene's name
-            if (newScene.name.CompareTo(sceneName) != 0) continue;
-
-            //Control scheme will be applied
-            controlSchemeApplied = true;
-
-            //Enable the corresponing input scheme based on the scene's control binding
-            switch (sceneControlBinding.inputControlScheme)
-            {
-                case InputControlScheme.Player:
-                    SetControlSchemeToPlayer();
-                    break;
-                case InputControlScheme.UI:
-                    SetControlSchemeToUI(); 
-                    break;
-                default:
-                    EnableDefaultControls();
-                    break;
-            }
-        }
-
-        //Check if the control scheme was applied
-        if (!controlSchemeApplied)
-        {
-            //Apply default controls on scene load
-            Debug.LogWarning($"Warning: No control scheme given for scene, '{newScene.name}'");
-            EnableDefaultControls();
-        }
     }
 
 
@@ -162,20 +77,12 @@ public class InputManager : MonoBehaviour
 
     public void SetControlSchemeToUI()
     {
-        //When the player is in the UI menus, they should see their mouse (or the mouse sprite if we add one) and their mouse position must be unlocked
-        Cursor.lockState = CursorLockMode.None;
-        Cursor.visible = true;
-
         controls.Player.Disable();
         controls.UI.Enable();
     }
 
     public void SetControlSchemeToPlayer()
     {
-        //When the player is playing the game, they should not see their mouse, and the mouse position must be locked in place.
-        Cursor.lockState = CursorLockMode.Locked;
-        Cursor.visible = false;
-
         controls.Player.Enable();
         controls.UI.Disable();
     }
