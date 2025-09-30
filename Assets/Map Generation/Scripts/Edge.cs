@@ -4,6 +4,7 @@ public class Edge
 {
     List<GridPosition> path;
 
+    EdgeMonoBehaviour edgeMonobehaviour;
     GridPosition edgeConnectorForChamberA;
     GridPosition edgeConnectorForChamberB;
     Chamber chamberA;
@@ -32,4 +33,6 @@ public class Edge
     public Chamber GetChamberA() => chamberA;
     public Chamber GetChamberB() => chamberB;
     public int GetEdgeCost() => edgeCost;
+    public void SetEdgeMonobehaviour(EdgeMonoBehaviour newBehaviour) => edgeMonobehaviour = newBehaviour;
+    public EdgeMonoBehaviour GetEdgeMonobehaviour() => edgeMonobehaviour;
 }
