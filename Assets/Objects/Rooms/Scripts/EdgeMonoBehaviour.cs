@@ -4,25 +4,31 @@ using UnityEngine;
 public class EdgeMonoBehaviour : MonoBehaviour
 {
     Edge edge;
-    GameObject parentRenderer;
 
+    EdgeNodeMonobehaviour[] edgeNodes;
 
-    public void Initialize(Edge edge, GameObject parentRenderer)
+    public void Initialize(Edge edge)
     {
         this.edge = edge;
-        this.parentRenderer = parentRenderer;
         edge.SetEdgeMonobehaviour(this);
+        edgeNodes = GetComponentsInChildren<EdgeNodeMonobehaviour>();
 
-        parentRenderer.SetActive(false);
+        Cull();
     }
 
     public void Render()
     {
-        parentRenderer.SetActive(true);
+        foreach (EdgeNodeMonobehaviour edge in edgeNodes)
+        {
+            edge.Cull();
+        }
     }
     public void Cull()
     {
-        parentRenderer.SetActive(false);
+        foreach (EdgeNodeMonobehaviour edge in edgeNodes)
+        {
+            edge.Cull();
+        }
     }
 
     public void OnChamberRendered()
