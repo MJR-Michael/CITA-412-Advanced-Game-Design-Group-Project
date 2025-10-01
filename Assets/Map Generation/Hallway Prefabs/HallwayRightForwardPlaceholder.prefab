@@ -148,7 +148,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 90, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 5.000001, y: 10.000002}
+  m_AnchoredPosition: {x: 5.000001, y: 0}
   m_SizeDelta: {x: 37, y: 37}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!223 &3360996856943584459
@@ -373,6 +373,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EdgeNodeMonobehaviour
   parentRenderer: {fileID: 7882111645856502693}
+  mapRenderer: {fileID: 2768672611405704607}
 --- !u!1 &4072216324282627748
 GameObject:
   m_ObjectHideFlags: 0

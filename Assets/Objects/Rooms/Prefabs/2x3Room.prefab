@@ -1276,7 +1276,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 90, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 54, y: 36}
+  m_AnchoredPosition: {x: 54, y: 0}
   m_SizeDelta: {x: 112.5, y: 75}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!223 &1770519498966357659
@@ -1797,6 +1797,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ChamberMonoBehaviour
   parentRenderer: {fileID: 804598715354904755}
+  mapRenderer: {fileID: 5429127126119510075}
   chamberTrigger: {fileID: 2177735373624546322}
 --- !u!65 &2177735373624546322
 BoxCollider:

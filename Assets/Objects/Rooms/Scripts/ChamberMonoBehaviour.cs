@@ -8,11 +8,15 @@ public class ChamberMonoBehaviour : MonoBehaviour
     GameObject parentRenderer;
 
     [SerializeField]
+    GameObject mapRenderer;
+
+    [SerializeField]
     Collider chamberTrigger;
 
     Chamber chamber;
 
     bool isRendered;
+    bool hasBeenVisisted;
 
     private void OnTriggerEnter(Collider other)
     {
@@ -25,6 +29,8 @@ public class ChamberMonoBehaviour : MonoBehaviour
 
     public void OnPlayerEnteredChamber()
     {
+        hasBeenVisisted = true;
+        mapRenderer.SetActive(true);
         Render();
 
         //Tell adjacent neighbors to cull out their neighbors, excluding this chamber & the ones this chamber connects to.
@@ -46,6 +52,7 @@ public class ChamberMonoBehaviour : MonoBehaviour
 
         //Cull out by default
         parentRenderer.SetActive(false);
+        mapRenderer.SetActive(false);
 
         //Set the chamber monobehaviour
         chamber.SetMonobehaviour(this);
@@ -86,4 +93,5 @@ public class ChamberMonoBehaviour : MonoBehaviour
     }
 
     public bool IsRendered() => isRendered;
+    public bool HasBeenVisisted() => hasBeenVisisted;
 }

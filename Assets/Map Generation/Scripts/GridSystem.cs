@@ -963,7 +963,7 @@ public class GridSystem : MonoBehaviour
             map[path[pathIndex].x, path[pathIndex].z].MakeObjectAHallway();
         }
 
-        edgeMonoBehaviour.Initialize(edge);
+        edgeMonoBehaviour.Initialize(edge, parentEdgeRenderer);
 
         float timeEndBuildingPaths = Time.realtimeSinceStartup;
         timeSpentBuildingPaths += timeEndBuildingPaths - timeStartBuildingPath;
