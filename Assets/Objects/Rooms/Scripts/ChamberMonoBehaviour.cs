@@ -10,6 +10,12 @@ public class ChamberMonoBehaviour : MonoBehaviour
     [SerializeField]
     Collider chamberTrigger;
 
+    [SerializeField]
+    EnemySpawner spawner;
+
+    [SerializeField] 
+    int enemiesToSpawn = 1;
+
     Chamber chamber;
 
     bool isRendered;
@@ -36,6 +42,12 @@ public class ChamberMonoBehaviour : MonoBehaviour
         {
             adjacentChamber.GetMonobehaviour().Render();
             adjacentChamber.GetMonobehaviour().CullOutAdjacentChambers(chambersNotToCullOut);
+        }
+
+        // Spawn a few enemies when player enters
+        for (int i = 0; i < enemiesToSpawn; i++)
+        {
+            spawner.SpawnEnemyInChamber(this);
         }
     }
 
@@ -118,6 +130,11 @@ public class ChamberMonoBehaviour : MonoBehaviour
         {
             edgeMonoBehaviour.OnChamberRendered();
         }
+    }
+
+    public Collider GetChamberCollider()
+    {
+        return chamberTrigger;
     }
 
     public bool IsRendered() => isRendered;
