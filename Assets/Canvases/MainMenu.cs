@@ -6,13 +6,17 @@ using UnityEngine.UI;
 public class MainMenu : MonoBehaviour
 {
     [SerializeField]
-    TextMeshProUGUI inputText;
+    TMP_InputField inputField;
 
     const string GAME_SCENE_STRING = "GameScene";
 
     public void OnButtonPressed()
     {
-        if (int.TryParse(inputText.text, out int gameSeed))
+        Debug.Log("Button pressed. Input text value: " + inputField.text);
+
+        Debug.Log($"Can this be parsed to an integer? {int.TryParse(inputField.text, out int i)}");
+
+        if (int.TryParse(inputField.text, out int gameSeed))
         {
             RNGSeedManager.Instance.SetGameSeed(gameSeed);
         }

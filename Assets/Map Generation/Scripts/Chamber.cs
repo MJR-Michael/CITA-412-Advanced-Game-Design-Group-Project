@@ -1,11 +1,14 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 
 public class Chamber
 {
     List<Chamber> connectedTo;
     GridPosition originGridPosition;
     ChamberLayoutSO chamberLayoutSO;
+    ChamberMonoBehaviour chamberMonoBehaviour;
+    List<EdgeMonoBehaviour> edgeMonobehaviours = new List<EdgeMonoBehaviour>();
 
     /// <summary>
     /// Key = hallway connector to the chamber (absolute position). Value = the chamber that connects to a hallway (absolute position)
@@ -51,7 +54,10 @@ public class Chamber
         return hallwayConnectors.Remove(connectorGridPosition);
     }
     public void AddConnection(Chamber otherChamber) => connectedTo.Add(otherChamber);
+    public List<Chamber> GetConnectingChambers() => connectedTo;
     public bool IsBossChamber() => isBossChamber;
+    public ChamberMonoBehaviour GetMonobehaviour() => chamberMonoBehaviour;
+    public void SetMonobehaviour(ChamberMonoBehaviour monoBehaviour) => this.chamberMonoBehaviour = monoBehaviour;
     public bool IsConnectedTo(Chamber givenChamber) => connectedTo.Contains(givenChamber);
     /// <summary>
     /// Key = hallway connector to the chamber (absolute position). Value = the chamber that connects to a hallway (absolute position)
@@ -60,11 +66,14 @@ public class Chamber
     public bool IsVisited() => isVisited;
     public void SetIsVisited(bool isVisited) => this.isVisited = isVisited;
 
+    public GridPosition OriginGridPosition() => originGridPosition;
     public bool ContainsHallwayConnector(GridPosition gridPosition)
     {
         return hallwayConnectors.ContainsKey(gridPosition);
     }
 
+    public void AddEdgeMonobehaviour(EdgeMonoBehaviour newEdgeMonobehaviour) => edgeMonobehaviours.Add(newEdgeMonobehaviour);
+    public List<EdgeMonoBehaviour> GetEdgeMonoBehaviours() => edgeMonobehaviours;
     public GridPosition GetPlayerSpawnPosition()
     {
         //Get the spawn position from the prefab
@@ -72,4 +81,21 @@ public class Chamber
     }
 
     public object GetChamberLayoutSO() => chamberLayoutSO;
+
+    public EdgeMonoBehaviour GetEdgeMonoBehaviourBetweenChambers(Chamber otherChamber)
+    {
+        foreach (EdgeMonoBehaviour edgeMonoBehaviour in edgeMonobehaviours)
+        {
+            Chamber chamberA = edgeMonoBehaviour.GetEdge().GetChamberA();
+            Chamber chamberB = edgeMonoBehaviour.GetEdge().GetChamberB();
+
+            if ((otherChamber == chamberA && this == chamberB) ||
+                this == chamberA && otherChamber == chamberB)
+            {
+                return edgeMonoBehaviour;
+            }
+        }
+
+        return null;
+    }
 }
