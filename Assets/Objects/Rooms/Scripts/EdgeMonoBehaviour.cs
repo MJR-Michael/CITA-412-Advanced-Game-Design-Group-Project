@@ -6,28 +6,56 @@ public class EdgeMonoBehaviour : MonoBehaviour
     Edge edge;
     GameObject parentRenderer;
 
+    EdgeNodeMonobehaviour[] edgeNodes;
 
     public void Initialize(Edge edge, GameObject parentRenderer)
     {
         this.edge = edge;
-        this.parentRenderer = parentRenderer;
         edge.SetEdgeMonobehaviour(this);
+        this.parentRenderer = parentRenderer;
+        edgeNodes = parentRenderer.GetComponentsInChildren<EdgeNodeMonobehaviour>();
 
-        parentRenderer.SetActive(false);
+        Cull();
+        foreach (EdgeNodeMonobehaviour node in edgeNodes)
+        {
+            node.Initialize();
+        }
     }
 
     public void Render()
     {
-        parentRenderer.SetActive(true);
+        Debug.Log("rendering");
+        foreach (EdgeNodeMonobehaviour edge in edgeNodes)
+        {
+            Debug.Log(edge.gameObject.name);
+
+            edge.Render();
+        }
     }
     public void Cull()
     {
-        parentRenderer.SetActive(false);
+        foreach (EdgeNodeMonobehaviour edge in edgeNodes)
+        {
+            edge.Cull();
+        }
     }
 
     public void OnChamberRendered()
     {
         UpdateEdgeRender();
+        CheckIfShouldDisplayToMap();
+    }
+    private void CheckIfShouldDisplayToMap()
+    {
+        if (edge.GetChamberA().GetMonobehaviour().HasBeenVisisted() &&
+            edge.GetChamberB().GetMonobehaviour().HasBeenVisisted())
+        {
+            //Show up on the map
+            foreach (EdgeNodeMonobehaviour edge in edgeNodes)
+            {
+                edge.RenderOnMap();
+            }
+        }
     }
 
     private void UpdateEdgeRender()

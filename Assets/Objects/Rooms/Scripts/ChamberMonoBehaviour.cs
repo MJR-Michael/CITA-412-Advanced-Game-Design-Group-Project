@@ -8,11 +8,15 @@ public class ChamberMonoBehaviour : MonoBehaviour
     GameObject parentRenderer;
 
     [SerializeField]
+    GameObject mapRenderer;
+
+    [SerializeField]
     Collider chamberTrigger;
 
     Chamber chamber;
 
     bool isRendered;
+    bool hasBeenVisisted;
 
     private void OnTriggerEnter(Collider other)
     {
@@ -25,6 +29,8 @@ public class ChamberMonoBehaviour : MonoBehaviour
 
     public void OnPlayerEnteredChamber()
     {
+        hasBeenVisisted = true;
+        mapRenderer.SetActive(true);
         Render();
 
         //Tell adjacent neighbors to cull out their neighbors, excluding this chamber & the ones this chamber connects to.
@@ -39,27 +45,6 @@ public class ChamberMonoBehaviour : MonoBehaviour
         }
     }
 
-    public void RenderEdges()
-    {
-        foreach (EdgeMonoBehaviour edgeMonoBehaviour in chamber.GetEdgeMonoBehaviours())
-        {
-            if (chamber.OriginGridPosition() == new GridPosition(25, 30))
-            {
-                Debug.Log("current edge being rendered: " + edgeMonoBehaviour.gameObject.name);
-            }
-            edgeMonoBehaviour.Render();
-        }
-    }
-
-    public void CullEdges(EdgeMonoBehaviour edgesNotToCull)
-    {
-        foreach (EdgeMonoBehaviour edge in chamber.GetEdgeMonoBehaviours())
-        {
-            if (edgesNotToCull == edge) continue;
-            edge.Cull();
-        }
-    }
-
     public void Initialize(Chamber chamber)
     {
         //Set chamber data
@@ -67,6 +52,7 @@ public class ChamberMonoBehaviour : MonoBehaviour
 
         //Cull out by default
         parentRenderer.SetActive(false);
+        mapRenderer.SetActive(false);
 
         //Set the chamber monobehaviour
         chamber.SetMonobehaviour(this);
@@ -78,19 +64,6 @@ public class ChamberMonoBehaviour : MonoBehaviour
         foreach (Chamber adjacentChamber in chamber.GetConnectingChambers())
         {
             if (chambersNotToCullOut.Contains(adjacentChamber)) { continue; }
-
-            //cull out adjacent chamber's edges, but not the edge current is connecting to
-
-            //tell adjacent neighbors to the adjacent neighbor to cull out their edges
-            foreach (Chamber doublyAdjacentNeighbor in adjacentChamber.GetConnectingChambers())
-            {
-                if (doublyAdjacentNeighbor == chamber) continue; //No looping in on current chamber
-                EdgeMonoBehaviour edgeMonoBehaviourBetweenNeighborEdges = adjacentChamber.GetEdgeMonoBehaviourBetweenChambers(
-                    doublyAdjacentNeighbor);
-                if (edgeMonoBehaviourBetweenNeighborEdges == null) continue;
-
-                doublyAdjacentNeighbor.GetMonobehaviour().CullEdges(edgeMonoBehaviourBetweenNeighborEdges);
-            }
 
             //cull out the object
             adjacentChamber.GetMonobehaviour().Cull();
@@ -112,7 +85,6 @@ public class ChamberMonoBehaviour : MonoBehaviour
     {
         parentRenderer.SetActive(true);
         chamberTrigger.enabled = true;
-        RenderEdges();
         isRendered = true;
         foreach (EdgeMonoBehaviour edgeMonoBehaviour in chamber.GetEdgeMonoBehaviours())
         {
@@ -121,4 +93,5 @@ public class ChamberMonoBehaviour : MonoBehaviour
     }
 
     public bool IsRendered() => isRendered;
+    public bool HasBeenVisisted() => hasBeenVisisted;
 }
