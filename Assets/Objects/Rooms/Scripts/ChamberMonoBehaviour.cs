@@ -2,34 +2,39 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
+[Serializable]
+public class EnemySpawnInfo
+{
+    public GameObject enemyPrefab;
+    public Transform spawnPoint;
+}
+
 public class ChamberMonoBehaviour : MonoBehaviour
 {
-    [SerializeField]
-    GameObject parentRenderer;
+    [Header("Rendering & Triggers")]
+    [SerializeField] private GameObject parentRenderer;
+    [SerializeField] private Collider chamberTrigger;
 
-    [SerializeField]
-    Collider chamberTrigger;
+    [Header("Enemy Spawning")]
+    [SerializeField] private List<EnemySpawnInfo> enemySpawnInfos = new(); // Per-prefab spawn data
 
-    [SerializeField]
-    EnemySpawner spawner;
+    private Chamber chamber;
+    private bool isRendered;
 
-    [SerializeField] 
-    int enemiesToSpawn = 1;
+    // 🔔 Event that notifies external systems when the player enters
+    public event Action<ChamberMonoBehaviour> OnPlayerEntered;
 
-    Chamber chamber;
-
-    bool isRendered;
-
+    // TRIGGER HANDLING
     private void OnTriggerEnter(Collider other)
     {
         if (other.TryGetComponent<Player>(out Player player))
         {
-            OnPlayerEnteredChamber();
+            HandlePlayerEnteredChamber();
+            OnPlayerEntered?.Invoke(this); // ✅ Notify the manager or spawner system
         }
-        //Add other objects that need to handle entering chambers here
     }
 
-    public void OnPlayerEnteredChamber()
+    public void HandlePlayerEnteredChamber()
     {
         Render();
 
@@ -43,22 +48,15 @@ public class ChamberMonoBehaviour : MonoBehaviour
             adjacentChamber.GetMonobehaviour().Render();
             adjacentChamber.GetMonobehaviour().CullOutAdjacentChambers(chambersNotToCullOut);
         }
-
-        // Spawn a few enemies when player enters
-        for (int i = 0; i < enemiesToSpawn; i++)
-        {
-            spawner.SpawnEnemyInChamber(this);
-        }
     }
 
+    // ----------------------------
+    // RENDERING & CULLING
+    // ----------------------------
     public void RenderEdges()
     {
         foreach (EdgeMonoBehaviour edgeMonoBehaviour in chamber.GetEdgeMonoBehaviours())
         {
-            if (chamber.OriginGridPosition() == new GridPosition(25, 30))
-            {
-                Debug.Log("current edge being rendered: " + edgeMonoBehaviour.gameObject.name);
-            }
             edgeMonoBehaviour.Render();
         }
     }
@@ -89,16 +87,14 @@ public class ChamberMonoBehaviour : MonoBehaviour
         //Tell all neighbors to be culled out if they should be
         foreach (Chamber adjacentChamber in chamber.GetConnectingChambers())
         {
-            if (chambersNotToCullOut.Contains(adjacentChamber)) { continue; }
-
-            //cull out adjacent chamber's edges, but not the edge current is connecting to
+            if (chambersNotToCullOut.Contains(adjacentChamber)) continue;
 
             //tell adjacent neighbors to the adjacent neighbor to cull out their edges
             foreach (Chamber doublyAdjacentNeighbor in adjacentChamber.GetConnectingChambers())
             {
                 if (doublyAdjacentNeighbor == chamber) continue; //No looping in on current chamber
-                EdgeMonoBehaviour edgeMonoBehaviourBetweenNeighborEdges = adjacentChamber.GetEdgeMonoBehaviourBetweenChambers(
-                    doublyAdjacentNeighbor);
+                EdgeMonoBehaviour edgeMonoBehaviourBetweenNeighborEdges =
+                    adjacentChamber.GetEdgeMonoBehaviourBetweenChambers(doublyAdjacentNeighbor);
                 if (edgeMonoBehaviourBetweenNeighborEdges == null) continue;
 
                 doublyAdjacentNeighbor.GetMonobehaviour().CullEdges(edgeMonoBehaviourBetweenNeighborEdges);
@@ -120,22 +116,24 @@ public class ChamberMonoBehaviour : MonoBehaviour
             edgeMonoBehaviour.OnChamberCulled();
         }
     }
+
     public void Render()
     {
         parentRenderer.SetActive(true);
         chamberTrigger.enabled = true;
         RenderEdges();
         isRendered = true;
+
         foreach (EdgeMonoBehaviour edgeMonoBehaviour in chamber.GetEdgeMonoBehaviours())
         {
             edgeMonoBehaviour.OnChamberRendered();
         }
     }
 
-    public Collider GetChamberCollider()
-    {
-        return chamberTrigger;
-    }
-
+    // ----------------------------
+    // ACCESSORS
+    // ----------------------------
+    public List<EnemySpawnInfo> GetSpawnInfos() => enemySpawnInfos;
+    public Collider GetChamberCollider() => chamberTrigger;
     public bool IsRendered() => isRendered;
 }

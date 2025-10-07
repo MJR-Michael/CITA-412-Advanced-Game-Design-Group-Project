@@ -1,33 +1,17 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 public class EnemySpawner : MonoBehaviour
 {
-    [SerializeField] private GameObject enemyPrefab;
-
-    public GameObject SpawnEnemyInChamber(ChamberMonoBehaviour chamber)
+    public void SpawnEnemies(List<EnemySpawnInfo> spawnInfos)
     {
-        if (enemyPrefab == null || chamber == null)
-            return null;
-
-        // Get chamber bounds
-        Bounds bounds = chamber.GetChamberCollider().bounds;
-
-        // Pick a random spawn point
-        Vector3 spawnPos = new Vector3(
-            Random.Range(bounds.min.x, bounds.max.x),
-            Random.Range(bounds.min.y, bounds.max.y),
-            Random.Range(bounds.min.z, bounds.max.z)
-        );
-
-        // Instantiate enemy
-        GameObject enemy = Instantiate(enemyPrefab, spawnPos, Quaternion.identity);
-
-        // Assign chamber reference to enemy
-        if (enemy.TryGetComponent<EnemyTeleport>(out EnemyTeleport teleport))
+        foreach (var info in spawnInfos)
         {
-            teleport.SetCurrentChamber(chamber);
-        }
+            if (info.enemyPrefab == null || info.spawnPoint == null)
+                continue;
 
-        return enemy;
+            // TODO: Replace this with pooling for performance
+            Instantiate(info.enemyPrefab, info.spawnPoint.position, info.spawnPoint.rotation);
+        }
     }
 }
