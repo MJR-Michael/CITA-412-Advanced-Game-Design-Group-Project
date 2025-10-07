@@ -7,7 +7,10 @@ public class EnemySpawnInfo
 {
     public GameObject enemyPrefab;
     public Transform spawnPoint;
+
+    [HideInInspector] public ChamberMonoBehaviour chamber;
 }
+
 
 public class ChamberMonoBehaviour : MonoBehaviour
 {
@@ -133,7 +136,16 @@ public class ChamberMonoBehaviour : MonoBehaviour
     // ----------------------------
     // ACCESSORS
     // ----------------------------
-    public List<EnemySpawnInfo> GetSpawnInfos() => enemySpawnInfos;
+    public List<EnemySpawnInfo> GetSpawnInfos()
+    {
+        // Assign this chamber reference to each spawn info
+        foreach (var info in enemySpawnInfos)
+        {
+            info.chamber = this;
+        }
+
+        return enemySpawnInfos;
+    }
     public Collider GetChamberCollider() => chamberTrigger;
     public bool IsRendered() => isRendered;
 }

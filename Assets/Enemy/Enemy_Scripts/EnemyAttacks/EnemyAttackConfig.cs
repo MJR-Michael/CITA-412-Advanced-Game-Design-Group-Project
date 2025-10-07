@@ -8,7 +8,7 @@ public enum FirePattern
     Area
 }
 
-[CreateAssetMenu(fileName = "EnemyAttackConfig", menuName = "Enemies/AttackConfig")]
+[CreateAssetMenu(fileName = "EnemyAttackConfig", menuName = "ScriptableObject/AttackConfig")]
 public class EnemyAttackConfig : ScriptableObject
 {
     public GameObject projectilePrefab;

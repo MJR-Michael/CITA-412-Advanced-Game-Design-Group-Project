@@ -10,8 +10,15 @@ public class EnemySpawner : MonoBehaviour
             if (info.enemyPrefab == null || info.spawnPoint == null)
                 continue;
 
-            // TODO: Replace this with pooling for performance
-            Instantiate(info.enemyPrefab, info.spawnPoint.position, info.spawnPoint.rotation);
+            GameObject enemyObj = Instantiate(
+                info.enemyPrefab,
+                info.spawnPoint.position,
+                info.spawnPoint.rotation
+            );
+
+            // If the enemy implements IChamberBound, set its chamber
+            var chamberBound = enemyObj.GetComponent<IChamberBound>();
+            chamberBound?.SetChamber(info.chamber);
         }
     }
 }
