@@ -51,7 +51,7 @@ public class GridSystem : MonoBehaviour
     [SerializeField, Min(1), Tooltip("The lenght of the map")]
     int mapLength = 10;
 
-    [SerializeField, Min(1), Tooltip("The width of the map")]
+    [SerializeField, Min(1), Tooltip("The gridWidth of the map")]
     int mapWidth = 10;
 
     [SerializeField, Min(1), Tooltip("The minimum number of chambers that will be placed on the map")]
