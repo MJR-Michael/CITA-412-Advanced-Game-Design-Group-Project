@@ -267,7 +267,6 @@ public class GridSystem : MonoBehaviour
         if (spawnManager == null)
         {
             Debug.LogError("EnemySpawnManager reference is missing!");
-            return;
         }
 
         // Build a dictionary for fast lookups
