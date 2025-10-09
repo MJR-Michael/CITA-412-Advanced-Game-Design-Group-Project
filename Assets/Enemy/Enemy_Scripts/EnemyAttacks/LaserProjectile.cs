@@ -1,8 +1,9 @@
 using UnityEngine;
 
-public class LaserProjectile : MonoBehaviour
+public class LaserProjectile : MonoBehaviour, IProjectile
 {
     public float speed = 10f;
+    public float damage = 10f;
     private Vector3 direction;
     public float lifetime = 5f;
 
@@ -13,24 +14,21 @@ public class LaserProjectile : MonoBehaviour
 
     private void Update()
     {
-        // Move the laser forward
         transform.position += direction * speed * Time.deltaTime;
     }
 
-    // Called by the spawner to set the target
-    public void Initialize(Vector3 targetPosition)
+    // Implement IProjectile
+    public void Initialize(Vector3 targetPosition, float projectileSpeed)
     {
-        // Calculate direction toward target
         direction = (targetPosition - transform.position).normalized;
+        speed = projectileSpeed;
     }
 
     private void OnTriggerEnter(Collider other)
     {
-        // Example: damage players
-        if (other.CompareTag("Player"))
+        if (other.CompareTag("Player") && other.TryGetComponent(out Player player))
         {
-            Debug.Log("Hit player!");
-            // TODO: Call PlayerCore.TakeDamage() here
+            player.TakeDamage(damage);
             Destroy(gameObject);
         }
     }
