@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 #if ENABLE_INPUT_SYSTEM
 using UnityEngine.InputSystem;
 #endif
@@ -216,6 +216,8 @@ namespace StarterAssets
 			float knockbackMagnitude = _externalForce.magnitude;
 			float inputControlFactor = Mathf.Clamp01(1f - (knockbackMagnitude / 80f));
 			// tweak denominator (20f) to control how much knockback reduces input
+
+			// depending on how strong the knockback is, the player will have less control! Theres a way to make the player always have a certain ammount of control.
 	
 			// move the player
 			_controller.Move(inputDirection.normalized * (_speed * inputControlFactor * Time.deltaTime) + new Vector3(0.0f, _verticalVelocity, 0.0f) * Time.deltaTime + _externalForce * Time.deltaTime);

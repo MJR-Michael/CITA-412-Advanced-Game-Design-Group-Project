@@ -33,8 +33,8 @@ Transform:
   m_GameObject: {fileID: 913636348551868650}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.43, y: 2.08, z: -40.54}
-  m_LocalScale: {x: 3.6, y: 3.6, z: 3.6}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 2, y: 2, z: 2}
   m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 0}
@@ -72,7 +72,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 31321ba15b8f8eb4c954353edc038b1d, type: 2}
+  - {fileID: 2100000, guid: 51a84b2d0798a8ac38d0504cb76ebb66, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -190,11 +190,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a0b868adf01ea655ea127af9d6530d8d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Enemy1_Mo2ement
-  speed: 3
+  speed: 2
   minMoveDuration: 1
   maxMoveDuration: 2
   minPauseDuration: 2
-  maxPauseDuration: 5
+  maxPauseDuration: 4
 --- !u!114 &5183600103625658831
 MonoBehaviour:
   m_ObjectHideFlags: 0
