@@ -50,8 +50,8 @@ public class ChamberMonoBehaviour : MonoBehaviour
         //Set chamber data
         this.chamber = chamber;
 
-        //Cull out by default
-        parentRenderer.SetActive(false);
+        Cull();
+
         mapRenderer.SetActive(false);
 
         //Set the chamber monobehaviour
