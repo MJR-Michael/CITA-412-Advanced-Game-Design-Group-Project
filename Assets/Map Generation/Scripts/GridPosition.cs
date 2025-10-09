@@ -17,6 +17,7 @@ public struct GridPosition : IEquatable<GridPosition>
     /// </summary>
     public static readonly GridPosition Invalid = new GridPosition(int.MinValue, int.MinValue);
     public static readonly GridPosition Zero = new GridPosition(0, 0);
+    public static readonly GridPosition One = new GridPosition(1, 1);
 
     public static readonly GridPosition Forward = new GridPosition(0, 1);
     public static readonly GridPosition Rightward = new GridPosition(1, 0);
