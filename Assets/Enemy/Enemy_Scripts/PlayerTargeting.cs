@@ -7,14 +7,18 @@ public static class PlayerTargeting
     {
         GameObject[] players = GameObject.FindGameObjectsWithTag("Player");
         Transform closest = null;
-        float minDistance = Mathf.Infinity;
+        float minDistanceSqr = Mathf.Infinity;
 
         foreach (GameObject player in players)
         {
-            float distance = Vector3.Distance(fromPosition, player.transform.position);
-            if (distance < minDistance)
+            if (player == null) continue;
+
+            Vector3 toPlayer = player.transform.position - fromPosition;
+            float distanceSqr = toPlayer.sqrMagnitude;
+
+            if (distanceSqr < minDistanceSqr)
             {
-                minDistance = distance;
+                minDistanceSqr = distanceSqr;
                 closest = player.transform;
             }
         }
