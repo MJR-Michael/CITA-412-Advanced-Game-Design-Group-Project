@@ -7,7 +7,6 @@ public class EnemySpawnInfo
 {
     public GameObject enemyPrefab;
     public Transform spawnPoint;
-
     [HideInInspector] public ChamberMonoBehaviour chamber;
 }
 
@@ -24,7 +23,7 @@ public class ChamberMonoBehaviour : MonoBehaviour
     private Chamber chamber;
     private bool isRendered;
 
-    // 🔔 Event that notifies external systems when the player enters
+    // Event that notifies external systems when the player enters
     public event Action<ChamberMonoBehaviour> OnPlayerEntered;
 
     // TRIGGER HANDLING
@@ -33,7 +32,7 @@ public class ChamberMonoBehaviour : MonoBehaviour
         if (other.TryGetComponent<Player>(out Player player))
         {
             HandlePlayerEnteredChamber();
-            OnPlayerEntered?.Invoke(this); // ✅ Notify the manager or spawner system
+            OnPlayerEntered?.Invoke(this); // Notify the manager or spawner system
         }
     }
 
@@ -133,9 +132,7 @@ public class ChamberMonoBehaviour : MonoBehaviour
         }
     }
 
-    // ----------------------------
     // ACCESSORS
-    // ----------------------------
     public List<EnemySpawnInfo> GetSpawnInfos()
     {
         // Assign this chamber reference to each spawn info

@@ -4736,7 +4736,7 @@ Transform:
   m_GameObject: {fileID: 857718920}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: -31.4, y: 11.5, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -4884,51 +4884,6 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 902326999}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
---- !u!1 &918711029
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 918711031}
-  - component: {fileID: 918711030}
-  m_Layer: 0
-  m_Name: Input Manager
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!114 &918711030
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 918711029}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0bc6ec01ad2ca4a49817bbe901f1fde8, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::InputManager
-  scenesInBuildIndex: []
---- !u!4 &918711031
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 918711029}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 1.15646, y: 0, z: -35.78394}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &942116784
 GameObject:
   m_ObjectHideFlags: 0
@@ -6040,7 +5995,7 @@ Transform:
   m_GameObject: {fileID: 1203723790}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -27.35396, y: 10.3, z: -38.1}
+  m_LocalPosition: {x: -14.8, y: 10.3, z: -38.1}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -7174,6 +7129,7 @@ GameObject:
   - component: {fileID: 1568550483}
   - component: {fileID: 1568550485}
   - component: {fileID: 1568550484}
+  - component: {fileID: 1568550486}
   m_Layer: 0
   m_Name: Enviorment
   m_TagString: Untagged
@@ -7190,7 +7146,7 @@ Transform:
   m_GameObject: {fileID: 1568550482}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: -0.5, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -7244,6 +7200,18 @@ MonoBehaviour:
   - enemyPrefab: {fileID: 913636348551868650, guid: f02a4770c80c4b9f4bf5a759a978f189, type: 3}
     spawnPoint: {fileID: 942116785}
     chamber: {fileID: 0}
+--- !u!114 &1568550486
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1568550482}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 342396d8ff55de979a645beeb57e848b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::EnemySpawner
 --- !u!1 &1572420006
 GameObject:
   m_ObjectHideFlags: 0
@@ -10521,8 +10489,12 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 690892202854615437, guid: 395d509e48f57fe189afd048ff4b9155, type: 3}
       propertyPath: m_Name
-      value: Enemy Spawner (2 only)
+      value: Enemy Spawner
       objectReference: {fileID: 0}
+    - target: {fileID: 7972975398775069090, guid: 395d509e48f57fe189afd048ff4b9155, type: 3}
+      propertyPath: spawner
+      value: 
+      objectReference: {fileID: 1568550486}
     - target: {fileID: 8297716468630164856, guid: 395d509e48f57fe189afd048ff4b9155, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -10747,6 +10719,5 @@ SceneRoots:
   m_ObjectHideFlags: 0
   m_Roots:
   - {fileID: 655551176471901815}
-  - {fileID: 918711031}
   - {fileID: 3989554}
   - {fileID: 1568550483}
