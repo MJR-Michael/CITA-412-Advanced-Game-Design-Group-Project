@@ -89,6 +89,9 @@ public class GridSystem : MonoBehaviour
     bool debugging;
 
 
+    [Header("Camera Settings")]
+    [SerializeField]
+    Camera mapCamera;
 
     //Map Data Structures
     GridObject[,] map;
@@ -192,6 +195,59 @@ public class GridSystem : MonoBehaviour
     {
         InitializeChamberMonobehaviours();
         InitializeEdgeMonobehaviours();
+        SetupCameraSettings();
+    }
+
+    private void SetupCameraSettings()
+    {
+        /*
+         * 1) To setup the camera, it needs to capture the entire map. This can be done by centralizing the camera to the center of the map
+         *    The center of the map can be a little strange. Say it has an even length, then the center of the map is in between the two
+         *    middle grid positions. When it's odd then the middle grid position is the camera's position. Thus, you need to determine
+         *    if the dimensions are even or odd before determining the center.
+         * 2) After getting the center, the camera's height & orthographic size needs to be adjusted to fit the entire map. Considerations for the near & far
+         *    clipping plane also should be taken.
+         */
+
+        //Get center of the map
+        int centerWidth = mapWidth / 2;
+        int centerLength = mapLength / 2;
+
+        //Get the gridposition for the center
+        GridPosition centerGridPosition = new GridPosition(centerLength, centerWidth);
+
+        //Get world position from this position
+        Vector3 centerWorldPos = GetWorldPositionFromGridPosition(centerGridPosition);
+
+        //If length/width are even, add world unit measurement
+        Vector3 unitGridVectorPosition = GetWorldPositionFromGridPosition(GridPosition.One) / 2;
+        if (centerWidth % 2 == 0)
+        {
+            centerWorldPos += new Vector3(0,0,unitGridVectorPosition.z);
+        }
+        if (centerLength % 2 == 0)
+        {
+            centerWorldPos += new Vector3(unitGridVectorPosition.x, 0, 0);
+        }
+
+        //set camera height
+        float cameraHeight = 50;
+        centerWorldPos += new Vector3(0, cameraHeight, 0);
+
+        //Set camera center position
+        mapCamera.transform.SetPositionAndRotation(centerWorldPos, mapCamera.transform.rotation);
+        //Debug.Log("Camera center position: " + centerWorldPos);
+
+
+        //Set the orthographic size of the camera to fit the entire map.
+        mapCamera.orthographicSize = Mathf.Max(
+            centerWorldPos.z,
+            centerWorldPos.x / mapCamera.aspect
+        );
+
+        //Set camera height, near clip plane, & far clip plane
+        mapCamera.nearClipPlane = 0.0001f;
+        mapCamera.farClipPlane = mapCamera.transform.position.y + 1;
     }
 
     private void InitializeEdgeMonobehaviours()
@@ -900,8 +956,6 @@ public class GridSystem : MonoBehaviour
         //Initialize edge object
         edgeObj.name = $"Edge {chamberA.OriginGridPosition()} <-> {chamberB.OriginGridPosition()}";
         EdgeMonoBehaviour edgeMonoBehaviour = edgeObj.AddComponent<EdgeMonoBehaviour>();
-        edgeMonoBehaviour.Initialize(edge, parentEdgeRenderer);
-
         //Loop through each path position
         for (int pathIndex = 0; pathIndex < path.Count; pathIndex++)
         {
@@ -927,6 +981,8 @@ public class GridSystem : MonoBehaviour
             //update the map with the new hallway objects
             map[path[pathIndex].x, path[pathIndex].z].MakeObjectAHallway();
         }
+
+        edgeMonoBehaviour.Initialize(edge, parentEdgeRenderer);
 
         float timeEndBuildingPaths = Time.realtimeSinceStartup;
         timeSpentBuildingPaths += timeEndBuildingPaths - timeStartBuildingPath;

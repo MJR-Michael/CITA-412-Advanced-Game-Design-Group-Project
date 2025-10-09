@@ -20,11 +20,14 @@ public class ChamberMonoBehaviour : MonoBehaviour
     [Header("Enemy Spawning")]
     [SerializeField] private List<EnemySpawnInfo> enemySpawnInfos = new(); // Per-prefab spawn data
 
+    [SerializeField]
+    GameObject mapRenderer;
+
     private Chamber chamber;
     private bool isRendered;
-
-    // Event that notifies external systems when the player enters
     public event Action<ChamberMonoBehaviour> OnPlayerEntered;
+    bool hasBeenVisisted;
+
 
     // TRIGGER HANDLING
     private void OnTriggerEnter(Collider other)
@@ -38,6 +41,8 @@ public class ChamberMonoBehaviour : MonoBehaviour
 
     public void HandlePlayerEnteredChamber()
     {
+        hasBeenVisisted = true;
+        mapRenderer.SetActive(true);
         Render();
 
         //Tell adjacent neighbors to cull out their neighbors, excluding this chamber & the ones this chamber connects to.
@@ -52,33 +57,14 @@ public class ChamberMonoBehaviour : MonoBehaviour
         }
     }
 
-    // ----------------------------
-    // RENDERING & CULLING
-    // ----------------------------
-    public void RenderEdges()
-    {
-        foreach (EdgeMonoBehaviour edgeMonoBehaviour in chamber.GetEdgeMonoBehaviours())
-        {
-            edgeMonoBehaviour.Render();
-        }
-    }
-
-    public void CullEdges(EdgeMonoBehaviour edgesNotToCull)
-    {
-        foreach (EdgeMonoBehaviour edge in chamber.GetEdgeMonoBehaviours())
-        {
-            if (edgesNotToCull == edge) continue;
-            edge.Cull();
-        }
-    }
-
     public void Initialize(Chamber chamber)
     {
         //Set chamber data
         this.chamber = chamber;
 
-        //Cull out by default
-        parentRenderer.SetActive(false);
+        Cull();
+
+        mapRenderer.SetActive(false);
 
         //Set the chamber monobehaviour
         chamber.SetMonobehaviour(this);
@@ -89,19 +75,7 @@ public class ChamberMonoBehaviour : MonoBehaviour
         //Tell all neighbors to be culled out if they should be
         foreach (Chamber adjacentChamber in chamber.GetConnectingChambers())
         {
-            if (chambersNotToCullOut.Contains(adjacentChamber)) continue;
-
-            //tell adjacent neighbors to the adjacent neighbor to cull out their edges
-            foreach (Chamber doublyAdjacentNeighbor in adjacentChamber.GetConnectingChambers())
-            {
-                if (doublyAdjacentNeighbor == chamber) continue; //No looping in on current chamber
-                EdgeMonoBehaviour edgeMonoBehaviourBetweenNeighborEdges =
-                    adjacentChamber.GetEdgeMonoBehaviourBetweenChambers(doublyAdjacentNeighbor);
-                if (edgeMonoBehaviourBetweenNeighborEdges == null) continue;
-
-                doublyAdjacentNeighbor.GetMonobehaviour().CullEdges(edgeMonoBehaviourBetweenNeighborEdges);
-            }
-
+            if (chambersNotToCullOut.Contains(adjacentChamber)) { continue; }
             //cull out the object
             adjacentChamber.GetMonobehaviour().Cull();
         }
@@ -123,7 +97,6 @@ public class ChamberMonoBehaviour : MonoBehaviour
     {
         parentRenderer.SetActive(true);
         chamberTrigger.enabled = true;
-        RenderEdges();
         isRendered = true;
 
         foreach (EdgeMonoBehaviour edgeMonoBehaviour in chamber.GetEdgeMonoBehaviours())
@@ -145,4 +118,5 @@ public class ChamberMonoBehaviour : MonoBehaviour
     }
     public Collider GetChamberCollider() => chamberTrigger;
     public bool IsRendered() => isRendered;
+    public bool HasBeenVisisted() => hasBeenVisisted;
 }
