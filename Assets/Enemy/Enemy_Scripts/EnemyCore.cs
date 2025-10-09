@@ -1,11 +1,13 @@
 using UnityEngine;
 
-public class Enemy : MonoBehaviour
+public class Enemy : MonoBehaviour, IChamberBound
 {
+    [Header("Health")]
     [SerializeField] private float maxHealth = 100f;
     [SerializeField] private float currentHealth = 100f;
 
     private IDeathBehavior[] deathBehaviors;
+    protected ChamberMonoBehaviour currentChamber;
 
     private void Awake()
     {
@@ -22,6 +24,7 @@ public class Enemy : MonoBehaviour
             Die();
         }
     }
+
     public void Heal(int amount)
     {
         if (currentHealth <= 0)
@@ -32,10 +35,9 @@ public class Enemy : MonoBehaviour
 
         currentHealth += amount;
         currentHealth = Mathf.Min(currentHealth, maxHealth);
-
         Debug.Log($"Enemy healed {amount}. Current HP: {currentHealth}/{maxHealth}");
     }
-    
+
     private void Die()
     {
         foreach (var behavior in deathBehaviors)
@@ -43,4 +45,11 @@ public class Enemy : MonoBehaviour
             behavior.OnDeath(this);
         }
     }
+
+    public void SetChamber(ChamberMonoBehaviour chamber)
+    {
+        currentChamber = chamber;
+    }
+
+    public ChamberMonoBehaviour GetChamber() => currentChamber;
 }

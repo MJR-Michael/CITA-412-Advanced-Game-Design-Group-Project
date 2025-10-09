@@ -26,6 +26,10 @@ public class GridSystem : MonoBehaviour
 
 
 
+    [SerializeField] private EnemySpawnManager spawnManager; // assign via Inspector
+
+
+
     [Header("Hallway References")]
     [SerializeField]
     GameObject hallwayForwardPlaceholder;
@@ -260,24 +264,38 @@ public class GridSystem : MonoBehaviour
 
     private void InitializeChamberMonobehaviours()
     {
+        if (spawnManager == null)
+        {
+            Debug.LogError("EnemySpawnManager reference is missing!");
+        }
+
+        // Build a dictionary for fast lookups
+        Dictionary<GridPosition, Chamber> chamberLookup = new Dictionary<GridPosition, Chamber>();
+        foreach (Chamber chamber in chambers)
+        {
+            chamberLookup[chamber.OriginGridPosition()] = chamber;
+        }
+
         foreach (KeyValuePair<GridPosition, GameObject> chamberPositionObjectValuePair in chamberGameObjects)
         {
-            //Get the monobehaviour attached & initialize it to the chamber at its origin grid position
             GameObject chamberObj = chamberPositionObjectValuePair.Value;
             GridPosition chamberPos = chamberPositionObjectValuePair.Key;
             ChamberMonoBehaviour chamberMonoBehaviour = chamberObj.GetComponent<ChamberMonoBehaviour>();
 
-            Chamber chamber = chambers.FirstOrDefault(c => c.OriginGridPosition() == chamberPos);
-            if (chamber == null)
+            if (!chamberLookup.TryGetValue(chamberPos, out Chamber chamber))
             {
                 Debug.LogError($"Error: Chamber at {chamberPos} does not exist, but monobehaviour object needs one!");
+                continue;
             }
 
             chamberMonoBehaviour.Initialize(chamber);
+
+            // Register with EnemySpawnManager directly — no search required
+            spawnManager.RegisterChamber(chamberMonoBehaviour);
         }
 
-        //Tell starting chamber to initialize as rendered
-        startingChamber.GetMonobehaviour().OnPlayerEnteredChamber();
+        // Initialize starting chamber
+        startingChamber.GetMonobehaviour().HandlePlayerEnteredChamber();
     }
 
     private Vector3 GetPlayerSpawnPosition(Chamber startingChamber)
