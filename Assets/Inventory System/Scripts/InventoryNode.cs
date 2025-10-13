@@ -6,12 +6,20 @@ using UnityEngine.UI;
 public class InventoryNode : Button
 {
     public RectTransform rectTransform { get; private set; }
+    public GridPosition gridPosition {get; private set;}
+    public GridPosition itemGridPosition {get; set;}
+
+    [SerializeField]
+    Image itemImageOverlay;
+
     InventorySystem inventorySystem;
-    public GridPosition gridPosition{get; private set;}
+    Sprite defaultSprite;
 
     protected override void Awake()
     {
         base.Awake();
+
+        defaultSprite = itemImageOverlay.sprite;
 
         rectTransform = GetComponent<RectTransform>();
         onClick.AddListener(HandleButtonClicked);
@@ -20,6 +28,12 @@ public class InventoryNode : Button
     private void HandleButtonClicked()
     {
         //Handle button clicked events here
+
+        Debug.Log("Button clicked");
+
+        Debug.Log($"Is there an item at this button postion? {itemGridPosition != GridPosition.Invalid}");
+
+        inventorySystem.OnInventoryNodeClicked(this);
     }
 
     public void Initialize(InventorySystem inventorySystem, GridPosition gridPosition)
@@ -28,5 +42,19 @@ public class InventoryNode : Button
         this.gridPosition = gridPosition;
 
         name = $"{gridPosition} Inventory Slot";
+        itemGridPosition = GridPosition.Invalid;
+        SetSpriteDefault();
+    }
+
+    public void SetSprite(Sprite sprite)
+    {
+        itemImageOverlay.sprite = sprite;
+        itemImageOverlay.color = new Color(255,255,255,255);
+    }
+
+    public void SetSpriteDefault()
+    {
+        itemImageOverlay.sprite = defaultSprite;
+        itemImageOverlay.color = new Color(0, 0, 0, 0);
     }
 }
