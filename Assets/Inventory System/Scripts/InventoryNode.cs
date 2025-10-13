@@ -57,4 +57,17 @@ public class InventoryNode : Button
         itemImageOverlay.sprite = defaultSprite;
         itemImageOverlay.color = new Color(0, 0, 0, 0);
     }
+
+    public bool IsPartOfItem()
+    {
+        return itemGridPosition == GridPosition.Invalid ? false : true;
+    }
+
+    public GridPosition GetItemGridPosition() => itemGridPosition;
+
+    public void ResetInventoryNode()
+    {
+        SetSpriteDefault();
+        itemGridPosition = GridPosition.Invalid;
+    }
 }
