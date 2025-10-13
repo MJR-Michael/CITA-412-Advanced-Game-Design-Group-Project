@@ -1,6 +1,6 @@
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "NewInventoryStructureSO", menuName = "ScriptableObject/InventoryStructureSO")]
+[CreateAssetMenu(fileName = "NewItemStructureSO", menuName = "ScriptableObject/ItemStructureSO")]
 public class ItemStructureSO : ScriptableObject
 {
     [System.Serializable]

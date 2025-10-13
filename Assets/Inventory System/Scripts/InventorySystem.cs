@@ -21,6 +21,11 @@ public class InventorySystem : MonoBehaviour
     [SerializeField]
     ItemStructureSO testItemStructure;
 
+    [SerializeField]
+    ItemStructureSO testItem2;
+
+    [SerializeField]
+    ItemStructureSO testItem3;
 
     Dictionary<GridPosition, ItemStructureSO> itemsInInventory = new Dictionary<GridPosition, ItemStructureSO>();
     List<InventoryNode> inventoryNodes = new List<InventoryNode>();
@@ -29,16 +34,7 @@ public class InventorySystem : MonoBehaviour
     private void Awake()
     {
         inventoryLength = inventoryGridLayoutGroup.constraintCount;
-        for (int i = 0; i < startingIventoryNodeCount; i++)
-        {
-            int gridPosX = i % inventoryLength; //Column position in grid
-            int gridPosZ = i / inventoryLength; //Row position in grid
-            GridPosition inventoryNodeGridPos = new GridPosition(gridPosX, gridPosZ);
-
-            InventoryNode inventoryNodeObj = Instantiate(inventoryNodePrefab, content.transform);
-            inventoryNodeObj.Initialize(this, inventoryNodeGridPos);
-            inventoryNodes.Add(inventoryNodeObj);
-        }
+        AddNodesToInventory(startingIventoryNodeCount);
 
         if (CanPlaceItemAtGridPosition(new GridPosition(0,0), testItemStructure))
         {
@@ -71,6 +67,34 @@ public class InventorySystem : MonoBehaviour
         else
         {
             Debug.Log("Couldn't place item at position");
+        }
+
+        Debug.Log("Adding some extra inventory slots...");
+
+        AddNodesToInventory(5);
+
+        PlaceItemAtGridPosition(new GridPosition(4, 1), testItem3);
+    }
+
+    private void Start()
+    {
+        Debug.Log("Giviong the player an item to start with");
+        PlayerCursorInventory.Instance.TakeItem(testItem2);
+    }
+
+    public void AddNodesToInventory(int numOfNodesToAdd)
+    {
+        for (int i = 0; i < numOfNodesToAdd; i++)
+        {
+            //Get the grid position of this new node
+            int gridPosX = inventoryNodes.Count % inventoryLength; //Column position in grid
+            int gridPosZ = inventoryNodes.Count / inventoryLength; //Row position in grid
+
+            GridPosition inventoryNodeGridPos = new GridPosition(gridPosX, gridPosZ);
+
+            InventoryNode inventoryNodeObj = Instantiate(inventoryNodePrefab, content.transform);
+            inventoryNodeObj.Initialize(this, inventoryNodeGridPos);
+            inventoryNodes.Add(inventoryNodeObj);
         }
     }
 

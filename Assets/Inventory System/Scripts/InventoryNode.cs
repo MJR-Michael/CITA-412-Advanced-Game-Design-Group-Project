@@ -29,9 +29,7 @@ public class InventoryNode : Button
     {
         //Handle button clicked events here
 
-        Debug.Log("Button clicked");
-
-        Debug.Log($"Is there an item at this button postion? {itemGridPosition != GridPosition.Invalid}");
+        Debug.Log($"{name} clicked");
 
         inventorySystem.OnInventoryNodeClicked(this);
     }
