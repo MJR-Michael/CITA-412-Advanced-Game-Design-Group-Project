@@ -180,7 +180,7 @@ public class InventorySystem : MonoBehaviour
         }
     }
 
-    protected virtual bool TryPlacingItemInInventory(ItemStructureSO itemStructure)
+    public virtual bool TryPlacingItemInInventory(ItemStructureSO itemStructure)
     {
         //Loop through the nodes in the inventory. If no node is suitable for this item, then it is not possible to add
         foreach (InventoryNode inventoryNode in inventoryNodes)
