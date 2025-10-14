@@ -220,6 +220,11 @@ public class InputManager : MonoBehaviour
         return controls.Player.Pause.ReadValue<float>() == 1f? true : false;
     }
 
+    public bool PlayerOpenInventory()
+    {
+        return controls.Player.Inventory.ReadValue<float>() == 1f? true : false;
+    }
+
     public float GetPrimaryFireInput()
     {
         return controls.Player.PrimaryFire.ReadValue<float>();
@@ -245,5 +250,10 @@ public class InputManager : MonoBehaviour
     public bool UIBack()
     {
         return controls.UI.Back.ReadValue<float>() == 1f ? true : false;
+    }
+
+    public bool UICloseInventory()
+    {
+        return controls.UI.Inventory.ReadValue<float>() == 1f ? true : false;
     }
 }

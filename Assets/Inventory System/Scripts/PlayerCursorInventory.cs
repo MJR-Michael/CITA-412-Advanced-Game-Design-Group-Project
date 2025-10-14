@@ -27,7 +27,6 @@ public class PlayerCursorInventory : MonoBehaviour
 
     public void TakeItem(ItemStructureSO itemStructure)
     {
-        Debug.Log($"Player picked up item: {itemStructure.GetItemName()}");
         this.itemStructure = itemStructure;
     }
 

@@ -28,9 +28,6 @@ public class InventoryNode : Button
     private void HandleButtonClicked()
     {
         //Handle button clicked events here
-
-        Debug.Log($"{name} clicked");
-
         inventorySystem.OnInventoryNodeClicked(this);
     }
 

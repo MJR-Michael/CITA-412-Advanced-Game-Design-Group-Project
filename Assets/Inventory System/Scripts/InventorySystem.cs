@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -31,55 +32,10 @@ public class InventorySystem : MonoBehaviour
     List<InventoryNode> inventoryNodes = new List<InventoryNode>();
     int inventoryLength;
 
-    private void Awake()
+    protected virtual void Awake()
     {
         inventoryLength = inventoryGridLayoutGroup.constraintCount;
         AddNodesToInventory(startingIventoryNodeCount);
-
-        if (CanPlaceItemAtGridPosition(new GridPosition(0,0), testItemStructure))
-        {
-            Debug.Log("Can place item at position. Placing it...");
-            PlaceItemAtGridPosition(new GridPosition(0, 0), testItemStructure);
-        }
-        else
-        {
-            Debug.Log("Couldn't place item at position");
-        }
-
-        Debug.Log("Adding another item for testing...");
-        if (CanPlaceItemAtGridPosition(new GridPosition(0, 0), testItemStructure))
-        {
-            Debug.Log("Can place item at position. Placing it...");
-            PlaceItemAtGridPosition(new GridPosition(0, 0), testItemStructure);
-        }
-        else
-        {
-            Debug.Log("Couldn't place item at position");
-        }
-
-        Debug.Log("Adding item at valid position");
-
-        if (CanPlaceItemAtGridPosition(new GridPosition(0, 1), testItemStructure))
-        {
-            Debug.Log("Can place item at position. Placing it...");
-            PlaceItemAtGridPosition(new GridPosition(0, 1), testItemStructure);
-        }
-        else
-        {
-            Debug.Log("Couldn't place item at position");
-        }
-
-        Debug.Log("Adding some extra inventory slots...");
-
-        AddNodesToInventory(5);
-
-        PlaceItemAtGridPosition(new GridPosition(4, 1), testItem3);
-    }
-
-    private void Start()
-    {
-        Debug.Log("Giviong the player an item to start with");
-        PlayerCursorInventory.Instance.TakeItem(testItem2);
     }
 
     public void AddNodesToInventory(int numOfNodesToAdd)
@@ -100,8 +56,6 @@ public class InventorySystem : MonoBehaviour
 
     public void OnInventoryNodeClicked(InventoryNode clickedInventoryNode)
     {
-        Debug.Log($"{name} clicked");
-
         //Handle the logic for clicking an inventory node
         if (PlayerCursorInventory.Instance.HasItem())
         {
@@ -172,7 +126,7 @@ public class InventorySystem : MonoBehaviour
     /// Picks up the item at the given node. Assumes that the node can be picked up. NOTE: to test if an item can be picked up, use the method CanPickupItemAtNode
     /// </summary>
     /// <param name="inventoryNode">The node in question for item pickup</param>
-    void PickupItemAtNode(InventoryNode inventoryNode)
+    protected virtual void PickupItemAtNode(InventoryNode inventoryNode)
     {
         //Get the origin position of the item that this inventory node is assigned to
         GridPosition originGridPosition = inventoryNode.GetItemGridPosition();
@@ -204,7 +158,7 @@ public class InventorySystem : MonoBehaviour
     /// </summary>
     /// <param name="originGridPosition">The clicked position to place the item at</param>
     /// <param name="itemStructure">The type of item being placed at the position</param>
-    void PlaceItemAtGridPosition(GridPosition originGridPosition, ItemStructureSO itemStructure)
+    protected virtual void PlaceItemAtGridPosition(GridPosition originGridPosition, ItemStructureSO itemStructure)
     {
         //Add item to inventory dictionary
         itemsInInventory.Add(originGridPosition, itemStructure);
@@ -224,5 +178,21 @@ public class InventorySystem : MonoBehaviour
             //Set its sprite
             inventoryNode.SetSprite(itemStructureNode.GetSprite());
         }
+    }
+
+    protected virtual bool TryPlacingItemInInventory(ItemStructureSO itemStructure)
+    {
+        //Loop through the nodes in the inventory. If no node is suitable for this item, then it is not possible to add
+        foreach (InventoryNode inventoryNode in inventoryNodes)
+        {
+            if (!CanPlaceItemAtGridPosition(inventoryNode.gridPosition, itemStructure)) continue;
+
+            //Can place item at this inventory node position
+            PlaceItemAtGridPosition(inventoryNode.gridPosition, itemStructure);
+            return true;
+        }
+
+        //cannot place item into inventory
+        return false;
     }
 }
