@@ -25,6 +25,7 @@ public class Crossbow : MonoBehaviour
 
     void Shoot()
     {
+        Debug.Log("hi");
         crossbowCooldown = Time.time + crossbowFireRate;
 
         Quaternion spawnRotation = crossbowFirePoint.rotation * crossbowProjectile.transform.rotation;

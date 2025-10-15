@@ -351,7 +351,7 @@ Camera:
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
-    m_Bits: 695
+    m_Bits: 4023
   m_RenderingPath: -1
   m_TargetTexture: {fileID: 0}
   m_TargetDisplay: 0
@@ -1195,6 +1195,18 @@ PrefabInstance:
       value: CrossBow
       objectReference: {fileID: 0}
     - target: {fileID: 4624414656084178474, guid: 63dbcdd6fe1a1691e8237860b9bf5f07, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 0.33835
+      objectReference: {fileID: 0}
+    - target: {fileID: 4624414656084178474, guid: 63dbcdd6fe1a1691e8237860b9bf5f07, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 0.33835
+      objectReference: {fileID: 0}
+    - target: {fileID: 4624414656084178474, guid: 63dbcdd6fe1a1691e8237860b9bf5f07, type: 3}
+      propertyPath: m_LocalScale.z
+      value: 0.33835
+      objectReference: {fileID: 0}
+    - target: {fileID: 4624414656084178474, guid: 63dbcdd6fe1a1691e8237860b9bf5f07, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
       objectReference: {fileID: 0}
@@ -1204,7 +1216,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4624414656084178474, guid: 63dbcdd6fe1a1691e8237860b9bf5f07, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 1.09
+      value: 1.19
       objectReference: {fileID: 0}
     - target: {fileID: 4624414656084178474, guid: 63dbcdd6fe1a1691e8237860b9bf5f07, type: 3}
       propertyPath: m_LocalRotation.w
@@ -1235,6 +1247,10 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4986688578093901091, guid: 63dbcdd6fe1a1691e8237860b9bf5f07, type: 3}
+      propertyPath: playerColliders.Array.size
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 4986688578093901091, guid: 63dbcdd6fe1a1691e8237860b9bf5f07, type: 3}
       propertyPath: 'playerColliders.Array.data[0]'
       value: 
       objectReference: {fileID: 2112403539474119680}
@@ -1246,7 +1262,13 @@ PrefabInstance:
       propertyPath: 'playerColliders.Array.data[2]'
       value: 
       objectReference: {fileID: 2531570343484295762}
-    m_RemovedComponents: []
+    - target: {fileID: 4986688578093901091, guid: 63dbcdd6fe1a1691e8237860b9bf5f07, type: 3}
+      propertyPath: 'playerColliders.Array.data[3]'
+      value: 
+      objectReference: {fileID: 2531570343484295762}
+    m_RemovedComponents:
+    - {fileID: 7790203446288154882, guid: 63dbcdd6fe1a1691e8237860b9bf5f07, type: 3}
+    - {fileID: 2690887327972160419, guid: 63dbcdd6fe1a1691e8237860b9bf5f07, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []

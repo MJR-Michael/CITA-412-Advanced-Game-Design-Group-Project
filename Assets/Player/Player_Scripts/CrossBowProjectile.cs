@@ -18,6 +18,8 @@ public class CrossbowProjectile : MonoBehaviour
     }
     void OnCollisionEnter(Collision collision)
     {
+        Debug.Log("collision");
+
         if (stuck) return;
         stuck = true;
 
