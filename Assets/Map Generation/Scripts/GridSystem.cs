@@ -300,7 +300,10 @@ public class GridSystem : MonoBehaviour
             chamberMonoBehaviour.Initialize(chamber);
 
             // Register with EnemySpawnManager directly — no search required
-            spawnManager.RegisterChamber(chamberMonoBehaviour);
+            if (spawnManager != null)
+            {
+                spawnManager.RegisterChamber(chamberMonoBehaviour);
+            }
         }
 
         // Initialize starting chamber
