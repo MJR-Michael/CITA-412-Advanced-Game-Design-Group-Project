@@ -490,7 +490,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 128
   canPush: 1
-  strength: 1.1
+  strength: 4.5
 --- !u!114 &2314647226020026946
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1194,6 +1194,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: CrossBow
       objectReference: {fileID: 0}
+    - target: {fileID: 4040041941516668573, guid: 63dbcdd6fe1a1691e8237860b9bf5f07, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 1.21
+      objectReference: {fileID: 0}
+    - target: {fileID: 4040041941516668573, guid: 63dbcdd6fe1a1691e8237860b9bf5f07, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0.05
+      objectReference: {fileID: 0}
     - target: {fileID: 4624414656084178474, guid: 63dbcdd6fe1a1691e8237860b9bf5f07, type: 3}
       propertyPath: m_LocalScale.x
       value: 0.33835
@@ -1266,6 +1274,10 @@ PrefabInstance:
       propertyPath: 'playerColliders.Array.data[3]'
       value: 
       objectReference: {fileID: 2531570343484295762}
+    - target: {fileID: 6732697432599283378, guid: 63dbcdd6fe1a1691e8237860b9bf5f07, type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 7790203446288154882, guid: 63dbcdd6fe1a1691e8237860b9bf5f07, type: 3}
     - {fileID: 2690887327972160419, guid: 63dbcdd6fe1a1691e8237860b9bf5f07, type: 3}

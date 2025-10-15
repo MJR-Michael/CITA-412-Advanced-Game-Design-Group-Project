@@ -7,6 +7,9 @@ public class Crossbow : MonoBehaviour
     [SerializeField]
     List<Collider> playerColliders = new List<Collider>();
 
+    [SerializeField]
+    GameObject restingBoltObj;
+
     public Transform crossbowFirePoint;
     public GameObject crossbowProjectile;
 
@@ -15,9 +18,21 @@ public class Crossbow : MonoBehaviour
 
     private float crossbowCooldown = 0f;
 
+    bool canFire = true;
+
     void Update()
     {
-        if (InputManager.Instance.GetPrimaryFireInput() > 0 && Time.time >= crossbowCooldown)
+        canFire = Time.time >= crossbowCooldown;
+        if (canFire)
+        {
+            restingBoltObj.SetActive(true);
+        }
+        else
+        {
+            restingBoltObj.SetActive(false);
+        }
+
+        if (canFire && InputManager.Instance.GetPrimaryFireInput() > 0)
         {
             Shoot();
         }
@@ -25,7 +40,6 @@ public class Crossbow : MonoBehaviour
 
     void Shoot()
     {
-        Debug.Log("hi");
         crossbowCooldown = Time.time + crossbowFireRate;
 
         Quaternion spawnRotation = crossbowFirePoint.rotation * crossbowProjectile.transform.rotation;

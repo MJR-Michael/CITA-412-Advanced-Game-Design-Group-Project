@@ -2,6 +2,7 @@ using UnityEngine;
 
 public class CrossbowProjectile : MonoBehaviour
 {
+    Collider collider;
     private Rigidbody rb;
     public float lifeTime = 8f;       // Destroy after x seconds if it doesn’t hit anything
     public int damage = 10;           // Damage dealt on hit
@@ -9,6 +10,7 @@ public class CrossbowProjectile : MonoBehaviour
 
     void Awake()
     {
+        collider = GetComponent<Collider>();
         rb = GetComponent<Rigidbody>();
     }
 
@@ -18,8 +20,6 @@ public class CrossbowProjectile : MonoBehaviour
     }
     void OnCollisionEnter(Collision collision)
     {
-        Debug.Log("collision");
-
         if (stuck) return;
         stuck = true;
 
@@ -41,8 +41,16 @@ public class CrossbowProjectile : MonoBehaviour
         if (stickDirection == Vector3.zero) stickDirection = transform.forward;
 
         // Make the arrow look along the flight direction while aligning with surface normal
-        transform.rotation = Quaternion.LookRotation(stickDirection, -contact.normal);
-        transform.SetParent(collision.transform);
+        transform.rotation = Quaternion.LookRotation(stickDirection, contact.normal);
+        if (collision.rigidbody != null)
+        {
+            transform.SetParent(collision.rigidbody.transform);
+        }
+        else
+        {
+            transform.SetParent(collision.transform);
+        }
         Destroy(rb);
+        Destroy(collider);
     }
 }
