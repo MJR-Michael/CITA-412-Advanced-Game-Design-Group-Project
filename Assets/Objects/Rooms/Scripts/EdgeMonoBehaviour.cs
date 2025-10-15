@@ -15,11 +15,12 @@ public class EdgeMonoBehaviour : MonoBehaviour
         this.parentRenderer = parentRenderer;
         edgeNodes = parentRenderer.GetComponentsInChildren<EdgeNodeMonobehaviour>();
 
-        Cull();
         foreach (EdgeNodeMonobehaviour node in edgeNodes)
         {
             node.Initialize();
         }
+
+        Cull();
     }
 
     public void Render()
