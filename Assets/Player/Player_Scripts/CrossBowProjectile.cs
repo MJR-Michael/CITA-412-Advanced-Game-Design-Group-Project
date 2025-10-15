@@ -24,16 +24,18 @@ public class Projectile : MonoBehaviour
         // }
     }
 
-    private void OnTriggerEnter(Collider other)
+    private void OnCollisionEnter(Collision other)
     {
+        Debug.Log($"collided with {other.gameObject}");
+
         // Check if we hit an enemy
-        if (other.CompareTag("Enemy") && other.TryGetComponent(out Enemy enemy))
+        if (other.gameObject.CompareTag("Enemy") && other.gameObject.TryGetComponent(out Enemy enemy))
         {
             enemy.TakeDamage(damage);
             Destroy(gameObject);
 
         }
-        else if (!other.CompareTag("Projectile"))
+        else if (!other.gameObject.CompareTag("Projectile"))
         {
             Destroy(gameObject);
         }
