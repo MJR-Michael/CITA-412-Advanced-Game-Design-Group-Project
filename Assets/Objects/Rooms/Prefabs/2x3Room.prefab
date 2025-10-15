@@ -106,6 +106,12 @@ Transform:
   - {fileID: 8649444336513266188}
   - {fileID: 2144392338279552750}
   - {fileID: 2169517195560655586}
+  - {fileID: 6632825965231725804}
+  - {fileID: 6920695274184924403}
+  - {fileID: 4316575497881474179}
+  - {fileID: 1133066134526548545}
+  - {fileID: 6627348741403805957}
+  - {fileID: 5856443540571499968}
   m_Father: {fileID: 992272858196335933}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &804598715354904755
@@ -458,7 +464,7 @@ Transform:
   m_GameObject: {fileID: 2421173826323748312}
   serializedVersion: 2
   m_LocalRotation: {x: -0.7071068, y: -0, z: -0, w: 0.7071067}
-  m_LocalPosition: {x: 90, y: 0, z: 18}
+  m_LocalPosition: {x: 90, y: 0.28700566, z: 18}
   m_LocalScale: {x: 1800, y: 1800, z: 1800}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -791,7 +797,7 @@ Transform:
   m_GameObject: {fileID: 3682152241197734133}
   serializedVersion: 2
   m_LocalRotation: {x: -0.7071068, y: -0, z: -0, w: 0.7071067}
-  m_LocalPosition: {x: 54, y: 0, z: 18}
+  m_LocalPosition: {x: 54, y: 0.28700566, z: 18}
   m_LocalScale: {x: 1800, y: 1800, z: 1800}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -902,7 +908,7 @@ Transform:
   m_GameObject: {fileID: 4557516585533093883}
   serializedVersion: 2
   m_LocalRotation: {x: -0.7071068, y: -0, z: -0, w: 0.7071067}
-  m_LocalPosition: {x: 90, y: 0, z: 54}
+  m_LocalPosition: {x: 90, y: 0.28700566, z: 54}
   m_LocalScale: {x: 1800, y: 1800, z: 1800}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1046,7 +1052,7 @@ Transform:
   m_GameObject: {fileID: 4718619262030239143}
   serializedVersion: 2
   m_LocalRotation: {x: -0.7071068, y: -0, z: -0, w: 0.7071067}
-  m_LocalPosition: {x: 18, y: 0, z: 54}
+  m_LocalPosition: {x: 18, y: 0.28700566, z: 54}
   m_LocalScale: {x: 1800, y: 1800, z: 1800}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1378,6 +1384,37 @@ Transform:
   - {fileID: 7299225350451384504}
   m_Father: {fileID: 6483495172161462829}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &6491035611838243471
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 419521115933564960}
+  m_Layer: 0
+  m_Name: Item Reward Spawn Point
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &419521115933564960
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6491035611838243471}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 61.9, y: 2.9, z: 37.06}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 3430699554843509358}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &6615108278389154770
 GameObject:
   m_ObjectHideFlags: 0
@@ -1440,7 +1477,7 @@ Transform:
   m_GameObject: {fileID: 7966730091852535476}
   serializedVersion: 2
   m_LocalRotation: {x: -0.7071068, y: -0, z: -0, w: 0.7071067}
-  m_LocalPosition: {x: 18, y: 0, z: 18}
+  m_LocalPosition: {x: 18, y: 0.28700566, z: 18}
   m_LocalScale: {x: 1800, y: 1800, z: 1800}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1591,7 +1628,7 @@ Transform:
   m_GameObject: {fileID: 8657358991096214404}
   serializedVersion: 2
   m_LocalRotation: {x: -0.7071068, y: -0, z: -0, w: 0.7071067}
-  m_LocalPosition: {x: 54, y: 0, z: 54}
+  m_LocalPosition: {x: 54, y: 0.28700566, z: 54}
   m_LocalScale: {x: 1800, y: 1800, z: 1800}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1782,12 +1819,7 @@ Transform:
   m_Children:
   - {fileID: 992272858196335933}
   - {fileID: 8763831472316646625}
-  - {fileID: 6632825965231725804}
-  - {fileID: 6920695274184924403}
-  - {fileID: 4316575497881474179}
-  - {fileID: 1133066134526548545}
-  - {fileID: 6627348741403805957}
-  - {fileID: 5856443540571499968}
+  - {fileID: 419521115933564960}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &883443353850802081
@@ -1806,6 +1838,7 @@ MonoBehaviour:
   chamberTrigger: {fileID: 2177735373624546322}
   enemySpawnInfos: []
   mapRenderer: {fileID: 5429127126119510075}
+  itemRewardSpawnPoint: {fileID: 6491035611838243471}
 --- !u!65 &2177735373624546322
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -2756,7 +2789,7 @@ PrefabInstance:
   serializedVersion: 2
   m_Modification:
     serializedVersion: 3
-    m_TransformParent: {fileID: 3430699554843509358}
+    m_TransformParent: {fileID: 6838019732041907392}
     m_Modifications:
     - target: {fileID: 423016536528663315, guid: 58b9baf02686e584bad7005d5e993637, type: 3}
       propertyPath: m_Name
@@ -3032,7 +3065,7 @@ PrefabInstance:
   serializedVersion: 2
   m_Modification:
     serializedVersion: 3
-    m_TransformParent: {fileID: 3430699554843509358}
+    m_TransformParent: {fileID: 6838019732041907392}
     m_Modifications:
     - target: {fileID: 423016536528663315, guid: 58b9baf02686e584bad7005d5e993637, type: 3}
       propertyPath: m_Name
@@ -3836,7 +3869,7 @@ PrefabInstance:
   serializedVersion: 2
   m_Modification:
     serializedVersion: 3
-    m_TransformParent: {fileID: 3430699554843509358}
+    m_TransformParent: {fileID: 6838019732041907392}
     m_Modifications:
     - target: {fileID: 423016536528663315, guid: 58b9baf02686e584bad7005d5e993637, type: 3}
       propertyPath: m_Name
@@ -4620,7 +4653,7 @@ PrefabInstance:
   serializedVersion: 2
   m_Modification:
     serializedVersion: 3
-    m_TransformParent: {fileID: 3430699554843509358}
+    m_TransformParent: {fileID: 6838019732041907392}
     m_Modifications:
     - target: {fileID: 423016536528663315, guid: 58b9baf02686e584bad7005d5e993637, type: 3}
       propertyPath: m_Name
@@ -4682,7 +4715,7 @@ PrefabInstance:
   serializedVersion: 2
   m_Modification:
     serializedVersion: 3
-    m_TransformParent: {fileID: 3430699554843509358}
+    m_TransformParent: {fileID: 6838019732041907392}
     m_Modifications:
     - target: {fileID: 423016536528663315, guid: 58b9baf02686e584bad7005d5e993637, type: 3}
       propertyPath: m_Name
@@ -4744,7 +4777,7 @@ PrefabInstance:
   serializedVersion: 2
   m_Modification:
     serializedVersion: 3
-    m_TransformParent: {fileID: 3430699554843509358}
+    m_TransformParent: {fileID: 6838019732041907392}
     m_Modifications:
     - target: {fileID: 423016536528663315, guid: 58b9baf02686e584bad7005d5e993637, type: 3}
       propertyPath: m_Name

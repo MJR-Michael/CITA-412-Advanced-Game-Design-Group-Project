@@ -425,12 +425,7 @@ Transform:
   m_Children:
   - {fileID: 8682215772457681391}
   - {fileID: 7930419894320287181}
-  - {fileID: 3283261974272160705}
-  - {fileID: 5084238286219163433}
-  - {fileID: 4524944351514949102}
-  - {fileID: 6296674796692800835}
-  - {fileID: 1197092411076717032}
-  - {fileID: 7744285658165386835}
+  - {fileID: 492829728426280552}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &4519206085853796905
@@ -449,6 +444,7 @@ MonoBehaviour:
   chamberTrigger: {fileID: 8651344755263787035}
   enemySpawnInfos: []
   mapRenderer: {fileID: 621580229158077461}
+  itemRewardSpawnPoint: {fileID: 2120000832150176701}
 --- !u!65 &8651344755263787035
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -503,6 +499,37 @@ Transform:
   - {fileID: 1917459255971000201}
   - {fileID: 8089835841657545863}
   m_Father: {fileID: 2139742922316747779}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &2120000832150176701
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 492829728426280552}
+  m_Layer: 0
+  m_Name: ItemRewardSpawnPoint
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &492829728426280552
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2120000832150176701}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 36, y: 1.6, z: 18}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 3048704157526023809}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &2742034207720996792
 GameObject:
@@ -973,6 +1000,12 @@ Transform:
   - {fileID: 5860821894605393802}
   - {fileID: 7839439613635640171}
   - {fileID: 3959789663883408485}
+  - {fileID: 3283261974272160705}
+  - {fileID: 5084238286219163433}
+  - {fileID: 4524944351514949102}
+  - {fileID: 6296674796692800835}
+  - {fileID: 1197092411076717032}
+  - {fileID: 7744285658165386835}
   m_Father: {fileID: 8682215772457681391}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &5850966195043996224
@@ -1857,7 +1890,7 @@ PrefabInstance:
   serializedVersion: 2
   m_Modification:
     serializedVersion: 3
-    m_TransformParent: {fileID: 3048704157526023809}
+    m_TransformParent: {fileID: 8050918017201366549}
     m_Modifications:
     - target: {fileID: 423016536528663315, guid: 58b9baf02686e584bad7005d5e993637, type: 3}
       propertyPath: m_Name
@@ -2063,7 +2096,7 @@ PrefabInstance:
   serializedVersion: 2
   m_Modification:
     serializedVersion: 3
-    m_TransformParent: {fileID: 3048704157526023809}
+    m_TransformParent: {fileID: 8050918017201366549}
     m_Modifications:
     - target: {fileID: 423016536528663315, guid: 58b9baf02686e584bad7005d5e993637, type: 3}
       propertyPath: m_Name
@@ -2459,7 +2492,7 @@ PrefabInstance:
   serializedVersion: 2
   m_Modification:
     serializedVersion: 3
-    m_TransformParent: {fileID: 3048704157526023809}
+    m_TransformParent: {fileID: 8050918017201366549}
     m_Modifications:
     - target: {fileID: 423016536528663315, guid: 58b9baf02686e584bad7005d5e993637, type: 3}
       propertyPath: m_Name
@@ -2855,7 +2888,7 @@ PrefabInstance:
   serializedVersion: 2
   m_Modification:
     serializedVersion: 3
-    m_TransformParent: {fileID: 3048704157526023809}
+    m_TransformParent: {fileID: 8050918017201366549}
     m_Modifications:
     - target: {fileID: 423016536528663315, guid: 58b9baf02686e584bad7005d5e993637, type: 3}
       propertyPath: m_Name
@@ -3053,7 +3086,7 @@ PrefabInstance:
   serializedVersion: 2
   m_Modification:
     serializedVersion: 3
-    m_TransformParent: {fileID: 3048704157526023809}
+    m_TransformParent: {fileID: 8050918017201366549}
     m_Modifications:
     - target: {fileID: 423016536528663315, guid: 58b9baf02686e584bad7005d5e993637, type: 3}
       propertyPath: m_Name
@@ -3185,7 +3218,7 @@ PrefabInstance:
   serializedVersion: 2
   m_Modification:
     serializedVersion: 3
-    m_TransformParent: {fileID: 3048704157526023809}
+    m_TransformParent: {fileID: 8050918017201366549}
     m_Modifications:
     - target: {fileID: 423016536528663315, guid: 58b9baf02686e584bad7005d5e993637, type: 3}
       propertyPath: m_Name

@@ -26,7 +26,7 @@ public class Projectile : MonoBehaviour
 
     private void OnCollisionEnter(Collision other)
     {
-        Debug.Log($"collided with {other.gameObject}");
+        //Debug.Log($"collided with {other.gameObject}");
 
         // Check if we hit an enemy
         if (other.gameObject.CompareTag("Enemy") && other.gameObject.TryGetComponent(out Enemy enemy))

@@ -25,9 +25,17 @@ public class GridSystem : MonoBehaviour
     ChamberLayoutSO[] bossRoomLayouts;
 
 
+    [Header("Chamber Type Settings")]
+    [SerializeField, Range(0, 1), Tooltip("The chance for the chamber to be a shop chamber. Note: Ensure all types of chamber chances add to 1 for ease of debugging")]
+    float chanceForChamberToBeShop = 0.1f;
 
-    [SerializeField] private EnemySpawnManager spawnManager; // assign via Inspector
+    [SerializeField, Tooltip("The items that any given chamber may contain as a reward")]
+    Item[] itemRewards;
 
+
+    [Header("Managers")]
+    [SerializeField] 
+    EnemySpawnManager spawnManager; // assign via Inspector
 
 
     [Header("Hallway References")]
@@ -80,7 +88,6 @@ public class GridSystem : MonoBehaviour
     float mapScale = 10f;
 
 
-
     [Header("Pathfinding Settings")]
     [SerializeField, Tooltip("The type of pathfinding algorithm that will be used to generate connections. Note: performance may be impacted by using less efficient pathfinding algorithms")]
     PathfindingAlgorithm pathfindingAlgorithmToUse = PathfindingAlgorithm.AStar;
@@ -92,6 +99,8 @@ public class GridSystem : MonoBehaviour
     [Header("Camera Settings")]
     [SerializeField]
     Camera mapCamera;
+
+
 
     //Map Data Structures
     GridObject[,] map;
@@ -187,7 +196,7 @@ public class GridSystem : MonoBehaviour
         }
 
         //Generate player into the map
-        Debug.Log("player starting grid position: " + startingChamber.GetPlayerSpawnPosition());
+        //Debug.Log("player starting grid position: " + startingChamber.GetPlayerSpawnPosition());
         //Debug.Log("player starting grid position: " + startingChamber.GetPlayerSpawnPosition());
         GameObject playerObj = Instantiate(playerPrefab, GetPlayerSpawnPosition(startingChamber) + new Vector3(5, 3, 5), Quaternion.identity);
     }
@@ -591,8 +600,35 @@ public class GridSystem : MonoBehaviour
                 hallwayConnectors.Remove(gridPosition);
             }
 
+            //Determine what type of chamber the chamber will be. Default to item reward
+            Chamber.ChamberType chamberType = Chamber.ChamberType.ItemReward;
+            if (isBossChamber)
+            {
+                chamberType = Chamber.ChamberType.Boss;
+            }
+            else
+            {
+                //Roll the chance for the chamber being a shop or item
+                chamberType = RollForChamberType();
+            }
+
+            //Determine what type of item the chamber will contain
+            Item itemReward = null;
+
+            if (chamberType == Chamber.ChamberType.ItemReward)
+            {
+                itemReward = RollForItemReward();
+            }
+
             //Generate the chamber object
-            Chamber chamber = new Chamber(chamberPair.Key, chamberPair.Value, hallwayConnectors, isBossChamber);
+            Chamber chamber = new Chamber(
+                chamberPair.Key, 
+                chamberPair.Value, 
+                hallwayConnectors, 
+                isBossChamber, 
+                chamberType,
+                itemReward
+                );
 
             //Store chamber in list of chamber objects
             chambers.Add(chamber);
@@ -605,7 +641,50 @@ public class GridSystem : MonoBehaviour
         }
     }
 
+    private Item RollForItemReward()
+    {
+        if (itemRewards.Length == 0)
+        {
+            Debug.LogWarning($"Warning: {gameObject} does not contain any item rewards!");
+            return null;
+        }
 
+        //Default the item reward to first
+        Item itemReward = itemRewards[0];
+
+        //if only one item, return it
+        if (itemRewards.Length == 1)
+        {
+            return itemReward;
+        }
+        else
+        {
+            //Get a random item
+            int randomItemRewardIndex = Random.Range(0, itemRewards.Length);
+            itemReward = itemRewards[randomItemRewardIndex];
+        }
+
+       return itemReward;
+    }
+
+    /// <summary>
+    /// Determines what type of chamber you have based on the chances given in the inspector
+    /// </summary>
+    /// <returns>The type of chamber. Defaults to ItemReward if no other chamber reward was rolled</returns>
+    private Chamber.ChamberType RollForChamberType()
+    {
+        //Create a random number between 0 and 1
+        float randomChance = Random.Range(0, 1f);
+
+        //Check if this will be a shop chamber type
+        if (randomChance > 0 && randomChance <= chanceForChamberToBeShop)
+        {
+            return Chamber.ChamberType.Shop;
+        }
+
+        //No chamber type given, default to item reward
+        return Chamber.ChamberType.ItemReward;
+    }
 
     //Methods for chamber edge generation
     private void ConnectChambers()

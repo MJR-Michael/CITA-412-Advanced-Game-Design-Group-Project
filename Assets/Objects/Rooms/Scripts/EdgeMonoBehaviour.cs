@@ -24,10 +24,10 @@ public class EdgeMonoBehaviour : MonoBehaviour
 
     public void Render()
     {
-        Debug.Log("rendering");
+        //Debug.Log("rendering");
         foreach (EdgeNodeMonobehaviour edge in edgeNodes)
         {
-            Debug.Log(edge.gameObject.name);
+            //Debug.Log(edge.gameObject.name);
 
             edge.Render();
         }

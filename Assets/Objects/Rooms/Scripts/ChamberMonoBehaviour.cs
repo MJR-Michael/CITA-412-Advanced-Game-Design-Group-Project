@@ -13,19 +13,32 @@ public class EnemySpawnInfo
 
 public class ChamberMonoBehaviour : MonoBehaviour
 {
+    public event Action<ChamberMonoBehaviour> OnPlayerEntered;
+
     [Header("Rendering & Triggers")]
-    [SerializeField] private GameObject parentRenderer;
-    [SerializeField] private Collider chamberTrigger;
+    [SerializeField] 
+    private GameObject parentRenderer;
+    
+    [SerializeField] 
+    private Collider chamberTrigger;
+
 
     [Header("Enemy Spawning")]
-    [SerializeField] private List<EnemySpawnInfo> enemySpawnInfos = new(); // Per-prefab spawn data
+    [SerializeField] 
+    private List<EnemySpawnInfo> enemySpawnInfos = new(); // Per-prefab spawn data
 
+
+    [Header("References")]
     [SerializeField]
     GameObject mapRenderer;
 
+    //NOTE: change item drop position in the future. For now, this will suffice
+    [SerializeField, Tooltip("Where will the item reward spawn in this chamber?")]
+    GameObject itemRewardSpawnPoint;
+
     private Chamber chamber;
     private bool isRendered;
-    public event Action<ChamberMonoBehaviour> OnPlayerEntered;
+
     bool hasBeenVisisted;
 
 
@@ -62,12 +75,28 @@ public class ChamberMonoBehaviour : MonoBehaviour
         //Set chamber data
         this.chamber = chamber;
 
-        Cull();
-
         mapRenderer.SetActive(false);
 
         //Set the chamber monobehaviour
         chamber.SetMonobehaviour(this);
+
+        //Setup chamber based on the type it is
+        switch (chamber.GetChamberType())
+        {
+            case Chamber.ChamberType.ItemReward:
+                //Instantiate the item reward (if it exists) into the chamber
+                if (chamber.GetItemReward() != null)
+                {
+                    GameObject itemRewardObj = Instantiate(chamber.GetItemReward().gameObject, parentRenderer.transform);
+                    itemRewardObj.transform.position = itemRewardSpawnPoint.transform.position;
+                }
+                break;
+            default:
+                //Debug.Log($"Chamber type {chamber.GetChamberType()} not customized yet");
+                break;
+        }
+
+        Cull();
     }
 
     public void CullOutAdjacentChambers(List<Chamber> chambersNotToCullOut)

@@ -217,6 +217,37 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 0.019999998, y: 0.019999998, z: 0.00031889527}
   m_Center: {x: 0, y: 0, z: -0.00015944763}
+--- !u!1 &971841804301127032
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1563998686748081550}
+  m_Layer: 0
+  m_Name: Item Reward Spawn Point
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1563998686748081550
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 971841804301127032}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 55.24, y: 5.67, z: 22.6}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 2598695025621915566}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1049982798784907828
 GameObject:
   m_ObjectHideFlags: 0
@@ -389,7 +420,7 @@ Transform:
   m_GameObject: {fileID: 1481174890502893464}
   serializedVersion: 2
   m_LocalRotation: {x: -0.7071068, y: -0, z: -0, w: 0.7071067}
-  m_LocalPosition: {x: 18, y: 0, z: 18}
+  m_LocalPosition: {x: 18, y: 0.28700566, z: 18}
   m_LocalScale: {x: 1800, y: 1800, z: 1800}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -506,6 +537,10 @@ Transform:
   - {fileID: 8480003972181957718}
   - {fileID: 6518608630312706847}
   - {fileID: 7269518462935208096}
+  - {fileID: 2453523413616953967}
+  - {fileID: 406517307378485651}
+  - {fileID: 3017385509025774368}
+  - {fileID: 2925439136814033296}
   m_Father: {fileID: 8337391550938700506}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1704796679920199985
@@ -541,10 +576,7 @@ Transform:
   m_Children:
   - {fileID: 8337391550938700506}
   - {fileID: 5614767526743562209}
-  - {fileID: 2453523413616953967}
-  - {fileID: 406517307378485651}
-  - {fileID: 3017385509025774368}
-  - {fileID: 2925439136814033296}
+  - {fileID: 1563998686748081550}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &-1521890469683702945
@@ -563,6 +595,7 @@ MonoBehaviour:
   chamberTrigger: {fileID: 8264910813519786134}
   enemySpawnInfos: []
   mapRenderer: {fileID: 5451278204771769079}
+  itemRewardSpawnPoint: {fileID: 971841804301127032}
 --- !u!65 &8264910813519786134
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -758,7 +791,7 @@ Transform:
   m_GameObject: {fileID: 2856464573847625055}
   serializedVersion: 2
   m_LocalRotation: {x: -0.7071068, y: -0, z: -0, w: 0.7071067}
-  m_LocalPosition: {x: 54, y: 0, z: 54}
+  m_LocalPosition: {x: 54, y: 0.28700566, z: 54}
   m_LocalScale: {x: 1800, y: 1800, z: 1800}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1196,7 +1229,7 @@ Transform:
   m_GameObject: {fileID: 4494310957719648519}
   serializedVersion: 2
   m_LocalRotation: {x: -0.7071068, y: -0, z: -0, w: 0.7071067}
-  m_LocalPosition: {x: 54, y: 0, z: 18}
+  m_LocalPosition: {x: 54, y: 0.28700566, z: 18}
   m_LocalScale: {x: 1800, y: 1800, z: 1800}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1586,7 +1619,7 @@ Transform:
   m_GameObject: {fileID: 7520789171483774218}
   serializedVersion: 2
   m_LocalRotation: {x: -0.7071068, y: -0, z: -0, w: 0.7071067}
-  m_LocalPosition: {x: 18, y: 0, z: 54}
+  m_LocalPosition: {x: 18, y: 0.28700566, z: 54}
   m_LocalScale: {x: 1800, y: 1800, z: 1800}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1954,7 +1987,7 @@ PrefabInstance:
   serializedVersion: 2
   m_Modification:
     serializedVersion: 3
-    m_TransformParent: {fileID: 2598695025621915566}
+    m_TransformParent: {fileID: 5992603361771080898}
     m_Modifications:
     - target: {fileID: 423016536528663315, guid: 58b9baf02686e584bad7005d5e993637, type: 3}
       propertyPath: m_Name
@@ -2090,7 +2123,7 @@ PrefabInstance:
   serializedVersion: 2
   m_Modification:
     serializedVersion: 3
-    m_TransformParent: {fileID: 2598695025621915566}
+    m_TransformParent: {fileID: 5992603361771080898}
     m_Modifications:
     - target: {fileID: 423016536528663315, guid: 58b9baf02686e584bad7005d5e993637, type: 3}
       propertyPath: m_Name
@@ -2152,7 +2185,7 @@ PrefabInstance:
   serializedVersion: 2
   m_Modification:
     serializedVersion: 3
-    m_TransformParent: {fileID: 2598695025621915566}
+    m_TransformParent: {fileID: 5992603361771080898}
     m_Modifications:
     - target: {fileID: 423016536528663315, guid: 58b9baf02686e584bad7005d5e993637, type: 3}
       propertyPath: m_Name
@@ -2168,7 +2201,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2651490764714592375, guid: 58b9baf02686e584bad7005d5e993637, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 0.18929453
+      value: 0.186
       objectReference: {fileID: 0}
     - target: {fileID: 2651490764714592375, guid: 58b9baf02686e584bad7005d5e993637, type: 3}
       propertyPath: m_LocalRotation.w
@@ -2342,7 +2375,7 @@ PrefabInstance:
   serializedVersion: 2
   m_Modification:
     serializedVersion: 3
-    m_TransformParent: {fileID: 2598695025621915566}
+    m_TransformParent: {fileID: 5992603361771080898}
     m_Modifications:
     - target: {fileID: 423016536528663315, guid: 58b9baf02686e584bad7005d5e993637, type: 3}
       propertyPath: m_Name
@@ -2354,11 +2387,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2651490764714592375, guid: 58b9baf02686e584bad7005d5e993637, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 18.181158
+      value: 18.181156
       objectReference: {fileID: 0}
     - target: {fileID: 2651490764714592375, guid: 58b9baf02686e584bad7005d5e993637, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 18.000189
+      value: 18.000202
       objectReference: {fileID: 0}
     - target: {fileID: 2651490764714592375, guid: 58b9baf02686e584bad7005d5e993637, type: 3}
       propertyPath: m_LocalRotation.w
