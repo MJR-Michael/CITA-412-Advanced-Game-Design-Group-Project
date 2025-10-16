@@ -4,11 +4,20 @@ using System.Diagnostics;
 
 public class Chamber
 {
+    public enum ChamberType
+    {
+        ItemReward,
+        Shop,
+        Boss
+    }
+
     List<Chamber> connectedTo;
     GridPosition originGridPosition;
     ChamberLayoutSO chamberLayoutSO;
     ChamberMonoBehaviour chamberMonoBehaviour;
     List<EdgeMonoBehaviour> edgeMonobehaviours = new List<EdgeMonoBehaviour>();
+    ChamberType chamberType;
+    Item itemReward;
 
     /// <summary>
     /// Key = hallway connector to the chamber (absolute position). Value = the chamber that connects to a hallway (absolute position)
@@ -29,7 +38,14 @@ public class Chamber
     /// <param name="originGridPosition">absolute position of chamber's origin</param>
     /// <param name="hallwayConnectors">Key = hallway connector to the chamber (absolute position). Value = the chamber that connects to a hallway (absolute position)</param>
     /// <param name="isBossChamber"></param>
-    public Chamber(GridPosition originGridPosition, ChamberLayoutSO chamberLayoutSO, Dictionary<GridPosition, GridPosition> hallwayConnectors, bool isBossChamber)
+    public Chamber(
+        GridPosition originGridPosition,
+        ChamberLayoutSO chamberLayoutSO,
+        Dictionary<GridPosition, GridPosition> hallwayConnectors,
+        bool isBossChamber,
+        ChamberType chamberType,
+        Item itemReward = null
+        )
     {
         this.hallwayConnectors = new Dictionary<GridPosition, GridPosition>(hallwayConnectors);
         _originalHallwayConnectors = new Dictionary<GridPosition, GridPosition>(hallwayConnectors);
@@ -38,6 +54,9 @@ public class Chamber
         this.originGridPosition = originGridPosition;
         this.isBossChamber = isBossChamber;
         this.chamberLayoutSO = chamberLayoutSO;
+        this.chamberType = chamberType;
+        this.itemReward = itemReward;
+
         isVisited = false;
     }
     public GridPosition GetPositionOfChamberConnectorFromHallwayPosition(GridPosition hallwayConnectorPosition)
@@ -98,4 +117,8 @@ public class Chamber
 
         return null;
     }
+
+    public Item GetItemReward() => itemReward;
+
+    public ChamberType GetChamberType() => chamberType;
 }
