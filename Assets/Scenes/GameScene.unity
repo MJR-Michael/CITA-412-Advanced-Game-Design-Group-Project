@@ -456,51 +456,6 @@ MonoBehaviour:
   m_ShadowLayerMask: 1
   m_RenderingLayers: 1
   m_ShadowRenderingLayers: 1
---- !u!1 &605761021
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 605761023}
-  - component: {fileID: 605761022}
-  m_Layer: 0
-  m_Name: Enemy Spawn Manager
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!114 &605761022
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 605761021}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e618db5c45da4ac7d966fa5f29efa5a6, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::EnemySpawnManager
-  spawner: {fileID: 1297498787}
---- !u!4 &605761023
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 605761021}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 1034.9342, y: 0, z: 441.75085}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &649846251
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -512,7 +467,7 @@ PrefabInstance:
     - target: {fileID: 1268447211260291659, guid: 785a30857b7468a42ac34cdee87c6bf2, type: 3}
       propertyPath: spawnManager
       value: 
-      objectReference: {fileID: 605761022}
+      objectReference: {fileID: 699178756}
     - target: {fileID: 2247558039490215115, guid: 785a30857b7468a42ac34cdee87c6bf2, type: 3}
       propertyPath: m_LocalPosition.x
       value: 346.2617
@@ -562,50 +517,74 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 785a30857b7468a42ac34cdee87c6bf2, type: 3}
---- !u!1 &1297498786
-GameObject:
+--- !u!1001 &699178755
+PrefabInstance:
   m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1297498788}
-  - component: {fileID: 1297498787}
-  m_Layer: 0
-  m_Name: Enemy Spawner
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!114 &1297498787
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 1177713584641423618, guid: 283bb8b8e7baebd418c643a9b6d9f695, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 1698.6881
+      objectReference: {fileID: 0}
+    - target: {fileID: 1177713584641423618, guid: 283bb8b8e7baebd418c643a9b6d9f695, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -0.00001
+      objectReference: {fileID: 0}
+    - target: {fileID: 1177713584641423618, guid: 283bb8b8e7baebd418c643a9b6d9f695, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 993.9841
+      objectReference: {fileID: 0}
+    - target: {fileID: 1177713584641423618, guid: 283bb8b8e7baebd418c643a9b6d9f695, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1177713584641423618, guid: 283bb8b8e7baebd418c643a9b6d9f695, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1177713584641423618, guid: 283bb8b8e7baebd418c643a9b6d9f695, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1177713584641423618, guid: 283bb8b8e7baebd418c643a9b6d9f695, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1177713584641423618, guid: 283bb8b8e7baebd418c643a9b6d9f695, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1177713584641423618, guid: 283bb8b8e7baebd418c643a9b6d9f695, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1177713584641423618, guid: 283bb8b8e7baebd418c643a9b6d9f695, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3740768899078881182, guid: 283bb8b8e7baebd418c643a9b6d9f695, type: 3}
+      propertyPath: m_Name
+      value: GameManager
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 283bb8b8e7baebd418c643a9b6d9f695, type: 3}
+--- !u!114 &699178756 stripped
 MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
+  m_CorrespondingSourceObject: {fileID: 3494687941908882190, guid: 283bb8b8e7baebd418c643a9b6d9f695, type: 3}
+  m_PrefabInstance: {fileID: 699178755}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1297498786}
+  m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 342396d8ff55de979a645beeb57e848b, type: 3}
+  m_Script: {fileID: 11500000, guid: e618db5c45da4ac7d966fa5f29efa5a6, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::EnemySpawner
---- !u!4 &1297498788
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1297498786}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 1034.9342, y: 0, z: 441.75085}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_EditorClassIdentifier: Assembly-CSharp::EnemySpawnManager
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
@@ -613,6 +592,5 @@ SceneRoots:
   - {fileID: 490227723}
   - {fileID: 649846251}
   - {fileID: 270537624}
-  - {fileID: 605761023}
-  - {fileID: 1297498788}
   - {fileID: 410212024}
+  - {fileID: 699178755}
