@@ -4,24 +4,28 @@ public class Crossbow : MonoBehaviour
 {
     public Transform crossbowFirePoint;
     public GameObject crossbowProjectile;
+
+    public float launchSpeed = 60f;
     public float crossbowFireRate = 1f;
 
     private float crossbowCooldown = 0f;
 
-    private void Update()
+    void Update()
     {
-        crossbowCooldown -= Time.deltaTime;
-
-        if ((InputManager.Instance.GetPrimaryFireInput() > 0) && (crossbowCooldown <= 0f))
+        if (InputManager.Instance.GetPrimaryFireInput() > 0 && Time.time >= crossbowCooldown)
         {
             Shoot();
-            crossbowCooldown = 1f / crossbowFireRate;
         }
-
     }
 
-    private void Shoot()
+    void Shoot()
     {
-        GameObject bolt = Instantiate(crossbowProjectile, crossbowFirePoint.position, crossbowFirePoint.rotation);
+        crossbowCooldown = Time.time + crossbowFireRate;
+
+        Quaternion spawnRotation = crossbowFirePoint.rotation * crossbowProjectile.transform.rotation;
+        GameObject bolt = Instantiate(crossbowProjectile, crossbowFirePoint.position, spawnRotation);
+
+        Rigidbody rb = bolt.GetComponent<Rigidbody>();
+        rb.linearVelocity = Camera.main.transform.forward * launchSpeed;
     }
 }
