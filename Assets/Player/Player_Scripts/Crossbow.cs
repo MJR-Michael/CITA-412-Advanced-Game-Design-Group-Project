@@ -1,27 +1,62 @@
+using NUnit.Framework;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class Crossbow : MonoBehaviour
 {
+    [SerializeField]
+    List<Collider> playerColliders = new List<Collider>();
+
+    [SerializeField]
+    GameObject restingBoltObj;
+
     public Transform crossbowFirePoint;
     public GameObject crossbowProjectile;
+
+    public float launchSpeed = 60f;
     public float crossbowFireRate = 1f;
 
     private float crossbowCooldown = 0f;
 
-    private void Update()
-    {
-        crossbowCooldown -= Time.deltaTime;
+    bool canFire = true;
 
-        if ((InputManager.Instance.GetPrimaryFireInput() > 0) && (crossbowCooldown <= 0f))
+    void Update()
+    {
+        canFire = Time.time >= crossbowCooldown;
+        if (canFire)
         {
-            Shoot();
-            crossbowCooldown = 1f / crossbowFireRate;
+            restingBoltObj.SetActive(true);
+        }
+        else
+        {
+            restingBoltObj.SetActive(false);
         }
 
+        if (canFire && InputManager.Instance.GetPrimaryFireInput() > 0)
+        {
+            Shoot();
+        }
     }
 
-    private void Shoot()
+    void Shoot()
     {
-        GameObject bolt = Instantiate(crossbowProjectile, crossbowFirePoint.position, crossbowFirePoint.rotation);
+        crossbowCooldown = Time.time + crossbowFireRate;
+
+        Quaternion spawnRotation = crossbowFirePoint.rotation * crossbowProjectile.transform.rotation;
+        GameObject bolt = Instantiate(crossbowProjectile, crossbowFirePoint.position, spawnRotation);
+
+        Rigidbody rb = bolt.GetComponent<Rigidbody>();
+        rb.linearVelocity = Camera.main.transform.forward * launchSpeed;
+
+        Collider boltCollider = bolt.GetComponent<Collider>();
+
+        if (boltCollider != null)
+        {
+            foreach (Collider playerCollider in playerColliders)
+            {
+                Physics.IgnoreCollision(boltCollider, playerCollider);
+            }
+        }
+
     }
 }

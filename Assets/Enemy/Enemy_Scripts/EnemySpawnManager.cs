@@ -6,7 +6,7 @@ public class EnemySpawnManager : MonoBehaviour
     [SerializeField] private EnemySpawner spawner;
 
     // Keep a list of registered chambers
-    private readonly List<ChamberMonoBehaviour> registeredChambers = new List<ChamberMonoBehaviour>();
+    private List<ChamberMonoBehaviour> registeredChambers = new List<ChamberMonoBehaviour>();
 
     /// Called by a chamber to register itself.
     public void RegisterChamber(ChamberMonoBehaviour chamber)

@@ -2,12 +2,14 @@ using UnityEngine;
 
 public static class PlayerTargeting
 {
+    //Finds the closest player to the given position.
     public static Transform GetClosestPlayer(Vector3 fromPosition)
     {
+        GameObject[] players = GameObject.FindGameObjectsWithTag("Player");
         Transform closest = null;
         float minDistanceSqr = Mathf.Infinity;
 
-        foreach (Player player in Player.AllPlayers)
+        foreach (GameObject player in players)
         {
             if (player == null) continue;
 
@@ -24,6 +26,7 @@ public static class PlayerTargeting
         return closest;
     }
 
+    // Rotates a transform to face the target smoothly.
     public static void RotateTowardsTarget(Transform self, Transform target, float rotationSpeed = 10f)
     {
         if (target == null) return;
