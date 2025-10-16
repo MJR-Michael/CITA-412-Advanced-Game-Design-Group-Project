@@ -14,6 +14,8 @@ GameObject:
   - component: {fileID: 7999520503324108512}
   - component: {fileID: -7826735586516030485}
   - component: {fileID: 4536080431064354424}
+  - component: {fileID: 6680260424868990993}
+  - component: {fileID: 8500277667605440088}
   m_Layer: 0
   m_Name: Enemy1_Phase2
   m_TagString: Enemy
@@ -111,7 +113,7 @@ SphereCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Radius: 0.5
+  m_Radius: 1.6
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!135 &-7826735586516030485
 SphereCollider:
@@ -148,3 +150,32 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Enemy
   maxHealth: 100
   currentHealth: 100
+  currentChamber: {fileID: 0}
+--- !u!114 &6680260424868990993
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4951916363117944883}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2a581edd047ca66cda221661498bb55d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::DeathExplosion
+  explosionPrefab: {fileID: 6328527493802114786, guid: 9aee920c9d3828b98987c18863aa1ebf, type: 3}
+  explosionRadius: 5
+  damage: 20
+--- !u!114 &8500277667605440088
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4951916363117944883}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 758a64ee6c98bae189aa82beb24c1e26, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::EnemyProximityExplode
+  triggerRadius: 1.5
