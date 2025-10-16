@@ -10,7 +10,6 @@ public class EnemySpawnInfo
     [HideInInspector] public ChamberMonoBehaviour chamber;
 }
 
-
 public class ChamberMonoBehaviour : MonoBehaviour
 {
     [Header("Rendering & Triggers")]
@@ -44,6 +43,15 @@ public class ChamberMonoBehaviour : MonoBehaviour
         hasBeenVisisted = true;
         mapRenderer.SetActive(true);
         Render();
+
+        // SPAWN ENEMIES ONCE WHEN PLAYER ENTERS
+        foreach (var spawnInfo in enemySpawnInfos)
+        {
+            if (spawnInfo.enemyPrefab != null && spawnInfo.spawnPoint != null)
+            {
+                Instantiate(spawnInfo.enemyPrefab, spawnInfo.spawnPoint.position, spawnInfo.spawnPoint.rotation);
+            }
+        }
 
         //Tell adjacent neighbors to cull out their neighbors, excluding this chamber & the ones this chamber connects to.
         List<Chamber> chambersNotToCullOut = new List<Chamber>(chamber.GetConnectingChambers());
