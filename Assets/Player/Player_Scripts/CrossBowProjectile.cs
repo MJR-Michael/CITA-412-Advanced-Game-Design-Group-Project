@@ -1,41 +1,57 @@
 using UnityEngine;
 
-public class Projectile : MonoBehaviour
+public class CrossbowProjectile : MonoBehaviour
 {
-    public float speed = 20f;
-    public float lifetime = 3f;
-    public float damage = 10;
+    Collider collider;
+    private Rigidbody rb;
+    public float lifeTime = 8f;       // Destroy after x seconds if it doesn’t hit anything
+    public int damage = 10;           // Damage dealt on hit
+    private bool stuck = false;
 
-    private void Start()
+    void Awake()
     {
-        Destroy(gameObject, lifetime);
+        collider = GetComponent<Collider>();
+        rb = GetComponent<Rigidbody>();
     }
 
-    private void Update()
+    void Start()
     {
-        // Move forward
-        transform.position += transform.forward * speed * Time.deltaTime;
-
-        // Optionally, you can add a Rigidbody force instead of moving in Update
-        // Rigidbody rb = bolt.GetComponent<Rigidbody>();
-        // if (rb != null)
-        // {
-        //     rb.linearVelocity = firePoint.forward * 20f;
-        // }
+        Destroy(gameObject, lifeTime);
     }
 
-    private void OnTriggerEnter(Collider other)
+    void OnCollisionEnter(Collision collision)
     {
-        // Check if we hit an enemy
-        if (other.CompareTag("Enemy") && other.TryGetComponent(out Enemy enemy))
+        if (stuck) return;
+        stuck = true;
+
+        if (collision.gameObject.TryGetComponent<Enemy>(out var enemy))
         {
             enemy.TakeDamage(damage);
-            Destroy(gameObject);
+        }
 
-        }
-        else if (!other.CompareTag("Projectile"))
+        // Stop physics
+        rb.linearVelocity = Vector3.zero;
+        rb.angularVelocity = Vector3.zero;
+        rb.isKinematic = true;
+
+        ContactPoint contact = collision.contacts[0];
+        transform.position = contact.point;
+
+        // Stick along the flight direction
+        Vector3 stickDirection = rb.linearVelocity.normalized;
+        if (stickDirection == Vector3.zero) stickDirection = transform.forward;
+
+        // Make the arrow look along the flight direction while aligning with surface normal
+        transform.rotation = Quaternion.LookRotation(stickDirection, contact.normal);
+        if (collision.rigidbody != null)
         {
-            Destroy(gameObject);
+            transform.SetParent(collision.rigidbody.transform);
         }
+        else
+        {
+            transform.SetParent(collision.transform);
+        }
+        Destroy(rb);
+        Destroy(collider);
     }
 }
