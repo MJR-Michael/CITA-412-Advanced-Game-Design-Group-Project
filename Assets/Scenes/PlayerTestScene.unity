@@ -602,7 +602,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::DebugEnemySpawner
   chamber: {fileID: 1568550485}
-  spawnKey: 282
+  f1Key: 94
+  f2Key: 95
 --- !u!4 &58324907
 Transform:
   m_ObjectHideFlags: 0
@@ -10332,6 +10333,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Enemy
   maxHealth: 100
   currentHealth: 100
+  currentChamber: {fileID: 0}
 --- !u!1001 &655551176471901815
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -10488,6 +10490,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Enemy
   maxHealth: 100
   currentHealth: 100
+  currentChamber: {fileID: 0}
 --- !u!1001 &2411262664807952874
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -10718,6 +10721,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Enemy
   maxHealth: 100
   currentHealth: 100
+  currentChamber: {fileID: 0}
 --- !u!1001 &8297386358964839166
 PrefabInstance:
   m_ObjectHideFlags: 0

@@ -3,6 +3,7 @@ using UnityEngine;
 public class EnemyTeleport : Enemy
 {
     private bool hasTeleportedAtHalfHp = false;
+    public Knockback knockbackScript;
 
     public override void TakeDamage(float damage)
     {
@@ -25,6 +26,8 @@ public class EnemyTeleport : Enemy
             return;
         }
 
+        knockbackScript.ApplyAOEKnockback();
+        
         // Disable movement
         var movement = GetComponent<Enemy2_Movement>();
         if (movement != null)

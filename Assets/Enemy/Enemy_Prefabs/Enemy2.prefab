@@ -47,6 +47,7 @@ GameObject:
   - component: {fileID: -4758924506697721745}
   - component: {fileID: 3794952626733098471}
   - component: {fileID: 1064089403316771382}
+  - component: {fileID: 6996454634416520239}
   m_Layer: 0
   m_Name: Enemy2
   m_TagString: Enemy
@@ -180,6 +181,8 @@ MonoBehaviour:
   horizontalRange: 2
   horizontalRandomFactor: 8
   rotationSpeed: 5
+  startPosition: {x: 0, y: 0, z: 0}
+  canMove: 1
 --- !u!114 &3794952626733098471
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -194,6 +197,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::EnemyTeleport
   maxHealth: 100
   currentHealth: 100
+  currentChamber: {fileID: 0}
+  knockbackScript: {fileID: 6996454634416520239}
 --- !u!114 &1064089403316771382
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -207,3 +212,16 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::DeathKnockback
   knockbackForce: 100
+--- !u!114 &6996454634416520239
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2173754672973949297}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 95f2536b61cdce83487cab5429d41913, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Knockback
+  knockbackForce: 300
