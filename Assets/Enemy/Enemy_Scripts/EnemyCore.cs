@@ -38,7 +38,7 @@ public class Enemy : MonoBehaviour, IChamberBound
         Debug.Log($"Enemy healed {amount}. Current HP: {currentHealth}/{maxHealth}");
     }
 
-    private void Die()
+    public void Die()
     {
         foreach (var behavior in deathBehaviors)
         {
