@@ -3,18 +3,18 @@ using UnityEngine;
 public class Enemy : MonoBehaviour, IChamberBound
 {
     [Header("Health")]
-    [SerializeField] private float maxHealth = 100f;
-    [SerializeField] private float currentHealth = 100f;
+    [SerializeField] protected float maxHealth = 100f;
+    [SerializeField] protected float currentHealth = 100f;
 
     private IDeathBehavior[] deathBehaviors;
-    protected ChamberMonoBehaviour currentChamber;
+    public ChamberMonoBehaviour currentChamber;
 
     private void Awake()
     {
         deathBehaviors = GetComponents<IDeathBehavior>();
     }
 
-    public void TakeDamage(float damage)
+    public virtual void TakeDamage(float damage)
     {
         currentHealth -= damage;
         Debug.Log($"Enemy took {damage} damage. Remaining HP: {currentHealth}");

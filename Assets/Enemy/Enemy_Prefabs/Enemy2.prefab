@@ -43,9 +43,9 @@ GameObject:
   - component: {fileID: 7818659583709275959}
   - component: {fileID: 4646223499464376235}
   - component: {fileID: 1722774215558251408}
-  - component: {fileID: 8692255592006173583}
   - component: {fileID: 5962814363054516429}
   - component: {fileID: -4758924506697721745}
+  - component: {fileID: 3794952626733098471}
   - component: {fileID: 1064089403316771382}
   m_Layer: 0
   m_Name: Enemy2
@@ -147,20 +147,6 @@ SphereCollider:
   serializedVersion: 3
   m_Radius: 0.5
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &8692255592006173583
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2173754672973949297}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b927a9d339411c13f939feef1106c968, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::Enemy
-  maxHealth: 20
-  currentHealth: 20
 --- !u!114 &5962814363054516429
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -173,9 +159,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 647e221916346cb629f6c76bda80f796, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemyShooter
-  laserPrefab: {fileID: 1839331193652955715, guid: a41a342dd0960c598baef2025d1cee03, type: 3}
+  attackConfig: {fileID: 11400000, guid: edd3a3b03648dde1b991bd1d9b1e1ef2, type: 2}
   firePoint: {fileID: 376258350996773454}
-  fireCooldown: 3
+  rotationSpeed: 10
 --- !u!114 &-4758924506697721745
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -194,6 +180,20 @@ MonoBehaviour:
   horizontalRange: 2
   horizontalRandomFactor: 8
   rotationSpeed: 5
+--- !u!114 &3794952626733098471
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2173754672973949297}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 337714152f64ce230852d0c2f4957bbc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::EnemyTeleport
+  maxHealth: 100
+  currentHealth: 100
 --- !u!114 &1064089403316771382
 MonoBehaviour:
   m_ObjectHideFlags: 0
