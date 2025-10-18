@@ -47,9 +47,18 @@ public class ChamberMonoBehaviour : MonoBehaviour
         //Setup door references
         foreach (Door door in doorsInChamber)
         {
-            door.Initialize(chamber.OriginGridPosition());
+            GridPosition absoluteDoorGridPosition = door.RelativeDoorGridPosition() + chamber.OriginGridPosition();
+
+            //Check determine if this door is one that leads to another chamber
+            bool leadsToOtherChamber = chamber.IsUsingHallwayConnector(absoluteDoorGridPosition);
+
+            door.Initialize(absoluteDoorGridPosition, leadsToOtherChamber);
+
             //Listen to when the door is interacted with
-            door.OnDoorInteractedWith += HandleDoorInteractedWith;
+            if (leadsToOtherChamber)
+            {
+                door.OnDoorInteractedWith += HandleDoorInteractedWith;
+            }
         }
     }
 

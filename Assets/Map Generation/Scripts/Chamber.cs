@@ -28,6 +28,7 @@ public class Chamber
     /// Key = hallway connector to the chamber (absolute position). Value = the chamber that connects to a hallway (absolute position)
     /// </summary>
     Dictionary<GridPosition, GridPosition> hallwayConnectors;
+    Dictionary<GridPosition, GridPosition> usedHallwayConnectors = new Dictionary<GridPosition, GridPosition>();
 
     bool isBossChamber;
     bool isVisited;
@@ -70,6 +71,7 @@ public class Chamber
     }
     public bool UseHallwayConnector(GridPosition connectorGridPosition)
     {
+        usedHallwayConnectors.Add(connectorGridPosition, hallwayConnectors[connectorGridPosition]);
         return hallwayConnectors.Remove(connectorGridPosition);
     }
     public void AddConnection(Chamber otherChamber) => connectedTo.Add(otherChamber);
@@ -146,5 +148,17 @@ public class Chamber
     {
         //Get the door at the given edge connector grid position in chamber monobehaviour
         return chamberMonoBehaviour.GetDoorAtPosition(edgeConnectorGridPosition);
+    }
+
+    public bool IsUsingHallwayConnector(GridPosition gridPosition)
+    {
+        if (usedHallwayConnectors.ContainsKey(gridPosition))
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
     }
 }

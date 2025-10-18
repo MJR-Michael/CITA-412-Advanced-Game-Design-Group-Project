@@ -8,6 +8,12 @@ public class Door : Interactable
     [SerializeField, Tooltip("The door's relative position in the chamber. Reference the chamber design document to get the relative grid position for this chamber.")]
     GridPosition relativeDoorGridPosition;
 
+    [SerializeField, Tooltip("How the door will appear if it does not lead to other chambers")]
+    GameObject blockedDoorObj;
+
+    [SerializeField, Tooltip("How the door will appear if it does lead to other chambers")]
+    GameObject unblockedDoorObj;
+
     GridPosition absoluteDoorGridPosition;
 
     public void SetDoorwayInteractable(bool isInteractable)
@@ -34,10 +40,24 @@ public class Door : Interactable
         gameObject.SetActive(false);
     }
 
-    public void Initialize(GridPosition chamberOriginGridPosition)
+    public void Initialize(GridPosition absoluteDoorGridPosition, bool leadsToOtherChamber)
     {
-        absoluteDoorGridPosition = chamberOriginGridPosition + relativeDoorGridPosition;
+        this.absoluteDoorGridPosition = absoluteDoorGridPosition;
+        if (leadsToOtherChamber)
+        {
+            blockedDoorObj.SetActive(false);
+            unblockedDoorObj.SetActive(true);
+        }
+        else
+        {
+            blockedDoorObj.SetActive(true);
+            unblockedDoorObj.SetActive(false);
+
+            //Prevent the player from interacting with the door
+            isInteractable = false;
+        }
     }
 
+    public GridPosition RelativeDoorGridPosition() => relativeDoorGridPosition;
     public GridPosition AbsoluteDoorGridPosition() => absoluteDoorGridPosition;
 }
