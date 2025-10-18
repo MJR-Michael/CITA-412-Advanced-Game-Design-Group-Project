@@ -2604,6 +2604,13 @@ MonoBehaviour:
     chamber: {fileID: 0}
   mapRenderer: {fileID: 5429127126119510075}
   itemRewardSpawnPoint: {fileID: 6491035611838243471}
+  doorsInChamber:
+  - {fileID: 1909998053333208878}
+  - {fileID: 2775935501805719345}
+  - {fileID: 9037224190350165825}
+  - {fileID: 5274929763213379971}
+  - {fileID: 2122382483491347143}
+  - {fileID: 1714571085995310594}
 --- !u!65 &2177735373624546322
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -3659,6 +3666,14 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 7081586899856923573, guid: 58b9baf02686e584bad7005d5e993637, type: 3}
+      propertyPath: relativeDoorGridPosition.x
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7081586899856923573, guid: 58b9baf02686e584bad7005d5e993637, type: 3}
+      propertyPath: relativeDoorGridPosition.z
+      value: 2
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -3669,6 +3684,17 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 2651490764714592375, guid: 58b9baf02686e584bad7005d5e993637, type: 3}
   m_PrefabInstance: {fileID: 2246295963040455924}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &9037224190350165825 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 7081586899856923573, guid: 58b9baf02686e584bad7005d5e993637, type: 3}
+  m_PrefabInstance: {fileID: 2246295963040455924}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: de729807372de0047ad8ab8869b9b866, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Door
 --- !u!1001 &2559117127624069606
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -3923,6 +3949,14 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 7081586899856923573, guid: 58b9baf02686e584bad7005d5e993637, type: 3}
+      propertyPath: relativeDoorGridPosition.x
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 7081586899856923573, guid: 58b9baf02686e584bad7005d5e993637, type: 3}
+      propertyPath: relativeDoorGridPosition.z
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -3933,6 +3967,17 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 2651490764714592375, guid: 58b9baf02686e584bad7005d5e993637, type: 3}
   m_PrefabInstance: {fileID: 3130715770803196470}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &5274929763213379971 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 7081586899856923573, guid: 58b9baf02686e584bad7005d5e993637, type: 3}
+  m_PrefabInstance: {fileID: 3130715770803196470}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: de729807372de0047ad8ab8869b9b866, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Door
 --- !u!1001 &3216972028753287971
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -4715,11 +4760,30 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 7081586899856923573, guid: 58b9baf02686e584bad7005d5e993637, type: 3}
+      propertyPath: relativeDoorGridPosition.x
+      value: -1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7081586899856923573, guid: 58b9baf02686e584bad7005d5e993637, type: 3}
+      propertyPath: relativeDoorGridPosition.z
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 58b9baf02686e584bad7005d5e993637, type: 3}
+--- !u!114 &2775935501805719345 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 7081586899856923573, guid: 58b9baf02686e584bad7005d5e993637, type: 3}
+  m_PrefabInstance: {fileID: 4954174417334604932}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: de729807372de0047ad8ab8869b9b866, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Door
 --- !u!4 &6920695274184924403 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 2651490764714592375, guid: 58b9baf02686e584bad7005d5e993637, type: 3}
@@ -5479,11 +5543,30 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 7081586899856923573, guid: 58b9baf02686e584bad7005d5e993637, type: 3}
+      propertyPath: relativeDoorGridPosition.x
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7081586899856923573, guid: 58b9baf02686e584bad7005d5e993637, type: 3}
+      propertyPath: relativeDoorGridPosition.z
+      value: -1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 58b9baf02686e584bad7005d5e993637, type: 3}
+--- !u!114 &1714571085995310594 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 7081586899856923573, guid: 58b9baf02686e584bad7005d5e993637, type: 3}
+  m_PrefabInstance: {fileID: 8470629413353940407}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: de729807372de0047ad8ab8869b9b866, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Door
 --- !u!4 &5856443540571499968 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 2651490764714592375, guid: 58b9baf02686e584bad7005d5e993637, type: 3}
@@ -5541,11 +5624,26 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 7081586899856923573, guid: 58b9baf02686e584bad7005d5e993637, type: 3}
+      propertyPath: relativeDoorGridPosition.x
+      value: -1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 58b9baf02686e584bad7005d5e993637, type: 3}
+--- !u!114 &1909998053333208878 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 7081586899856923573, guid: 58b9baf02686e584bad7005d5e993637, type: 3}
+  m_PrefabInstance: {fileID: 8703053309777613979}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: de729807372de0047ad8ab8869b9b866, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Door
 --- !u!4 &6632825965231725804 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 2651490764714592375, guid: 58b9baf02686e584bad7005d5e993637, type: 3}
@@ -5603,11 +5701,26 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 7081586899856923573, guid: 58b9baf02686e584bad7005d5e993637, type: 3}
+      propertyPath: relativeDoorGridPosition.x
+      value: 3
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 58b9baf02686e584bad7005d5e993637, type: 3}
+--- !u!114 &2122382483491347143 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 7081586899856923573, guid: 58b9baf02686e584bad7005d5e993637, type: 3}
+  m_PrefabInstance: {fileID: 9165650271799034226}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: de729807372de0047ad8ab8869b9b866, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Door
 --- !u!4 &6627348741403805957 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 2651490764714592375, guid: 58b9baf02686e584bad7005d5e993637, type: 3}
