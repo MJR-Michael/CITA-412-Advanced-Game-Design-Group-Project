@@ -71,7 +71,11 @@ public class Chamber
     }
     public bool UseHallwayConnector(GridPosition connectorGridPosition)
     {
-        usedHallwayConnectors.Add(connectorGridPosition, hallwayConnectors[connectorGridPosition]);
+        if (hallwayConnectors.ContainsKey(connectorGridPosition))
+        {
+            usedHallwayConnectors.Add(connectorGridPosition, hallwayConnectors[connectorGridPosition]);
+        }
+
         return hallwayConnectors.Remove(connectorGridPosition);
     }
     public void AddConnection(Chamber otherChamber) => connectedTo.Add(otherChamber);

@@ -112,6 +112,9 @@ public class GridSystem : MonoBehaviour
     Chamber startingChamber;
     Chamber bossChamber;
 
+    //Band-Aid solution to a problem where hallways will connect to the same chamber's hallway connector, breaking the system
+    List<GridPosition> usedHallwayGridPositions = new List<GridPosition>();
+
     //Pathfinding Properties
     MinPriorityQueue<Edge> minPQ = new MinPriorityQueue<Edge>();
     int lastVisitID = 0;
@@ -755,6 +758,27 @@ public class GridSystem : MonoBehaviour
             //If chamber B (the supposed unvisited one) has already been visited, then skip this edge. No looping allowed yet
             if (chamberB.IsVisited()) continue;
 
+            //Check if chamber A and B's edge connector is still valid
+            if (!chamberA.ContainsHallwayConnector(currentEdge.GetEdgeConnectorForChamberA()))
+            {
+                Debug.LogWarning("Hallway connector was used before making extra connection");
+                continue;
+            }
+            if (!chamberB.ContainsHallwayConnector(currentEdge.GetEdgeConnectorForChamberB()))
+            {
+                Debug.LogWarning("Hallway connector was used before making extra connection");
+                continue;
+            }
+            if (usedHallwayGridPositions.Contains(currentEdge.GetEdgeConnectorForChamberA()))
+            {
+                continue;
+            }
+            if (usedHallwayGridPositions.Contains(currentEdge.GetEdgeConnectorForChamberB()))
+            {
+                continue;
+            }
+
+
             //Chamber have been visited
             chamberA.SetIsVisited(true); //Should be redundant
             chamberB.SetIsVisited(true);
@@ -776,6 +800,10 @@ public class GridSystem : MonoBehaviour
             //Tell chamber A and B their respective edge connector was consumed
             chamberA.UseHallwayConnector(currentEdge.GetEdgeConnectorForChamberA());
             chamberB.UseHallwayConnector(currentEdge.GetEdgeConnectorForChamberB());
+
+            //Store the edges in a list of used edges
+            usedHallwayGridPositions.Add(currentEdge.GetEdgeConnectorForChamberA());
+            usedHallwayGridPositions.Add(currentEdge.GetEdgeConnectorForChamberB());
 
             //Tell chamber A and B they are connected to one another
             chamberA.AddConnection(chamberB);
@@ -831,8 +859,24 @@ public class GridSystem : MonoBehaviour
             if (chamberB.IsBossChamber()) continue;
 
             //Check if chamber A and B's edge connector is still valid
-            if (!chamberA.ContainsHallwayConnector(currentEdge.GetEdgeConnectorForChamberA())) continue;
-            if (!chamberB.ContainsHallwayConnector(currentEdge.GetEdgeConnectorForChamberB())) continue;
+            if (!chamberA.ContainsHallwayConnector(currentEdge.GetEdgeConnectorForChamberA()))
+            {
+                Debug.LogWarning("Hallway connector was used before making extra connection");
+                continue;
+            }
+            if (!chamberB.ContainsHallwayConnector(currentEdge.GetEdgeConnectorForChamberB()))
+            {
+                Debug.LogWarning("Hallway connector was used before making extra connection");
+                continue;
+            }
+            if (usedHallwayGridPositions.Contains(currentEdge.GetEdgeConnectorForChamberA()))
+            {
+                continue;
+            }
+            if (usedHallwayGridPositions.Contains(currentEdge.GetEdgeConnectorForChamberB()))
+            {
+                continue;
+            }
 
             //Build edge path between chamber A's and B's edge connectors            
             List<GridPosition> path = UsePathfindingAlgorithm(

@@ -47,6 +47,16 @@ public class ChamberMonoBehaviour : MonoBehaviour
         //Setup door references
         foreach (Door door in doorsInChamber)
         {
+            if (door == null)
+            {
+                Debug.LogWarning($"WARNING: {gameObject} does not have any doors!");
+            }
+
+            if (chamber == null)
+            {
+                Debug.LogWarning($"WARNING: {gameObject} does not have any chamber reference!");
+            }
+
             GridPosition absoluteDoorGridPosition = door.RelativeDoorGridPosition() + chamber.OriginGridPosition();
 
             //Check determine if this door is one that leads to another chamber
