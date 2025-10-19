@@ -414,7 +414,7 @@ public class GridSystem : MonoBehaviour
             GridPosition gridPosition = chamberKeyValuePair.Key;
             Vector3 chamberWorldPos = GetWorldPositionFromGridPosition(gridPosition);
 
-            GameObject newChamber = Instantiate(chamberKeyValuePair.Value.chamberPrefab, chamberWorldPos, Quaternion.identity);
+            GameObject newChamber = Instantiate(chamberKeyValuePair.Value.constructionSitePrefab, chamberWorldPos, Quaternion.identity);
             chamberGameObjects.Add(gridPosition, newChamber);
             newChamber.name = $"{gridPosition} Chamber";
         }
