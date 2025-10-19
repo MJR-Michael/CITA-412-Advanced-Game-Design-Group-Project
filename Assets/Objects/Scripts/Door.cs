@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class Door : Interactable
@@ -13,6 +14,9 @@ public class Door : Interactable
 
     [SerializeField, Tooltip("How the door will appear if it does lead to other chambers")]
     GameObject unblockedDoorObj;
+
+    [SerializeField]
+    Animator animator;
 
     GridPosition absoluteDoorGridPosition;
 
@@ -36,8 +40,10 @@ public class Door : Interactable
 
     public void OpenDoor()
     {
-        //For now, just hide the door
-        gameObject.SetActive(false);
+        animator.SetBool("InteractedWith", true);
+        
+        //Can no longer interact with door
+        isInteractable = false;
     }
 
     public void Initialize(GridPosition absoluteDoorGridPosition, bool leadsToOtherChamber)
