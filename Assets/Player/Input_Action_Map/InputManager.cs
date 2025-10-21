@@ -225,6 +225,11 @@ public class InputManager : MonoBehaviour
         return controls.Player.Inventory.ReadValue<float>() == 1f? true : false;
     }
 
+    public bool PlayerInteract()
+    {
+        return controls.Player.Interact.ReadValue<float>() == 1f? true : false;
+    }
+
     public float GetPrimaryFireInput()
     {
         return controls.Player.PrimaryFire.ReadValue<float>();
