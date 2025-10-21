@@ -78,4 +78,27 @@ public class EdgeMonoBehaviour : MonoBehaviour
     {
         UpdateEdgeRender();
     }
+
+    public bool ContainsEdgeConnector(GridPosition absoluteDoorGridPosition)
+    {
+        if (edge.GetEdgeConnectorForChamberA() == absoluteDoorGridPosition ||
+            edge.GetEdgeConnectorForChamberB() == absoluteDoorGridPosition)
+        {
+            return true;
+        }
+
+        return false;
+    }
+
+    public (Chamber otherChamber, GridPosition edgeConnectorGridPosition) GetOtherChamberAndEdgeConnector(GridPosition absoluteDoorGridPosition)
+    {
+        if (edge.GetEdgeConnectorForChamberA() == absoluteDoorGridPosition)
+        {
+            return (edge.GetChamberB(), edge.GetEdgeConnectorForChamberB());
+        }
+        else
+        {
+            return (edge.GetChamberA(), edge.GetEdgeConnectorForChamberA());
+        }
+    }
 }
