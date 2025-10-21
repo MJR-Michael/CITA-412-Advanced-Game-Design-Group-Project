@@ -25,6 +25,18 @@ public class GridSystem : MonoBehaviour
     ChamberLayoutSO[] bossRoomLayouts;
 
 
+    [Header("Chamber Type Settings")]
+    [SerializeField, Range(0, 1), Tooltip("The chance for the chamber to be a shop chamber. Note: Ensure all types of chamber chances add to 1 for ease of debugging")]
+    float chanceForChamberToBeShop = 0.1f;
+
+    [SerializeField, Tooltip("The items that any given chamber may contain as a reward")]
+    Item[] itemRewards;
+
+
+    [Header("Managers")]
+    [SerializeField] 
+    EnemySpawnManager spawnManager; // assign via Inspector
+
 
     [Header("Hallway References")]
     [SerializeField]
@@ -51,7 +63,7 @@ public class GridSystem : MonoBehaviour
     [SerializeField, Min(1), Tooltip("The lenght of the map")]
     int mapLength = 10;
 
-    [SerializeField, Min(1), Tooltip("The width of the map")]
+    [SerializeField, Min(1), Tooltip("The gridWidth of the map")]
     int mapWidth = 10;
 
     [SerializeField, Min(1), Tooltip("The minimum number of chambers that will be placed on the map")]
@@ -76,13 +88,17 @@ public class GridSystem : MonoBehaviour
     float mapScale = 10f;
 
 
-
     [Header("Pathfinding Settings")]
     [SerializeField, Tooltip("The type of pathfinding algorithm that will be used to generate connections. Note: performance may be impacted by using less efficient pathfinding algorithms")]
     PathfindingAlgorithm pathfindingAlgorithmToUse = PathfindingAlgorithm.AStar;
 
     [SerializeField, Tooltip("Controls whether debug messages should be displayed")]
     bool debugging;
+
+
+    [Header("Camera Settings")]
+    [SerializeField]
+    Camera mapCamera;
 
 
 
@@ -95,6 +111,9 @@ public class GridSystem : MonoBehaviour
     List<Edge> edges = new List<Edge>();
     Chamber startingChamber;
     Chamber bossChamber;
+
+    //Band-Aid solution to a problem where hallways will connect to the same chamber's hallway connector, breaking the system
+    List<GridPosition> usedHallwayGridPositions = new List<GridPosition>();
 
     //Pathfinding Properties
     MinPriorityQueue<Edge> minPQ = new MinPriorityQueue<Edge>();
@@ -180,7 +199,7 @@ public class GridSystem : MonoBehaviour
         }
 
         //Generate player into the map
-        Debug.Log("player starting grid position: " + startingChamber.GetPlayerSpawnPosition());
+        //Debug.Log("player starting grid position: " + startingChamber.GetPlayerSpawnPosition());
         //Debug.Log("player starting grid position: " + startingChamber.GetPlayerSpawnPosition());
         GameObject playerObj = Instantiate(playerPrefab, GetPlayerSpawnPosition(startingChamber) + new Vector3(5, 3, 5), Quaternion.identity);
     }
@@ -188,6 +207,59 @@ public class GridSystem : MonoBehaviour
     {
         InitializeChamberMonobehaviours();
         InitializeEdgeMonobehaviours();
+        SetupCameraSettings();
+    }
+
+    private void SetupCameraSettings()
+    {
+        /*
+         * 1) To setup the camera, it needs to capture the entire map. This can be done by centralizing the camera to the center of the map
+         *    The center of the map can be a little strange. Say it has an even length, then the center of the map is in between the two
+         *    middle grid positions. When it's odd then the middle grid position is the camera's position. Thus, you need to determine
+         *    if the dimensions are even or odd before determining the center.
+         * 2) After getting the center, the camera's height & orthographic size needs to be adjusted to fit the entire map. Considerations for the near & far
+         *    clipping plane also should be taken.
+         */
+
+        //Get center of the map
+        int centerWidth = mapWidth / 2;
+        int centerLength = mapLength / 2;
+
+        //Get the gridposition for the center
+        GridPosition centerGridPosition = new GridPosition(centerLength, centerWidth);
+
+        //Get world position from this position
+        Vector3 centerWorldPos = GetWorldPositionFromGridPosition(centerGridPosition);
+
+        //If length/width are even, add world unit measurement
+        Vector3 unitGridVectorPosition = GetWorldPositionFromGridPosition(GridPosition.One) / 2;
+        if (centerWidth % 2 == 0)
+        {
+            centerWorldPos += new Vector3(0,0,unitGridVectorPosition.z);
+        }
+        if (centerLength % 2 == 0)
+        {
+            centerWorldPos += new Vector3(unitGridVectorPosition.x, 0, 0);
+        }
+
+        //set camera height
+        float cameraHeight = 50;
+        centerWorldPos += new Vector3(0, cameraHeight, 0);
+
+        //Set camera center position
+        mapCamera.transform.SetPositionAndRotation(centerWorldPos, mapCamera.transform.rotation);
+        //Debug.Log("Camera center position: " + centerWorldPos);
+
+
+        //Set the orthographic size of the camera to fit the entire map.
+        mapCamera.orthographicSize = Mathf.Max(
+            centerWorldPos.z,
+            centerWorldPos.x / mapCamera.aspect
+        );
+
+        //Set camera height, near clip plane, & far clip plane
+        mapCamera.nearClipPlane = 0.0001f;
+        mapCamera.farClipPlane = mapCamera.transform.position.y + 1;
     }
 
     private void InitializeEdgeMonobehaviours()
@@ -204,24 +276,41 @@ public class GridSystem : MonoBehaviour
 
     private void InitializeChamberMonobehaviours()
     {
+        if (spawnManager == null)
+        {
+            Debug.LogError("EnemySpawnManager reference is missing!");
+        }
+
+        // Build a dictionary for fast lookups
+        Dictionary<GridPosition, Chamber> chamberLookup = new Dictionary<GridPosition, Chamber>();
+        foreach (Chamber chamber in chambers)
+        {
+            chamberLookup[chamber.OriginGridPosition()] = chamber;
+        }
+
         foreach (KeyValuePair<GridPosition, GameObject> chamberPositionObjectValuePair in chamberGameObjects)
         {
-            //Get the monobehaviour attached & initialize it to the chamber at its origin grid position
             GameObject chamberObj = chamberPositionObjectValuePair.Value;
             GridPosition chamberPos = chamberPositionObjectValuePair.Key;
             ChamberMonoBehaviour chamberMonoBehaviour = chamberObj.GetComponent<ChamberMonoBehaviour>();
 
-            Chamber chamber = chambers.FirstOrDefault(c => c.OriginGridPosition() == chamberPos);
-            if (chamber == null)
+            if (!chamberLookup.TryGetValue(chamberPos, out Chamber chamber))
             {
                 Debug.LogError($"Error: Chamber at {chamberPos} does not exist, but monobehaviour object needs one!");
+                continue;
             }
 
             chamberMonoBehaviour.Initialize(chamber);
+
+            // Register with EnemySpawnManager directly — no search required
+            if (spawnManager != null)
+            {
+                spawnManager.RegisterChamber(chamberMonoBehaviour);
+            }
         }
 
-        //Tell starting chamber to initialize as rendered
-        startingChamber.GetMonobehaviour().OnPlayerEnteredChamber();
+        // Initialize starting chamber
+        startingChamber.GetMonobehaviour().HandlePlayerEnteredChamber();
     }
 
     private Vector3 GetPlayerSpawnPosition(Chamber startingChamber)
@@ -328,7 +417,7 @@ public class GridSystem : MonoBehaviour
             GridPosition gridPosition = chamberKeyValuePair.Key;
             Vector3 chamberWorldPos = GetWorldPositionFromGridPosition(gridPosition);
 
-            GameObject newChamber = Instantiate(chamberKeyValuePair.Value.chamberPrefab, chamberWorldPos, Quaternion.identity);
+            GameObject newChamber = Instantiate(chamberKeyValuePair.Value.constructionSitePrefab, chamberWorldPos, Quaternion.identity);
             chamberGameObjects.Add(gridPosition, newChamber);
             newChamber.name = $"{gridPosition} Chamber";
         }
@@ -517,8 +606,35 @@ public class GridSystem : MonoBehaviour
                 hallwayConnectors.Remove(gridPosition);
             }
 
+            //Determine what type of chamber the chamber will be. Default to item reward
+            Chamber.ChamberType chamberType = Chamber.ChamberType.ItemReward;
+            if (isBossChamber)
+            {
+                chamberType = Chamber.ChamberType.Boss;
+            }
+            else
+            {
+                //Roll the chance for the chamber being a shop or item
+                chamberType = RollForChamberType();
+            }
+
+            //Determine what type of item the chamber will contain
+            Item itemReward = null;
+
+            if (chamberType == Chamber.ChamberType.ItemReward)
+            {
+                itemReward = RollForItemReward();
+            }
+
             //Generate the chamber object
-            Chamber chamber = new Chamber(chamberPair.Key, chamberPair.Value, hallwayConnectors, isBossChamber);
+            Chamber chamber = new Chamber(
+                chamberPair.Key, 
+                chamberPair.Value, 
+                hallwayConnectors, 
+                isBossChamber, 
+                chamberType,
+                itemReward
+                );
 
             //Store chamber in list of chamber objects
             chambers.Add(chamber);
@@ -531,7 +647,50 @@ public class GridSystem : MonoBehaviour
         }
     }
 
+    private Item RollForItemReward()
+    {
+        if (itemRewards.Length == 0)
+        {
+            Debug.LogWarning($"Warning: {gameObject} does not contain any item rewards!");
+            return null;
+        }
 
+        //Default the item reward to first
+        Item itemReward = itemRewards[0];
+
+        //if only one item, return it
+        if (itemRewards.Length == 1)
+        {
+            return itemReward;
+        }
+        else
+        {
+            //Get a random item
+            int randomItemRewardIndex = Random.Range(0, itemRewards.Length);
+            itemReward = itemRewards[randomItemRewardIndex];
+        }
+
+       return itemReward;
+    }
+
+    /// <summary>
+    /// Determines what type of chamber you have based on the chances given in the inspector
+    /// </summary>
+    /// <returns>The type of chamber. Defaults to ItemReward if no other chamber reward was rolled</returns>
+    private Chamber.ChamberType RollForChamberType()
+    {
+        //Create a random number between 0 and 1
+        float randomChance = Random.Range(0, 1f);
+
+        //Check if this will be a shop chamber type
+        if (randomChance > 0 && randomChance <= chanceForChamberToBeShop)
+        {
+            return Chamber.ChamberType.Shop;
+        }
+
+        //No chamber type given, default to item reward
+        return Chamber.ChamberType.ItemReward;
+    }
 
     //Methods for chamber edge generation
     private void ConnectChambers()
@@ -599,6 +758,27 @@ public class GridSystem : MonoBehaviour
             //If chamber B (the supposed unvisited one) has already been visited, then skip this edge. No looping allowed yet
             if (chamberB.IsVisited()) continue;
 
+            //Check if chamber A and B's edge connector is still valid
+            if (!chamberA.ContainsHallwayConnector(currentEdge.GetEdgeConnectorForChamberA()))
+            {
+                Debug.LogWarning("Hallway connector was used before making extra connection");
+                continue;
+            }
+            if (!chamberB.ContainsHallwayConnector(currentEdge.GetEdgeConnectorForChamberB()))
+            {
+                Debug.LogWarning("Hallway connector was used before making extra connection");
+                continue;
+            }
+            if (usedHallwayGridPositions.Contains(currentEdge.GetEdgeConnectorForChamberA()))
+            {
+                continue;
+            }
+            if (usedHallwayGridPositions.Contains(currentEdge.GetEdgeConnectorForChamberB()))
+            {
+                continue;
+            }
+
+
             //Chamber have been visited
             chamberA.SetIsVisited(true); //Should be redundant
             chamberB.SetIsVisited(true);
@@ -620,6 +800,10 @@ public class GridSystem : MonoBehaviour
             //Tell chamber A and B their respective edge connector was consumed
             chamberA.UseHallwayConnector(currentEdge.GetEdgeConnectorForChamberA());
             chamberB.UseHallwayConnector(currentEdge.GetEdgeConnectorForChamberB());
+
+            //Store the edges in a list of used edges
+            usedHallwayGridPositions.Add(currentEdge.GetEdgeConnectorForChamberA());
+            usedHallwayGridPositions.Add(currentEdge.GetEdgeConnectorForChamberB());
 
             //Tell chamber A and B they are connected to one another
             chamberA.AddConnection(chamberB);
@@ -675,8 +859,24 @@ public class GridSystem : MonoBehaviour
             if (chamberB.IsBossChamber()) continue;
 
             //Check if chamber A and B's edge connector is still valid
-            if (!chamberA.ContainsHallwayConnector(currentEdge.GetEdgeConnectorForChamberA())) continue;
-            if (!chamberB.ContainsHallwayConnector(currentEdge.GetEdgeConnectorForChamberB())) continue;
+            if (!chamberA.ContainsHallwayConnector(currentEdge.GetEdgeConnectorForChamberA()))
+            {
+                Debug.LogWarning("Hallway connector was used before making extra connection");
+                continue;
+            }
+            if (!chamberB.ContainsHallwayConnector(currentEdge.GetEdgeConnectorForChamberB()))
+            {
+                Debug.LogWarning("Hallway connector was used before making extra connection");
+                continue;
+            }
+            if (usedHallwayGridPositions.Contains(currentEdge.GetEdgeConnectorForChamberA()))
+            {
+                continue;
+            }
+            if (usedHallwayGridPositions.Contains(currentEdge.GetEdgeConnectorForChamberB()))
+            {
+                continue;
+            }
 
             //Build edge path between chamber A's and B's edge connectors            
             List<GridPosition> path = UsePathfindingAlgorithm(
@@ -881,8 +1081,6 @@ public class GridSystem : MonoBehaviour
         //Initialize edge object
         edgeObj.name = $"Edge {chamberA.OriginGridPosition()} <-> {chamberB.OriginGridPosition()}";
         EdgeMonoBehaviour edgeMonoBehaviour = edgeObj.AddComponent<EdgeMonoBehaviour>();
-        edgeMonoBehaviour.Initialize(edge, parentEdgeRenderer);
-
         //Loop through each path position
         for (int pathIndex = 0; pathIndex < path.Count; pathIndex++)
         {
@@ -908,6 +1106,8 @@ public class GridSystem : MonoBehaviour
             //update the map with the new hallway objects
             map[path[pathIndex].x, path[pathIndex].z].MakeObjectAHallway();
         }
+
+        edgeMonoBehaviour.Initialize(edge, parentEdgeRenderer);
 
         float timeEndBuildingPaths = Time.realtimeSinceStartup;
         timeSpentBuildingPaths += timeEndBuildingPaths - timeStartBuildingPath;

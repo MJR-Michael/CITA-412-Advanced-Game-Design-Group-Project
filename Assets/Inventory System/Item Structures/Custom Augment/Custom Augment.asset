@@ -1,0 +1,29 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 387128e22e14aaf4397606266f0aee33, type: 3}
+  m_Name: Custom Augment
+  m_EditorClassIdentifier: Assembly-CSharp::ItemStructureSO
+  itemName: Custom Augment
+  itemDescription: This is a custom augment
+  itemStructure:
+  - gridPosition:
+      x: 0
+      z: 0
+    sprite: {fileID: 692402955, guid: 2361ae56c7a7893438192c8e85e4414c, type: 3}
+  - gridPosition:
+      x: 1
+      z: 0
+    sprite: {fileID: -610407926, guid: 2361ae56c7a7893438192c8e85e4414c, type: 3}
+  - gridPosition:
+      x: 0
+      z: 1
+    sprite: {fileID: 1421304333, guid: 2361ae56c7a7893438192c8e85e4414c, type: 3}
