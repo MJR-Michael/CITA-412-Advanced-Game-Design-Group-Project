@@ -388,6 +388,34 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 706838813775365101, guid: 46eaf4310c5033142ba3c27c4efca05a, type: 3}
+      propertyPath: damageResistances.Array.size
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 706838813775365101, guid: 46eaf4310c5033142ba3c27c4efca05a, type: 3}
+      propertyPath: damageResistances.Array.data[1].damageType
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 706838813775365101, guid: 46eaf4310c5033142ba3c27c4efca05a, type: 3}
+      propertyPath: damageResistances.Array.data[2].damageType
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 706838813775365101, guid: 46eaf4310c5033142ba3c27c4efca05a, type: 3}
+      propertyPath: damageResistances.Array.data[0].resistancePercent
+      value: 100
+      objectReference: {fileID: 0}
+    - target: {fileID: 706838813775365101, guid: 46eaf4310c5033142ba3c27c4efca05a, type: 3}
+      propertyPath: damageResistances.Array.data[1].resistancePercent
+      value: 100
+      objectReference: {fileID: 0}
+    - target: {fileID: 706838813775365101, guid: 46eaf4310c5033142ba3c27c4efca05a, type: 3}
+      propertyPath: damageResistances.Array.data[2].resistancePercent
+      value: 100
+      objectReference: {fileID: 0}
+    - target: {fileID: 5230136090975456383, guid: 46eaf4310c5033142ba3c27c4efca05a, type: 3}
+      propertyPath: health
+      value: 
+      objectReference: {fileID: 0}
     - target: {fileID: 5406536812885174128, guid: 46eaf4310c5033142ba3c27c4efca05a, type: 3}
       propertyPath: m_Mass
       value: 999
@@ -444,7 +472,9 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 706838813775365101, guid: 46eaf4310c5033142ba3c27c4efca05a, type: 3}
+    - {fileID: 5230136090975456383, guid: 46eaf4310c5033142ba3c27c4efca05a, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects:
     - targetCorrespondingSourceObject: {fileID: 8541290101951666172, guid: 46eaf4310c5033142ba3c27c4efca05a, type: 3}
