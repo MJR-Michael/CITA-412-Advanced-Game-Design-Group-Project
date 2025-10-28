@@ -24,9 +24,15 @@ public class CrossbowProjectile : MonoBehaviour
         if (stuck) return;
         stuck = true;
 
+        //Note: Update this when implementing the generic health on enemy
         if (collision.gameObject.TryGetComponent<Enemy>(out var enemy))
         {
             enemy.TakeDamage(damage);
+        }
+
+        if (collision.gameObject.TryGetComponent<Health>(out Health health))
+        {
+            health.TakeDamage(gameObject, damage, DamageType.Projectile);
         }
 
         // Stop physics
