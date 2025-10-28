@@ -17,8 +17,8 @@ public class Health : MonoBehaviour
 
 
     public event Action<Health> OnMaxHealthChanged;
-    public event Action<Health, DamageType> OnCurrentHealthChanged;
-    public event Action<Health, DamageType> OnDeath;
+    public event Action<GameObject, Health, DamageType> OnCurrentHealthChanged;
+    public event Action<GameObject, Health, DamageType> OnDeath;
 
     [Header("HP Settings")]
     [SerializeField, Tooltip("The base max HP of this object")]
@@ -42,10 +42,10 @@ public class Health : MonoBehaviour
         currentHealth = MaxHealth;
 
         OnMaxHealthChanged += HandleMaxHealthChanged;
-        OnCurrentHealthChanged += (Health throwAway, DamageType damageType) => CheckForDeath(damageType);
+        OnCurrentHealthChanged += (GameObject sender, Health throwAway, DamageType damageType) => CheckForDeath(sender, damageType);
     }
 
-    public void TakeDamage(float damageAmount, DamageType damageType)
+    public void TakeDamage(GameObject sender, float damageAmount, DamageType damageType)
     {
 
         //Get the real damage amount based on the object's resistance to this damage type
@@ -72,16 +72,16 @@ public class Health : MonoBehaviour
         if (realDamageAmount < 0)
         {
             //Heal instead
-            Heal(-realDamageAmount);
+            Heal(sender, -realDamageAmount);
             return;
         }
 
         //Update health, clamp between 0 and max health
         currentHealth = Mathf.Clamp(currentHealth - realDamageAmount, 0, MaxHealth);
-        OnCurrentHealthChanged?.Invoke(this, damageType);
+        OnCurrentHealthChanged?.Invoke(sender, this, damageType);
     }
 
-    public void Heal(float healAmount)
+    public void Heal(GameObject sender, float healAmount)
     {
         //If heal amount is 0, then no health change
         if (healAmount == 0)
@@ -92,13 +92,13 @@ public class Health : MonoBehaviour
         if (healAmount < 0)
         {
             //Take damage instead
-            TakeDamage(-healAmount, DamageType.Unknown);
+            TakeDamage(sender, -healAmount, DamageType.Unknown);
             return;
         }
 
         //Update health; clamp between 0 and max HP
         currentHealth = Mathf.Clamp(currentHealth + healAmount, 0, MaxHealth);
-        OnCurrentHealthChanged?.Invoke(this, DamageType.Unknown);
+        OnCurrentHealthChanged?.Invoke(sender, this, DamageType.Unknown);
     }
 
     public void TakeMaxHPDamage(float damageAmount, DamageType damageType)
@@ -134,14 +134,14 @@ public class Health : MonoBehaviour
         //Check if the current health is greater than max health
         currentHealth = Mathf.Clamp(currentHealth, 0, MaxHealth);
 
-        CheckForDeath(DamageType.Unknown);
+        CheckForDeath(null, DamageType.Unknown);
     }
 
-    private void CheckForDeath(DamageType damageType)
+    private void CheckForDeath(GameObject sender, DamageType damageType)
     {
         if (currentHealth == 0)
         {
-            OnDeath?.Invoke(this, damageType);
+            OnDeath?.Invoke(sender, this, damageType);
         }
     }
 }
