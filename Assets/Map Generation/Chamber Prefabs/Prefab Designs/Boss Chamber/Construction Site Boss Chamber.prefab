@@ -3229,6 +3229,14 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4793900819627390395, guid: 58b9baf02686e584bad7005d5e993637, type: 3}
+      propertyPath: relativeDoorGridPosition.x
+      value: 13
+      objectReference: {fileID: 0}
+    - target: {fileID: 4793900819627390395, guid: 58b9baf02686e584bad7005d5e993637, type: 3}
+      propertyPath: relativeDoorGridPosition.z
+      value: 6
+      objectReference: {fileID: 0}
     - target: {fileID: 7081586899856923573, guid: 58b9baf02686e584bad7005d5e993637, type: 3}
       propertyPath: relativeDoorGridPosition.x
       value: 13
@@ -3247,9 +3255,9 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 2651490764714592375, guid: 58b9baf02686e584bad7005d5e993637, type: 3}
   m_PrefabInstance: {fileID: 1018075423547530297}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &7810992141392611212 stripped
+--- !u!114 &5523582828920646018 stripped
 MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 7081586899856923573, guid: 58b9baf02686e584bad7005d5e993637, type: 3}
+  m_CorrespondingSourceObject: {fileID: 4793900819627390395, guid: 58b9baf02686e584bad7005d5e993637, type: 3}
   m_PrefabInstance: {fileID: 1018075423547530297}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 0}
@@ -5731,19 +5739,19 @@ PrefabInstance:
     - target: {fileID: -6067082977401405745, guid: 3586c286ea7157e4bbd73d7894a05d19, type: 3}
       propertyPath: 'doorsInChamber.Array.data[0]'
       value: 
-      objectReference: {fileID: 3173530075182666681}
+      objectReference: {fileID: 921872796191571383}
     - target: {fileID: -6067082977401405745, guid: 3586c286ea7157e4bbd73d7894a05d19, type: 3}
       propertyPath: 'doorsInChamber.Array.data[1]'
       value: 
-      objectReference: {fileID: 2241097277694781965}
+      objectReference: {fileID: 4600559781735269379}
     - target: {fileID: -6067082977401405745, guid: 3586c286ea7157e4bbd73d7894a05d19, type: 3}
       propertyPath: 'doorsInChamber.Array.data[2]'
       value: 
-      objectReference: {fileID: 2004369859305887460}
+      objectReference: {fileID: 4256307792727341290}
     - target: {fileID: -6067082977401405745, guid: 3586c286ea7157e4bbd73d7894a05d19, type: 3}
       propertyPath: 'doorsInChamber.Array.data[3]'
       value: 
-      objectReference: {fileID: 7810992141392611212}
+      objectReference: {fileID: 5523582828920646018}
     - target: {fileID: 1746686361815997651, guid: 3586c286ea7157e4bbd73d7894a05d19, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -7039,6 +7047,14 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4793900819627390395, guid: 58b9baf02686e584bad7005d5e993637, type: 3}
+      propertyPath: relativeDoorGridPosition.x
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 4793900819627390395, guid: 58b9baf02686e584bad7005d5e993637, type: 3}
+      propertyPath: relativeDoorGridPosition.z
+      value: 13
+      objectReference: {fileID: 0}
     - target: {fileID: 7081586899856923573, guid: 58b9baf02686e584bad7005d5e993637, type: 3}
       propertyPath: relativeDoorGridPosition.x
       value: 6
@@ -7052,9 +7068,9 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 58b9baf02686e584bad7005d5e993637, type: 3}
---- !u!114 &3173530075182666681 stripped
+--- !u!114 &921872796191571383 stripped
 MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 7081586899856923573, guid: 58b9baf02686e584bad7005d5e993637, type: 3}
+  m_CorrespondingSourceObject: {fileID: 4793900819627390395, guid: 58b9baf02686e584bad7005d5e993637, type: 3}
   m_PrefabInstance: {fileID: 5642021914877626380}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 0}
@@ -9616,6 +9632,14 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4793900819627390395, guid: 58b9baf02686e584bad7005d5e993637, type: 3}
+      propertyPath: relativeDoorGridPosition.x
+      value: -1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4793900819627390395, guid: 58b9baf02686e584bad7005d5e993637, type: 3}
+      propertyPath: relativeDoorGridPosition.z
+      value: 6
+      objectReference: {fileID: 0}
     - target: {fileID: 7081586899856923573, guid: 58b9baf02686e584bad7005d5e993637, type: 3}
       propertyPath: relativeDoorGridPosition.x
       value: -1
@@ -9629,9 +9653,9 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 58b9baf02686e584bad7005d5e993637, type: 3}
---- !u!114 &2004369859305887460 stripped
+--- !u!114 &4256307792727341290 stripped
 MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 7081586899856923573, guid: 58b9baf02686e584bad7005d5e993637, type: 3}
+  m_CorrespondingSourceObject: {fileID: 4793900819627390395, guid: 58b9baf02686e584bad7005d5e993637, type: 3}
   m_PrefabInstance: {fileID: 8761236336970911057}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 0}
@@ -10125,6 +10149,14 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4793900819627390395, guid: 58b9baf02686e584bad7005d5e993637, type: 3}
+      propertyPath: relativeDoorGridPosition.x
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 4793900819627390395, guid: 58b9baf02686e584bad7005d5e993637, type: 3}
+      propertyPath: relativeDoorGridPosition.z
+      value: -1
+      objectReference: {fileID: 0}
     - target: {fileID: 7081586899856923573, guid: 58b9baf02686e584bad7005d5e993637, type: 3}
       propertyPath: relativeDoorGridPosition.x
       value: 6
@@ -10138,9 +10170,9 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 58b9baf02686e584bad7005d5e993637, type: 3}
---- !u!114 &2241097277694781965 stripped
+--- !u!114 &4600559781735269379 stripped
 MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 7081586899856923573, guid: 58b9baf02686e584bad7005d5e993637, type: 3}
+  m_CorrespondingSourceObject: {fileID: 4793900819627390395, guid: 58b9baf02686e584bad7005d5e993637, type: 3}
   m_PrefabInstance: {fileID: 9033978798149710264}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 0}
