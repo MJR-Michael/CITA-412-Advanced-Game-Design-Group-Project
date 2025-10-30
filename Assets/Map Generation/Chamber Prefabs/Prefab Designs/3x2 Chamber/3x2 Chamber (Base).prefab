@@ -81,27 +81,27 @@ PrefabInstance:
     - target: {fileID: -6067082977401405745, guid: 3586c286ea7157e4bbd73d7894a05d19, type: 3}
       propertyPath: 'doorsInChamber.Array.data[0]'
       value: 
-      objectReference: {fileID: 2801543051629744942}
+      objectReference: {fileID: 441517867948244256}
     - target: {fileID: -6067082977401405745, guid: 3586c286ea7157e4bbd73d7894a05d19, type: 3}
       propertyPath: 'doorsInChamber.Array.data[1]'
       value: 
-      objectReference: {fileID: 2916382563421143228}
+      objectReference: {fileID: 628411422309379762}
     - target: {fileID: -6067082977401405745, guid: 3586c286ea7157e4bbd73d7894a05d19, type: 3}
       propertyPath: 'doorsInChamber.Array.data[2]'
       value: 
-      objectReference: {fileID: 8810218959350754864}
+      objectReference: {fileID: 6522810750754570302}
     - target: {fileID: -6067082977401405745, guid: 3586c286ea7157e4bbd73d7894a05d19, type: 3}
       propertyPath: 'doorsInChamber.Array.data[3]'
       value: 
-      objectReference: {fileID: 4705302508839578137}
+      objectReference: {fileID: 7029297774247216151}
     - target: {fileID: -6067082977401405745, guid: 3586c286ea7157e4bbd73d7894a05d19, type: 3}
       propertyPath: 'doorsInChamber.Array.data[4]'
       value: 
-      objectReference: {fileID: 8243087729971358832}
+      objectReference: {fileID: 5955120157574742654}
     - target: {fileID: -6067082977401405745, guid: 3586c286ea7157e4bbd73d7894a05d19, type: 3}
       propertyPath: 'doorsInChamber.Array.data[5]'
       value: 
-      objectReference: {fileID: 690976963491993589}
+      objectReference: {fileID: 2978943436167264763}
     - target: {fileID: -6067082977401405745, guid: 3586c286ea7157e4bbd73d7894a05d19, type: 3}
       propertyPath: enemySpawnInfos.Array.data[0].enemyPrefab
       value: 
@@ -358,6 +358,14 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4793900819627390395, guid: 58b9baf02686e584bad7005d5e993637, type: 3}
+      propertyPath: relativeDoorGridPosition.x
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4793900819627390395, guid: 58b9baf02686e584bad7005d5e993637, type: 3}
+      propertyPath: relativeDoorGridPosition.z
+      value: 3
+      objectReference: {fileID: 0}
     - target: {fileID: 7081586899856923573, guid: 58b9baf02686e584bad7005d5e993637, type: 3}
       propertyPath: relativeDoorGridPosition.x
       value: 1
@@ -376,9 +384,9 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 2651490764714592375, guid: 58b9baf02686e584bad7005d5e993637, type: 3}
   m_PrefabInstance: {fileID: 1162928564217771973}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &8243087729971358832 stripped
+--- !u!114 &5955120157574742654 stripped
 MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 7081586899856923573, guid: 58b9baf02686e584bad7005d5e993637, type: 3}
+  m_CorrespondingSourceObject: {fileID: 4793900819627390395, guid: 58b9baf02686e584bad7005d5e993637, type: 3}
   m_PrefabInstance: {fileID: 1162928564217771973}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 0}
@@ -439,6 +447,14 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4793900819627390395, guid: 58b9baf02686e584bad7005d5e993637, type: 3}
+      propertyPath: relativeDoorGridPosition.x
+      value: -1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4793900819627390395, guid: 58b9baf02686e584bad7005d5e993637, type: 3}
+      propertyPath: relativeDoorGridPosition.z
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 7081586899856923573, guid: 58b9baf02686e584bad7005d5e993637, type: 3}
       propertyPath: relativeDoorGridPosition.x
       value: -1
@@ -457,9 +473,9 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 2651490764714592375, guid: 58b9baf02686e584bad7005d5e993637, type: 3}
   m_PrefabInstance: {fileID: 1730216463937795461}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &8810218959350754864 stripped
+--- !u!114 &6522810750754570302 stripped
 MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 7081586899856923573, guid: 58b9baf02686e584bad7005d5e993637, type: 3}
+  m_CorrespondingSourceObject: {fileID: 4793900819627390395, guid: 58b9baf02686e584bad7005d5e993637, type: 3}
   m_PrefabInstance: {fileID: 1730216463937795461}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 0}
@@ -520,6 +536,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4793900819627390395, guid: 58b9baf02686e584bad7005d5e993637, type: 3}
+      propertyPath: relativeDoorGridPosition.z
+      value: 3
+      objectReference: {fileID: 0}
     - target: {fileID: 7081586899856923573, guid: 58b9baf02686e584bad7005d5e993637, type: 3}
       propertyPath: relativeDoorGridPosition.z
       value: 3
@@ -534,9 +554,9 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 2651490764714592375, guid: 58b9baf02686e584bad7005d5e993637, type: 3}
   m_PrefabInstance: {fileID: 2524916785181569452}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &4705302508839578137 stripped
+--- !u!114 &7029297774247216151 stripped
 MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 7081586899856923573, guid: 58b9baf02686e584bad7005d5e993637, type: 3}
+  m_CorrespondingSourceObject: {fileID: 4793900819627390395, guid: 58b9baf02686e584bad7005d5e993637, type: 3}
   m_PrefabInstance: {fileID: 2524916785181569452}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 0}
@@ -667,6 +687,14 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4793900819627390395, guid: 58b9baf02686e584bad7005d5e993637, type: 3}
+      propertyPath: relativeDoorGridPosition.x
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4793900819627390395, guid: 58b9baf02686e584bad7005d5e993637, type: 3}
+      propertyPath: relativeDoorGridPosition.z
+      value: -1
+      objectReference: {fileID: 0}
     - target: {fileID: 7081586899856923573, guid: 58b9baf02686e584bad7005d5e993637, type: 3}
       propertyPath: relativeDoorGridPosition.x
       value: 1
@@ -680,9 +708,9 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 58b9baf02686e584bad7005d5e993637, type: 3}
---- !u!114 &2801543051629744942 stripped
+--- !u!114 &441517867948244256 stripped
 MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 7081586899856923573, guid: 58b9baf02686e584bad7005d5e993637, type: 3}
+  m_CorrespondingSourceObject: {fileID: 4793900819627390395, guid: 58b9baf02686e584bad7005d5e993637, type: 3}
   m_PrefabInstance: {fileID: 4947148442315180187}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 0}
@@ -880,6 +908,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4793900819627390395, guid: 58b9baf02686e584bad7005d5e993637, type: 3}
+      propertyPath: relativeDoorGridPosition.z
+      value: -1
+      objectReference: {fileID: 0}
     - target: {fileID: 7081586899856923573, guid: 58b9baf02686e584bad7005d5e993637, type: 3}
       propertyPath: relativeDoorGridPosition.z
       value: -1
@@ -889,9 +921,9 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 58b9baf02686e584bad7005d5e993637, type: 3}
---- !u!114 &2916382563421143228 stripped
+--- !u!114 &628411422309379762 stripped
 MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 7081586899856923573, guid: 58b9baf02686e584bad7005d5e993637, type: 3}
+  m_CorrespondingSourceObject: {fileID: 4793900819627390395, guid: 58b9baf02686e584bad7005d5e993637, type: 3}
   m_PrefabInstance: {fileID: 5350218901891603209}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 0}
@@ -1081,6 +1113,14 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4793900819627390395, guid: 58b9baf02686e584bad7005d5e993637, type: 3}
+      propertyPath: relativeDoorGridPosition.x
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 4793900819627390395, guid: 58b9baf02686e584bad7005d5e993637, type: 3}
+      propertyPath: relativeDoorGridPosition.z
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 7081586899856923573, guid: 58b9baf02686e584bad7005d5e993637, type: 3}
       propertyPath: relativeDoorGridPosition.x
       value: 2
@@ -1094,9 +1134,9 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 58b9baf02686e584bad7005d5e993637, type: 3}
---- !u!114 &690976963491993589 stripped
+--- !u!114 &2978943436167264763 stripped
 MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 7081586899856923573, guid: 58b9baf02686e584bad7005d5e993637, type: 3}
+  m_CorrespondingSourceObject: {fileID: 4793900819627390395, guid: 58b9baf02686e584bad7005d5e993637, type: 3}
   m_PrefabInstance: {fileID: 7768724891387497536}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 0}
