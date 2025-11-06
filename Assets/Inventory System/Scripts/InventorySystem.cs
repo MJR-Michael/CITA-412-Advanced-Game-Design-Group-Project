@@ -12,7 +12,7 @@ public class InventorySystem : MonoBehaviour
     GridLayoutGroup inventoryGridLayoutGroup;
 
     [SerializeField]
-    int startingIventoryNodeCount = 25;
+    int startingInventoryNodeCount = 25;
 
     [SerializeField]
     GameObject content;
@@ -35,7 +35,7 @@ public class InventorySystem : MonoBehaviour
     protected virtual void Awake()
     {
         inventoryLength = inventoryGridLayoutGroup.constraintCount;
-        AddNodesToInventory(startingIventoryNodeCount);
+        AddNodesToInventory(startingInventoryNodeCount);
     }
 
     public void AddNodesToInventory(int numOfNodesToAdd)
@@ -102,7 +102,7 @@ public class InventorySystem : MonoBehaviour
         //Set up all inventory nodes for the item in the inventory
         foreach (ItemStructureSO.ItemStructureNode itemStructureNode in itemStructure.GetItemStructure())
         {
-            //Get absolute grid position of this node in the invventory
+            //Get absolute grid position of this node in the inventory
             GridPosition absoluteGridPosition = itemStructureNode.GetGridPosition() + originGridPosition;
 
             //Get the inventory node at this grid position
@@ -142,7 +142,7 @@ public class InventorySystem : MonoBehaviour
         //Reset the nodes that this item was connected to
         foreach (ItemStructureSO.ItemStructureNode itemStructureNode in itemStructure.GetItemStructure())
         {
-            //Get absolute grid position of this node in the invventory
+            //Get absolute grid position of this node in the inventory
             GridPosition absoluteGridPosition = itemStructureNode.GetGridPosition() + originGridPosition;
 
             //Get the inventory node at this grid position
@@ -166,7 +166,7 @@ public class InventorySystem : MonoBehaviour
         //Set up all inventory nodes for the item in the inventory
         foreach (ItemStructureSO.ItemStructureNode itemStructureNode in itemStructure.GetItemStructure())
         {
-            //Get absolute grid position of this node in the invventory
+            //Get absolute grid position of this node in the inventory
             GridPosition absoluteGridPosition = itemStructureNode.GetGridPosition() + originGridPosition;
 
             //Get the inventory node at this grid position
