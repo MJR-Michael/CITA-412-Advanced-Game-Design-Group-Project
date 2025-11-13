@@ -60,13 +60,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 720286979856196884}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.7071068, y: -0, z: -0, w: 0.7071067}
-  m_LocalPosition: {x: 120.81215, y: 0.57100743, z: 17.888283}
+  m_LocalRotation: {x: 0.00000008195639, y: 0.7071068, z: 0.7071068, w: 0.00000009724737}
+  m_LocalPosition: {x: 120.81215, y: 3.93, z: 17.888283}
   m_LocalScale: {x: 722.6121, y: 682.34314, z: 13085.255}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 7875979840103176756}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: -90, y: 0, z: 180}
 --- !u!33 &6222924400764361055
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -1230,6 +1230,14 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 1310437328493235535, guid: 4888b1fea70324a479b12f50cf8530c1, type: 3}
+      propertyPath: m_NavMeshData
+      value: 
+      objectReference: {fileID: 23800000, guid: 539de8448996d2940890d53a3b25859b, type: 2}
+    - target: {fileID: 1588559237382076241, guid: 4888b1fea70324a479b12f50cf8530c1, type: 3}
+      propertyPath: m_Layer
+      value: 11
+      objectReference: {fileID: 0}
     - target: {fileID: 2511482977440257144, guid: 4888b1fea70324a479b12f50cf8530c1, type: 3}
       propertyPath: enemySpawnInfos.Array.size
       value: 3
@@ -1273,6 +1281,10 @@ PrefabInstance:
     - target: {fileID: 3177280535377747782, guid: 4888b1fea70324a479b12f50cf8530c1, type: 3}
       propertyPath: relativeDoorGridPosition.z
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4466633973186372277, guid: 4888b1fea70324a479b12f50cf8530c1, type: 3}
+      propertyPath: m_Layer
+      value: 11
       objectReference: {fileID: 0}
     - target: {fileID: 5758282325489503707, guid: 4888b1fea70324a479b12f50cf8530c1, type: 3}
       propertyPath: relativeDoorGridPosition.x

@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 4422968069781079753}
   - component: {fileID: 3400707740720204998}
   - component: {fileID: 1660706397867088781}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: Cube (6)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -100,7 +100,7 @@ GameObject:
   - component: {fileID: 2608725613593769477}
   - component: {fileID: 3368815776394253223}
   - component: {fileID: 1582649651046496221}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: Cube (8)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -187,7 +187,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 412307303171607747}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: Colliders
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -221,7 +221,7 @@ GameObject:
   - component: {fileID: 2172457962224071995}
   - component: {fileID: 5514777473040343980}
   - component: {fileID: 690667325793480226}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: Cube (7)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -310,7 +310,7 @@ GameObject:
   - component: {fileID: 1040423093435997156}
   - component: {fileID: 1736283430724775351}
   - component: {fileID: 3592134489787329581}
-  m_Layer: 7
+  m_Layer: 11
   m_Name: Cylinder (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -401,7 +401,7 @@ GameObject:
   - component: {fileID: 1669322810306717229}
   - component: {fileID: 7993600338368653450}
   - component: {fileID: 2741985144324296340}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: IndividualHook
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -559,7 +559,7 @@ GameObject:
   - component: {fileID: 2845788802305985151}
   - component: {fileID: 8035657752493575974}
   - component: {fileID: 7276686952001501864}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: Cube
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -718,6 +718,14 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: -86.648
       objectReference: {fileID: 0}
+    - target: {fileID: 1278440528703025180, guid: 89d7303815440954cbbb12c154c10f31, type: 3}
+      propertyPath: m_Layer
+      value: 11
+      objectReference: {fileID: 0}
+    - target: {fileID: 1717486086635454512, guid: 89d7303815440954cbbb12c154c10f31, type: 3}
+      propertyPath: m_Layer
+      value: 11
+      objectReference: {fileID: 0}
     - target: {fileID: 2115687338864033137, guid: 89d7303815440954cbbb12c154c10f31, type: 3}
       propertyPath: m_UseGravity
       value: 0
@@ -729,6 +737,18 @@ PrefabInstance:
     - target: {fileID: 2160313706326178345, guid: 89d7303815440954cbbb12c154c10f31, type: 3}
       propertyPath: m_Name
       value: Skull
+      objectReference: {fileID: 0}
+    - target: {fileID: 2160313706326178345, guid: 89d7303815440954cbbb12c154c10f31, type: 3}
+      propertyPath: m_Layer
+      value: 11
+      objectReference: {fileID: 0}
+    - target: {fileID: 8067336785081427839, guid: 89d7303815440954cbbb12c154c10f31, type: 3}
+      propertyPath: m_Layer
+      value: 11
+      objectReference: {fileID: 0}
+    - target: {fileID: 8774111517497808922, guid: 89d7303815440954cbbb12c154c10f31, type: 3}
+      propertyPath: m_Layer
+      value: 11
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
