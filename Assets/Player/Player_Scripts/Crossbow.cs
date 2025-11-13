@@ -10,7 +10,10 @@ public class Crossbow : MonoBehaviour
     [SerializeField]
     GameObject restingBoltObj;
 
-    public Transform crossbowFirePoint;
+    [SerializeField]
+    float projectileSpawnPointOffset = 3f;
+
+    public Transform playerCameraTransform;
     public GameObject crossbowProjectile;
 
     public float launchSpeed = 60f;
@@ -42,8 +45,12 @@ public class Crossbow : MonoBehaviour
     {
         crossbowCooldown = Time.time + crossbowFireRate;
 
-        Quaternion spawnRotation = crossbowFirePoint.rotation * crossbowProjectile.transform.rotation;
-        GameObject bolt = Instantiate(crossbowProjectile, crossbowFirePoint.position, spawnRotation);
+        Vector3 projectileOffset = playerCameraTransform.forward * projectileSpawnPointOffset;
+        GameObject bolt = Instantiate(
+            crossbowProjectile,
+            playerCameraTransform.position + projectileOffset, 
+            playerCameraTransform.rotation
+            );
 
         Rigidbody rb = bolt.GetComponent<Rigidbody>();
         rb.linearVelocity = Camera.main.transform.forward * launchSpeed;
