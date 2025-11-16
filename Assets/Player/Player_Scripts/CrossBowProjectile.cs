@@ -35,6 +35,8 @@ public class CrossbowProjectile : MonoBehaviour
             health.TakeDamage(gameObject, damage, DamageType.Projectile);
         }
 
+        Quaternion rotation = transform.rotation;
+
         // Stop physics
         rb.linearVelocity = Vector3.zero;
         rb.angularVelocity = Vector3.zero;
@@ -43,12 +45,13 @@ public class CrossbowProjectile : MonoBehaviour
         ContactPoint contact = collision.contacts[0];
         transform.position = contact.point;
 
-        // Stick along the flight direction
-        Vector3 stickDirection = rb.linearVelocity.normalized;
-        if (stickDirection == Vector3.zero) stickDirection = transform.forward;
 
-        // Make the arrow look along the flight direction while aligning with surface normal
-        transform.rotation = Quaternion.LookRotation(stickDirection, contact.normal);
+        // Stick along the flight direction
+        //Vector3 stickDirection = rb.linearVelocity.normalized;
+        //if (stickDirection == Vector3.zero) stickDirection = transform.forward;
+
+        //// Make the arrow look along the flight direction while aligning with surface normal
+        //transform.rotation = Quaternion.LookRotation(stickDirection, contact.normal);
         if (collision.rigidbody != null)
         {
             transform.SetParent(collision.rigidbody.transform);
@@ -57,6 +60,9 @@ public class CrossbowProjectile : MonoBehaviour
         {
             transform.SetParent(collision.transform);
         }
+
+        transform.rotation = rotation;
+
         Destroy(rb);
         Destroy(collider);
     }
