@@ -10,8 +10,10 @@ public class Crossbow : WeaponBase
     [Header("Crossbow Components")]
     [SerializeField] List<Collider> playerColliders = new List<Collider>();
     [SerializeField] GameObject restingBoltObj;
+    [SerializeField] float projectileSpawnPointOffset;
 
-    public Transform crossbowFirePoint;
+
+    public Transform playerCameraTransform;
     public GameObject crossbowProjectile;
 
     void Awake()
@@ -43,10 +45,12 @@ public class Crossbow : WeaponBase
 
         InvokeShoot();  // Augments react here
 
-        Quaternion spawnRotation =
-            crossbowFirePoint.rotation * crossbowProjectile.transform.rotation;
-
-        GameObject bolt = Instantiate(crossbowProjectile, crossbowFirePoint.position, spawnRotation);
+        Vector3 projectileOffset = playerCameraTransform.forward * projectileSpawnPointOffset;
+        GameObject bolt = Instantiate(
+            crossbowProjectile,
+            playerCameraTransform.position + projectileOffset,
+            playerCameraTransform.rotation
+            );
 
         InvokeProjectileSpawn(bolt); // Augments adjust the projectile if needed
 
@@ -61,3 +65,4 @@ public class Crossbow : WeaponBase
         }
     }
 }
+
