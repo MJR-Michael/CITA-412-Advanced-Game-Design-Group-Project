@@ -1,18 +1,35 @@
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class Door : Interactable
 {
+    public event Action<GridPosition> OnDoorInteractedWith;
 
-    public override bool CanBeInteractedWith()
+    [SerializeField, Tooltip("The door's relative position in the chamber. Reference the chamber design document to get the relative grid position for this chamber.")]
+    GridPosition relativeDoorGridPosition;
+
+    [SerializeField, Tooltip("How the door will appear if it does not lead to other chambers")]
+    GameObject blockedDoorObj;
+
+    [SerializeField, Tooltip("How the door will appear if it does lead to other chambers")]
+    GameObject unblockedDoorObj;
+
+    [SerializeField]
+    Animator animator;
+
+    GridPosition absoluteDoorGridPosition;
+
+    public void SetDoorwayInteractable(bool isInteractable)
     {
-        //For now, just make the door always interactable
-        return true;
+        this.isInteractable = isInteractable;
     }
 
     public override void OnInteract()
     {
+        base.OnInteract();
         OpenDoor();
+        OnDoorInteractedWith?.Invoke(absoluteDoorGridPosition);
     }
 
     protected override void SetupRigidBody()
@@ -21,9 +38,32 @@ public class Door : Interactable
         rb.useGravity = false;
     }
 
-    private void OpenDoor()
+    public void OpenDoor()
     {
-        //For now, just hide the door
-        gameObject.SetActive(false);
+        animator.SetBool("InteractedWith", true);
+        
+        //Can no longer interact with door
+        isInteractable = false;
     }
+
+    public void Initialize(GridPosition absoluteDoorGridPosition, bool leadsToOtherChamber)
+    {
+        this.absoluteDoorGridPosition = absoluteDoorGridPosition;
+        if (leadsToOtherChamber)
+        {
+            blockedDoorObj.SetActive(false);
+            unblockedDoorObj.SetActive(true);
+        }
+        else
+        {
+            blockedDoorObj.SetActive(true);
+            unblockedDoorObj.SetActive(false);
+
+            //Prevent the player from interacting with the door
+            isInteractable = false;
+        }
+    }
+
+    public GridPosition RelativeDoorGridPosition() => relativeDoorGridPosition;
+    public GridPosition AbsoluteDoorGridPosition() => absoluteDoorGridPosition;
 }

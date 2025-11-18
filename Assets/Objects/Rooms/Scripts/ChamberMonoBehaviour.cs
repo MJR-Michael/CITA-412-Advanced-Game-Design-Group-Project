@@ -35,11 +35,52 @@ public class ChamberMonoBehaviour : MonoBehaviour
     [SerializeField, Tooltip("Where will the item reward spawn in this chamber?")]
     GameObject itemRewardSpawnPoint;
 
+    [SerializeField, Tooltip("The doors in the chamber that lead to other chambers")]
+    Door[] doorsInChamber;
+
     private Chamber chamber;
     private bool isRendered;
-
     bool hasBeenVisisted;
 
+    private void Start()
+    {
+        //Setup door references
+        foreach (Door door in doorsInChamber)
+        {
+            if (door == null)
+            {
+                Debug.LogWarning($"WARNING: {gameObject} does not have any doors!");
+            }
+
+            if (chamber == null)
+            {
+                Debug.LogWarning($"WARNING: {gameObject} does not have any chamber reference!");
+            }
+
+            GridPosition absoluteDoorGridPosition = door.RelativeDoorGridPosition() + chamber.OriginGridPosition();
+
+            //Check determine if this door is one that leads to another chamber
+            bool leadsToOtherChamber = chamber.IsUsingHallwayConnector(absoluteDoorGridPosition);
+
+            door.Initialize(absoluteDoorGridPosition, leadsToOtherChamber);
+
+            //Listen to when the door is interacted with
+            if (leadsToOtherChamber)
+            {
+                door.OnDoorInteractedWith += HandleDoorInteractedWith;
+            }
+        }
+    }
+
+    private void HandleDoorInteractedWith(GridPosition absoluteDoorGridPosition)
+    {
+        //Tell the door on the other side of the hallway to open
+        Door otherChamberDoor = chamber.GetOtherChamberDoorFromEdge(absoluteDoorGridPosition);
+        if (otherChamberDoor != null)
+        {
+            otherChamberDoor.OpenDoor();
+        }
+    }
 
     // TRIGGER HANDLING
     private void OnTriggerEnter(Collider other)
@@ -156,4 +197,18 @@ public class ChamberMonoBehaviour : MonoBehaviour
     public Collider GetChamberCollider() => chamberTrigger;
     public bool IsRendered() => isRendered;
     public bool HasBeenVisisted() => hasBeenVisisted;
+
+    public Door GetDoorAtPosition(GridPosition edgeConnectorGridPosition)
+    {
+        //Find the door at the given grid position
+        foreach (Door door in doorsInChamber)
+        {
+            if (door.AbsoluteDoorGridPosition() == edgeConnectorGridPosition)
+            {
+                return door;
+            }
+        }
+
+        return null;
+    }
 }

@@ -28,6 +28,7 @@ public class Chamber
     /// Key = hallway connector to the chamber (absolute position). Value = the chamber that connects to a hallway (absolute position)
     /// </summary>
     Dictionary<GridPosition, GridPosition> hallwayConnectors;
+    Dictionary<GridPosition, GridPosition> usedHallwayConnectors = new Dictionary<GridPosition, GridPosition>();
 
     bool isBossChamber;
     bool isVisited;
@@ -70,6 +71,11 @@ public class Chamber
     }
     public bool UseHallwayConnector(GridPosition connectorGridPosition)
     {
+        if (hallwayConnectors.ContainsKey(connectorGridPosition))
+        {
+            usedHallwayConnectors.Add(connectorGridPosition, hallwayConnectors[connectorGridPosition]);
+        }
+
         return hallwayConnectors.Remove(connectorGridPosition);
     }
     public void AddConnection(Chamber otherChamber) => connectedTo.Add(otherChamber);
@@ -121,4 +127,42 @@ public class Chamber
     public Item GetItemReward() => itemReward;
 
     public ChamberType GetChamberType() => chamberType;
+
+    public Door GetOtherChamberDoorFromEdge(GridPosition absoluteDoorGridPosition)
+    {
+        Door otherDoor = null;
+
+        //Get the edge from the given chamber's door grid position
+        foreach(EdgeMonoBehaviour edgeMonoBehaviour in edgeMonobehaviours)
+        {
+            if (edgeMonoBehaviour.ContainsEdgeConnector(absoluteDoorGridPosition))
+            {
+                //Get the door from the other chamber at their edge connector grid position
+                (Chamber otherChamber, GridPosition edgeConnectorGridPosition) = edgeMonoBehaviour.GetOtherChamberAndEdgeConnector(absoluteDoorGridPosition);
+
+                //Tell the chamber that the door at this grid position should open
+                otherDoor = otherChamber.GetDoorAtPosition(edgeConnectorGridPosition);
+            }
+        }
+
+        return otherDoor;
+    }
+
+    private Door GetDoorAtPosition(GridPosition edgeConnectorGridPosition)
+    {
+        //Get the door at the given edge connector grid position in chamber monobehaviour
+        return chamberMonoBehaviour.GetDoorAtPosition(edgeConnectorGridPosition);
+    }
+
+    public bool IsUsingHallwayConnector(GridPosition gridPosition)
+    {
+        if (usedHallwayConnectors.ContainsKey(gridPosition))
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
 }

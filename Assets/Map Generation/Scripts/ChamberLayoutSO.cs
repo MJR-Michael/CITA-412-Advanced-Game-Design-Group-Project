@@ -8,7 +8,15 @@ public class ChamberLayoutSO : ScriptableObject
     [Tooltip("Reference the chamebr design documentation for the positions of each grid position and the hallway connectors")]
     public ChamberNode[] chamberNodes;
 
-    public GameObject chamberPrefab;
+    [Tooltip("The construction site (floor 1) prefab variant of this chamber layout")]
+    public GameObject constructionSitePrefab;
+
+    [Tooltip("The underground (floor 2) prefab variant of this chamber layout")]
+    public GameObject undergroundPrefab;
+
+    [Tooltip("The hellscape (floor 3) prefab variant of this chamber layout")]
+    public GameObject hellscapePrefab;
+
 
     /// <summary>
     /// returns the index of the highest grid position (including hallway connectors)
