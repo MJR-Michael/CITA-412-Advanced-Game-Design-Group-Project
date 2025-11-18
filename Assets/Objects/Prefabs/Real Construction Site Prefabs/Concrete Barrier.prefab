@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 3463729076172505313}
   - component: {fileID: 4906471106597542219}
   - component: {fileID: 7837274940728258105}
-  m_Layer: 7
+  m_Layer: 10
   m_Name: Cube (4)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -100,7 +100,7 @@ GameObject:
   - component: {fileID: 1724630369382088614}
   - component: {fileID: 8540212462971743052}
   - component: {fileID: 6789753911044188891}
-  m_Layer: 7
+  m_Layer: 10
   m_Name: Cube (3)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -189,7 +189,7 @@ GameObject:
   - component: {fileID: 4736887049298936404}
   - component: {fileID: 8527325104133414620}
   - component: {fileID: 275553393582426709}
-  m_Layer: 7
+  m_Layer: 10
   m_Name: Cube
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -276,7 +276,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8205461486877943222}
-  m_Layer: 7
+  m_Layer: 10
   m_Name: LOD1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -313,7 +313,7 @@ GameObject:
   - component: {fileID: 4176314996987136196}
   - component: {fileID: 5331040604964372749}
   - component: {fileID: 8462714720184460401}
-  m_Layer: 7
+  m_Layer: 10
   m_Name: Cube (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -400,7 +400,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1714338432229684132}
-  m_Layer: 7
+  m_Layer: 10
   m_Name: LOD2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -435,7 +435,7 @@ GameObject:
   - component: {fileID: 2755306731252091627}
   - component: {fileID: 7243112735055542104}
   - component: {fileID: 7596834306933128729}
-  m_Layer: 7
+  m_Layer: 10
   m_Name: LOD0
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -592,6 +592,10 @@ PrefabInstance:
       propertyPath: maxHealth
       value: 350
       objectReference: {fileID: 0}
+    - target: {fileID: 3429606611834962459, guid: 46eaf4310c5033142ba3c27c4efca05a, type: 3}
+      propertyPath: m_Layer
+      value: 10
+      objectReference: {fileID: 0}
     - target: {fileID: 5230136090975456383, guid: 46eaf4310c5033142ba3c27c4efca05a, type: 3}
       propertyPath: destructiblePrefab
       value: 
@@ -611,6 +615,10 @@ PrefabInstance:
     - target: {fileID: 5449768021824725032, guid: 46eaf4310c5033142ba3c27c4efca05a, type: 3}
       propertyPath: m_Name
       value: Concrete Barrier
+      objectReference: {fileID: 0}
+    - target: {fileID: 5449768021824725032, guid: 46eaf4310c5033142ba3c27c4efca05a, type: 3}
+      propertyPath: m_Layer
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 6468213012111145743, guid: 46eaf4310c5033142ba3c27c4efca05a, type: 3}
       propertyPath: m_LocalPosition.x

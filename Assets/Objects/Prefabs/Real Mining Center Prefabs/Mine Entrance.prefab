@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 8381737314394299356}
   - component: {fileID: 6385245063350359825}
   - component: {fileID: 519908089004420006}
-  m_Layer: 7
+  m_Layer: 10
   m_Name: Cube (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -100,7 +100,7 @@ GameObject:
   - component: {fileID: 8526103522299710813}
   - component: {fileID: 8212153915261843958}
   - component: {fileID: 62704125806979890}
-  m_Layer: 7
+  m_Layer: 10
   m_Name: Cube (3)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -189,7 +189,7 @@ GameObject:
   - component: {fileID: 3464954858005770417}
   - component: {fileID: 2851199907567800231}
   - component: {fileID: 3841053309880148098}
-  m_Layer: 7
+  m_Layer: 10
   m_Name: Cube
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -279,7 +279,7 @@ GameObject:
   - component: {fileID: 5910255893971073915}
   - component: {fileID: 6912983088132847700}
   - component: {fileID: 224998955469336160}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: MineEntrance (LOD0)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -390,7 +390,7 @@ GameObject:
   - component: {fileID: 4090796927708469901}
   - component: {fileID: 8975124765425934758}
   - component: {fileID: 1234535648804705786}
-  m_Layer: 7
+  m_Layer: 10
   m_Name: Cube (2)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -477,7 +477,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7055710277856212744}
-  m_Layer: 7
+  m_Layer: 10
   m_Name: LOD1/2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -579,6 +579,10 @@ PrefabInstance:
       propertyPath: m_LODs.Array.data[2].renderers.Array.data[3].renderer
       value: 
       objectReference: {fileID: 62704125806979890}
+    - target: {fileID: 3429606611834962459, guid: 46eaf4310c5033142ba3c27c4efca05a, type: 3}
+      propertyPath: m_Layer
+      value: 10
+      objectReference: {fileID: 0}
     - target: {fileID: 5406536812885174128, guid: 46eaf4310c5033142ba3c27c4efca05a, type: 3}
       propertyPath: m_Mass
       value: 999
@@ -594,6 +598,10 @@ PrefabInstance:
     - target: {fileID: 5449768021824725032, guid: 46eaf4310c5033142ba3c27c4efca05a, type: 3}
       propertyPath: m_Name
       value: Mine Entrance
+      objectReference: {fileID: 0}
+    - target: {fileID: 5449768021824725032, guid: 46eaf4310c5033142ba3c27c4efca05a, type: 3}
+      propertyPath: m_Layer
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 6468213012111145743, guid: 46eaf4310c5033142ba3c27c4efca05a, type: 3}
       propertyPath: m_LocalPosition.x
