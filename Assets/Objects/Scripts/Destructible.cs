@@ -30,7 +30,7 @@ public class Destructible : MonoBehaviour
         foreach (Rigidbody childRB in childRigidbodies)
         {
             //Apply a force in the given direction
-            childRB.AddForce(-forceDir * forceMagnitude);
+            childRB.AddForce(forceDir * forceMagnitude);
         }
     }
 

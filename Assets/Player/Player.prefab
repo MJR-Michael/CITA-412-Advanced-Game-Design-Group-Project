@@ -453,7 +453,6 @@ Transform:
   m_Children:
   - {fileID: 4050365061585749571}
   - {fileID: 8181821964700073701}
-  - {fileID: 6097349407598093503}
   - {fileID: 3104093488619974043}
   - {fileID: 8085757694249329011}
   - {fileID: 8804504212031972276}
@@ -964,6 +963,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
+  - {fileID: 6097349407598093503}
   - {fileID: 266508420531377940}
   m_Father: {fileID: 5323217625383176376}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -1188,7 +1188,7 @@ PrefabInstance:
   serializedVersion: 2
   m_Modification:
     serializedVersion: 3
-    m_TransformParent: {fileID: 5323217625383176376}
+    m_TransformParent: {fileID: 4050365061585749571}
     m_Modifications:
     - target: {fileID: 746357998521836200, guid: 63dbcdd6fe1a1691e8237860b9bf5f07, type: 3}
       propertyPath: m_Name
@@ -1260,11 +1260,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4624414656084178474, guid: 63dbcdd6fe1a1691e8237860b9bf5f07, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0.838
+      value: 0.8379996
       objectReference: {fileID: 0}
     - target: {fileID: 4624414656084178474, guid: 63dbcdd6fe1a1691e8237860b9bf5f07, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.59
+      value: -0.7850001
       objectReference: {fileID: 0}
     - target: {fileID: 4624414656084178474, guid: 63dbcdd6fe1a1691e8237860b9bf5f07, type: 3}
       propertyPath: m_LocalPosition.z
@@ -1299,8 +1299,16 @@ PrefabInstance:
       value: -8.662
       objectReference: {fileID: 0}
     - target: {fileID: 4986688578093901091, guid: 63dbcdd6fe1a1691e8237860b9bf5f07, type: 3}
+      propertyPath: playerCameraTransform
+      value: 
+      objectReference: {fileID: 266508420531377940}
+    - target: {fileID: 4986688578093901091, guid: 63dbcdd6fe1a1691e8237860b9bf5f07, type: 3}
       propertyPath: playerColliders.Array.size
       value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 4986688578093901091, guid: 63dbcdd6fe1a1691e8237860b9bf5f07, type: 3}
+      propertyPath: projectileSpawnPointOffset
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 4986688578093901091, guid: 63dbcdd6fe1a1691e8237860b9bf5f07, type: 3}
       propertyPath: 'playerColliders.Array.data[0]'
@@ -1321,6 +1329,10 @@ PrefabInstance:
     - target: {fileID: 6732697432599283378, guid: 63dbcdd6fe1a1691e8237860b9bf5f07, type: 3}
       propertyPath: m_Enabled
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8071822789188800116, guid: 63dbcdd6fe1a1691e8237860b9bf5f07, type: 3}
+      propertyPath: crossbowFirePoint
+      value: 
       objectReference: {fileID: 0}
     - target: {fileID: 8704364330628343329, guid: 63dbcdd6fe1a1691e8237860b9bf5f07, type: 3}
       propertyPath: m_LocalPosition.x
@@ -1371,7 +1383,9 @@ PrefabInstance:
     - {fileID: 4715683268974107043, guid: 63dbcdd6fe1a1691e8237860b9bf5f07, type: 3}
     - {fileID: 130666791571298262, guid: 63dbcdd6fe1a1691e8237860b9bf5f07, type: 3}
     - {fileID: 4650573505456035908, guid: 63dbcdd6fe1a1691e8237860b9bf5f07, type: 3}
-    m_RemovedGameObjects: []
+    - {fileID: 8071822789188800116, guid: 63dbcdd6fe1a1691e8237860b9bf5f07, type: 3}
+    m_RemovedGameObjects:
+    - {fileID: 3187730234212762796, guid: 63dbcdd6fe1a1691e8237860b9bf5f07, type: 3}
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 63dbcdd6fe1a1691e8237860b9bf5f07, type: 3}
