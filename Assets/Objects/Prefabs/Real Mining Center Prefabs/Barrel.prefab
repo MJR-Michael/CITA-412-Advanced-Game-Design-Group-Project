@@ -9,7 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6657935057300166589}
-  m_Layer: 7
+  m_Layer: 11
   m_Name: LOD2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -49,7 +49,7 @@ GameObject:
   - component: {fileID: 7722396525632657652}
   - component: {fileID: 1352233441426315999}
   - component: {fileID: 4157011486041790481}
-  m_Layer: 7
+  m_Layer: 11
   m_Name: Cube (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -138,7 +138,7 @@ GameObject:
   - component: {fileID: 8175199572603479034}
   - component: {fileID: 1366556654608849588}
   - component: {fileID: 3128296260819971387}
-  m_Layer: 7
+  m_Layer: 11
   m_Name: Cube (6)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -227,7 +227,7 @@ GameObject:
   - component: {fileID: 8969812534676019624}
   - component: {fileID: 3240967195704671409}
   - component: {fileID: 1806580316121542954}
-  m_Layer: 7
+  m_Layer: 11
   m_Name: Cylinder (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -316,7 +316,7 @@ GameObject:
   - component: {fileID: 8089242123995550750}
   - component: {fileID: 6467067045636443796}
   - component: {fileID: 3420995624849568240}
-  m_Layer: 7
+  m_Layer: 11
   m_Name: Cube (4)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -405,7 +405,7 @@ GameObject:
   - component: {fileID: 251121157363822307}
   - component: {fileID: 1944652897887708218}
   - component: {fileID: 347629772703680352}
-  m_Layer: 7
+  m_Layer: 11
   m_Name: Cube (2)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -495,7 +495,7 @@ GameObject:
   - component: {fileID: 2689113588987733508}
   - component: {fileID: 5637254833975755334}
   - component: {fileID: 5167657338770051084}
-  m_Layer: 7
+  m_Layer: 11
   m_Name: Mesh (LOD0)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -607,7 +607,7 @@ GameObject:
   - component: {fileID: 1913559702067262429}
   - component: {fileID: 8840979338602269044}
   - component: {fileID: 518448319132342431}
-  m_Layer: 7
+  m_Layer: 11
   m_Name: Cylinder (5)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -696,7 +696,7 @@ GameObject:
   - component: {fileID: 8965575209063642329}
   - component: {fileID: 6513953061182169709}
   - component: {fileID: 7772446107742636176}
-  m_Layer: 7
+  m_Layer: 11
   m_Name: Cylinder (3)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -785,7 +785,7 @@ GameObject:
   - component: {fileID: 7422417453240621539}
   - component: {fileID: 6908509677160028137}
   - component: {fileID: 4096436788570406775}
-  m_Layer: 7
+  m_Layer: 11
   m_Name: Cube (5)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -874,7 +874,7 @@ GameObject:
   - component: {fileID: 5900183382126602791}
   - component: {fileID: 3840013377809678653}
   - component: {fileID: 4172929756988025865}
-  m_Layer: 7
+  m_Layer: 11
   m_Name: Cube
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -961,7 +961,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1625724727016082892}
-  m_Layer: 7
+  m_Layer: 11
   m_Name: LOD1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -998,7 +998,7 @@ GameObject:
   - component: {fileID: 782416480270250460}
   - component: {fileID: 6558616597410881951}
   - component: {fileID: 989085464737810951}
-  m_Layer: 7
+  m_Layer: 11
   m_Name: Cube (3)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1168,6 +1168,10 @@ PrefabInstance:
       propertyPath: m_LODs.Array.data[2].renderers.Array.data[6].renderer
       value: 
       objectReference: {fileID: 3128296260819971387}
+    - target: {fileID: 3429606611834962459, guid: 46eaf4310c5033142ba3c27c4efca05a, type: 3}
+      propertyPath: m_Layer
+      value: 11
+      objectReference: {fileID: 0}
     - target: {fileID: 5406536812885174128, guid: 46eaf4310c5033142ba3c27c4efca05a, type: 3}
       propertyPath: m_Mass
       value: 50
@@ -1175,6 +1179,10 @@ PrefabInstance:
     - target: {fileID: 5449768021824725032, guid: 46eaf4310c5033142ba3c27c4efca05a, type: 3}
       propertyPath: m_Name
       value: Barrel
+      objectReference: {fileID: 0}
+    - target: {fileID: 5449768021824725032, guid: 46eaf4310c5033142ba3c27c4efca05a, type: 3}
+      propertyPath: m_Layer
+      value: 11
       objectReference: {fileID: 0}
     - target: {fileID: 6468213012111145743, guid: 46eaf4310c5033142ba3c27c4efca05a, type: 3}
       propertyPath: m_LocalPosition.x
