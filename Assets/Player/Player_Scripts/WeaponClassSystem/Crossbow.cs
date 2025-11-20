@@ -28,7 +28,7 @@ public class Crossbow : WeaponBase
         {
             restingBoltObj.SetActive(true);
 
-            if (InputManager.Instance.GetPrimaryFireInput() > 0)
+            if (InputManager.Instance.GetPrimaryFireInputDown() > 0)
             {
                 Shoot();
             }
