@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 7758072713765420584}
   - component: {fileID: 3933596530184877140}
   - component: {fileID: 4990269525677869839}
+  - component: {fileID: 6908481401672846389}
   m_Layer: 8
   m_Name: DamageAnimText
   m_TagString: Untagged
@@ -151,3 +152,17 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::DamageTextAnim
   damageText: {fileID: 3933596530184877140}
   timeToDisappear: 1.5
+  destroyAfterInactivity: {fileID: 6908481401672846389}
+--- !u!114 &6908481401672846389
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 886823013973430792}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fbb76c7d25b85884cb68cb7c38895bbe, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::DestroyAfterInactivity
+  inactivityDurationBeforeDestruction: 3

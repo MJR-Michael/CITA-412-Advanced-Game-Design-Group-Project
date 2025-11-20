@@ -12,13 +12,7 @@ public class ChargedTimeWeapon : WeaponBase
     Canvas weaponOverlayCanvas;
 
     [SerializeField]
-    RectTransform startingRectTransformPosition;
-
-    [SerializeField]
-    RectTransform endingRectTransformPosition;
-
-    [SerializeField]
-    RectTransform hitScannerAreaRectTransform;
+    RectTransform hitScannerSpawnPos;
 
     [SerializeField]
     RectTransform damageAnimTextStartingPos;
@@ -118,88 +112,45 @@ public class ChargedTimeWeapon : WeaponBase
         }
     }
 
-    private int CalculateDamage(float hitScannerPosition)
+    private int CalculateDamage(float hitScannerUISliderPosition)
     {
-        /*
-         * To calculate the accuracy, consider the hit area as a numbered line:
-         *  x1    c     x2
-         *  |-|-|-|-|-|-|
-         *  
-         *  where x1 is the lower x bounds defined by the starting position of the hit scanner, c is the center, and x2 is the upper x bounds defined
-         *  by the ending position of the hit scanner.
-         *  
-         *  We can zero the scale by performin the operations:
-         *  x1-x1=0,
-         *  x2-x1=x
-         *  
-         *  Let this equal the new number line
-         *  0     c     x
-         *  |-|-|-|-|-|-|
-         *  
-         *  since the midpoint from 0 to x is x/2, c=x/2
-         *  0    x/2    x
-         *  |-|-|-|-|-|-|
-         *  
-         *  This will define how the accuracy bounds will be calculated.
-         *  
-         *  Let z represent our position along the line. We can calculate our accuracy relative to the center by breaking the number line into 3 components:
-         *  z < x/2
-         *  z = x/2
-         *  z > x/2
-         *  
-         *  When z follows either of these behaviors, we will use a different ratio to calculate accuracy:
-         *  
-         *  z < x/2 => acc = z/(x/2) -------------------------------<<<
-         *  0     z    x/2
-         *  |---|---|---|
-         *  
-         *  z = x/2 => acc = 1 -------------------------------------<<<
-         *  
-         *  z > x/2 => acc = (x/2)/z -------------------------------<<<
-         * x/2    z     x
-         *  |---|---|---|
-         */
-
         int damage = 0;
 
-        //calcaulte scale from 0 to x
-        float x = endingRectTransformPosition.position.x - startingRectTransformPosition.position.x;
-        float midPoint = x / 2;
-
-        //Get the position on the new zeroes numbered line
-        float zeroedScannerPosition = hitScannerPosition - startingRectTransformPosition.position.x;
+        //Static values from UI slider
+        float maxUISliderValue = 1;
+        float midPoint = maxUISliderValue / 2;
 
         //Handle positions off numbered line (default to 0 / worse accuracy)
-        if (zeroedScannerPosition < 0 || zeroedScannerPosition > x)
+        if (hitScannerUISliderPosition < 0 || hitScannerUISliderPosition > maxUISliderValue)
         {
             damage += GetDamageFromAccuracyRatio(0);
         }
         //Handle when the hit position was left of center
-        else if (zeroedScannerPosition < midPoint)
+        else if (hitScannerUISliderPosition < midPoint)
         {
-            damage += GetDamageFromAccuracyRatio(zeroedScannerPosition / midPoint);
+            damage += GetDamageFromAccuracyRatio(hitScannerUISliderPosition / midPoint);
         }
         //Handle perfect accuracy
-        else if (zeroedScannerPosition == midPoint)
+        else if (hitScannerUISliderPosition == midPoint)
         {
             damage += GetDamageFromAccuracyRatio(1);
         }
         //Handle when the hit position was right of center
         else
         {
-            damage += GetDamageFromAccuracyRatio(midPoint / zeroedScannerPosition);
+            damage += GetDamageFromAccuracyRatio(midPoint / hitScannerUISliderPosition);
         }
 
         return damage;
     }
 
-    private void HandleHitScannerFired(float hitScannerXPos)
+    private void HandleHitScannerFired(float hitScannerUISliderValue)
     {
         //Handle logic for next hit scanner being the one to fire
         StartCoroutine(HandleNextHitScannerActive());
 
         //Debug.Log("Hit scanner fired!");
-        int hitScannerDamage = CalculateDamage(hitScannerXPos);
+        int hitScannerDamage = CalculateDamage(hitScannerUISliderValue);
 
         //Store damage in overall weapon damage
         totalDamageFromShot += hitScannerDamage;
@@ -244,7 +195,6 @@ public class ChargedTimeWeapon : WeaponBase
         totalDamageFromShot = 0;
 
         //Remove damage text anim
-        activeDamageTextAnim.RemoveAfterDelay();
         activeDamageTextAnim = null;
     }
 
@@ -255,11 +205,11 @@ public class ChargedTimeWeapon : WeaponBase
         int numOfSpawnedHitScanners = 0;
         bool isTopHitScanner = true;
 
-        //Debug.Log("Hit scanner spawned!");
+        Debug.Log("Hit scanner spawned!");
 
         //Create the initial hit scanner
-        ChargedWeaponHitScanner hitScanner = Instantiate(chargedWeaponHitScannerPrefab, hitScannerAreaRectTransform.transform);
-        hitScanner.Initialize(OnHitScannerFired, startingRectTransformPosition, endingRectTransformPosition, isTopHitScanner);
+        ChargedWeaponHitScanner hitScanner = Instantiate(chargedWeaponHitScannerPrefab, hitScannerSpawnPos.transform);
+        hitScanner.Initialize(OnHitScannerFired, hitScannerSpawnPos, isTopHitScanner);
 
         //Handle hit scanner created
         activeChargedWeaponHitScanners.Add(hitScanner);
@@ -279,11 +229,10 @@ public class ChargedTimeWeapon : WeaponBase
 
             //Spawn next hit scanner
             //Create the initial hit scanner
-            hitScanner = Instantiate(chargedWeaponHitScannerPrefab, hitScannerAreaRectTransform.transform);
+            hitScanner = Instantiate(chargedWeaponHitScannerPrefab, hitScannerSpawnPos.transform);
             hitScanner.Initialize(
                 OnHitScannerFired, 
-                startingRectTransformPosition, 
-                endingRectTransformPosition, 
+                hitScannerSpawnPos,  
                 activeChargedWeaponHitScanners.Count == 0? isTopHitScanner : !isTopHitScanner);
 
             //Handle hit scanner created
@@ -307,6 +256,7 @@ public class ChargedTimeWeapon : WeaponBase
         //Remove top/current hit scanner
         activeChargedWeaponHitScanners.RemoveAt(0);
 
+        //Wait for next frame
         yield return null;
 
         //Check for other hit scanners

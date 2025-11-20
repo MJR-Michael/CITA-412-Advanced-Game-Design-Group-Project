@@ -1,5 +1,6 @@
 using System;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class ChargedWeaponHitScanner : MonoBehaviour
 {
@@ -9,21 +10,26 @@ public class ChargedWeaponHitScanner : MonoBehaviour
     RectTransform rectTransform;
 
     [SerializeField]
+    Slider uiSlider;
+
+    [SerializeField]
     float baseSpeed = 50f;
 
-    float endingXPos;
     bool isFired = false;
     bool isTopHitScanner;
+
+    static int STARTING_SLIDER_VALUE = 0;
+    static int ENDING_SLIDER_VALUE = 1;
 
     private void Update()
     {
         if (isFired) return;
         MoveHorizontally();
 
-        if (rectTransform.position.x >= endingXPos)
+        if (uiSlider.value == ENDING_SLIDER_VALUE)
         {
-            //Debug.Log("Player missed opportunity to hit");
-            OnHitScannerFired?.Invoke(rectTransform.position.x);
+            Debug.Log("Player missed opportunity to hit");
+            OnHitScannerFired?.Invoke(uiSlider.value);
             return;
         }
 
@@ -31,7 +37,7 @@ public class ChargedWeaponHitScanner : MonoBehaviour
 
         if (InputManager.Instance.GetPrimaryFireInputPressedThisFrame())
         {
-            OnHitScannerFired?.Invoke(rectTransform.position.x);
+            OnHitScannerFired?.Invoke(uiSlider.value);
         }
     }
 
@@ -39,11 +45,8 @@ public class ChargedWeaponHitScanner : MonoBehaviour
     {
         //TODO: Change horizontal movement to use Vector3.Lerp instead, having the factor based on time. The current setup does not scale the speed based on screen size, giving
         //an unfair disadvantage to smaller-screen users
-        rectTransform.position = new Vector3(
-            rectTransform.position.x + Time.deltaTime * baseSpeed,
-            rectTransform.position.y,
-            rectTransform.position.z
-            );
+
+        uiSlider.value = Mathf.Clamp(uiSlider.value + Time.deltaTime * baseSpeed, 0, 1);
     }
 
     public void SetTopHitScanner(bool isTopHitScanner)
@@ -54,15 +57,14 @@ public class ChargedWeaponHitScanner : MonoBehaviour
     public void Initialize(
         Action<float> OnHitScannerFired, 
         RectTransform startingPosition,
-        RectTransform endingPosiiton,
         bool isTopHitScanner
         )
     {
         this.OnHitScannerFired = OnHitScannerFired;
         rectTransform.position = startingPosition.position;
-        endingXPos = endingPosiiton.position.x;
         this.OnHitScannerFired += HandleHitScannerFired;
         this.isTopHitScanner = isTopHitScanner;
+        uiSlider.value = STARTING_SLIDER_VALUE;
     }
 
     private void HandleHitScannerFired(float obj)
