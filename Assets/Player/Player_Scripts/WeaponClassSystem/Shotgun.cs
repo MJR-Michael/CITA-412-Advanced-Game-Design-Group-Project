@@ -27,15 +27,6 @@ public class Shotgun : WeaponBase
     float shotgunSpreadAngleRad;
     float shotgunSpreadRadius;
 
-    public Transform GetStartingShootPos()
-    {
-        return startingShootPos;
-    }
-    public Transform GetShotgunShootDir()
-    {
-        return shotgunShootDir;
-    }
-
     private void Awake()
     {
         OnShoot += ShootShotgun;
@@ -46,6 +37,10 @@ public class Shotgun : WeaponBase
 
     private void Update()
     {
+        startingShootPos.position = Camera.main.transform.position;
+        startingShootPos.rotation = Camera.main.transform.rotation;
+
+
         if (!CanFire) return;
 
         if (InputManager.Instance.GetPrimaryFireInputPressedThisFrame())

@@ -12,12 +12,16 @@ public class Crossbow : WeaponBase
     [SerializeField] GameObject restingBoltObj;
     [SerializeField] float projectileSpawnPointOffset;
 
+    [SerializeField]
+    Transform crossbowStartingTransformValues;
 
-    public Transform playerCameraTransform;
     public GameObject crossbowProjectile;
 
     void Awake()
     {
+        transform.localPosition = crossbowStartingTransformValues.localPosition;
+        transform.localRotation = crossbowStartingTransformValues.localRotation;
+        transform.localScale = crossbowStartingTransformValues.localScale;
         FireRate = crossbowFireRate;
         LaunchSpeed = launchSpeed;
     }
@@ -45,11 +49,11 @@ public class Crossbow : WeaponBase
 
         InvokeShoot();  // Augments react here
 
-        Vector3 projectileOffset = playerCameraTransform.forward * projectileSpawnPointOffset;
+        Vector3 projectileOffset = Camera.main.transform.forward * projectileSpawnPointOffset;
         GameObject bolt = Instantiate(
             crossbowProjectile,
-            playerCameraTransform.position + projectileOffset,
-            playerCameraTransform.rotation
+            Camera.main.transform.position + projectileOffset,
+            Camera.main.transform.rotation
             );
 
         InvokeProjectileSpawn(bolt); // Augments adjust the projectile if needed

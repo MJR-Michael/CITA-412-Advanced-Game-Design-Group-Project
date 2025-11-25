@@ -19,7 +19,7 @@ public class DeathExplosion : MonoBehaviour, IDeathBehavior
         {
             if (hit.TryGetComponent(out Player player))
             {
-                player.TakeDamage(damage);
+                player.TakeDamage(gameObject, damage, DamageType.Explosion);
             }
         }
 
