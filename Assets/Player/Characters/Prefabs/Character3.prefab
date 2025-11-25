@@ -1,0 +1,131 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1001 &5218098880096648302
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 3194971436564039929, guid: 6da3e48c1d6ee3c4cb5440372869cfc2, type: 3}
+      propertyPath: m_Name
+      value: Character3
+      objectReference: {fileID: 0}
+    - target: {fileID: 5323217625383176376, guid: 6da3e48c1d6ee3c4cb5440372869cfc2, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -0.99208
+      objectReference: {fileID: 0}
+    - target: {fileID: 5323217625383176376, guid: 6da3e48c1d6ee3c4cb5440372869cfc2, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5323217625383176376, guid: 6da3e48c1d6ee3c4cb5440372869cfc2, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -9.31942
+      objectReference: {fileID: 0}
+    - target: {fileID: 5323217625383176376, guid: 6da3e48c1d6ee3c4cb5440372869cfc2, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5323217625383176376, guid: 6da3e48c1d6ee3c4cb5440372869cfc2, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5323217625383176376, guid: 6da3e48c1d6ee3c4cb5440372869cfc2, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5323217625383176376, guid: 6da3e48c1d6ee3c4cb5440372869cfc2, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5323217625383176376, guid: 6da3e48c1d6ee3c4cb5440372869cfc2, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5323217625383176376, guid: 6da3e48c1d6ee3c4cb5440372869cfc2, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5323217625383176376, guid: 6da3e48c1d6ee3c4cb5440372869cfc2, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 3194971436564039929, guid: 6da3e48c1d6ee3c4cb5440372869cfc2, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 5198508647419664766}
+  m_SourcePrefab: {fileID: 100100000, guid: 6da3e48c1d6ee3c4cb5440372869cfc2, type: 3}
+--- !u!114 &2419599047676920432 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 7637627553425800734, guid: 6da3e48c1d6ee3c4cb5440372869cfc2, type: 3}
+  m_PrefabInstance: {fileID: 5218098880096648302}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7222851109661799575}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 42a4b757a28865ed2bd2f566a2552635, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::CharacterStats
+--- !u!114 &4598928834227370953 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 8626860729832196007, guid: 6da3e48c1d6ee3c4cb5440372869cfc2, type: 3}
+  m_PrefabInstance: {fileID: 5218098880096648302}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7222851109661799575}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 55919ac34a26952479f3fc91f777b2fa, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &6231553036735974042 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 2166377863692007156, guid: 6da3e48c1d6ee3c4cb5440372869cfc2, type: 3}
+  m_PrefabInstance: {fileID: 5218098880096648302}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7222851109661799575}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 21a4ac15ab437824c83dab27627657d1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Health
+--- !u!114 &6691570693530274632 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 1492755669186475814, guid: 6da3e48c1d6ee3c4cb5440372869cfc2, type: 3}
+  m_PrefabInstance: {fileID: 5218098880096648302}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7222851109661799575}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3489f96111cb96068af564197345672a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Dodgeroll
+--- !u!1 &7222851109661799575 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 3194971436564039929, guid: 6da3e48c1d6ee3c4cb5440372869cfc2, type: 3}
+  m_PrefabInstance: {fileID: 5218098880096648302}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &5198508647419664766
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7222851109661799575}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3d37c7268e6eba24ca59221ca021e135, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Character3
+  health: {fileID: 6231553036735974042}
+  dodgeRoll: {fileID: 6691570693530274632}
+  firstPersonController: {fileID: 4598928834227370953}
+  characterSO: {fileID: 11400000, guid: 02e78197dcf1e7046ba3f81da56d30eb, type: 2}
+  characterStats: {fileID: 2419599047676920432}
+  abilityTarget: {fileID: 7222851109661799575}
+  weaponTarget: {fileID: 8592986610465347645, guid: c45cffef02a4df548ab70db7197d98ca, type: 3}
+  isInvulnerable: 0

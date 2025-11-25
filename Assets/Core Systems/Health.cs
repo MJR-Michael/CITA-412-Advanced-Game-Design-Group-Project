@@ -36,6 +36,8 @@ public class Health : MonoBehaviour
     float currentHealth;
     public float CurrentHealth { get { return currentHealth; } }
 
+    public bool IsInvulnerable { get; private set; }
+
     private void Awake()
     {
         //Set current health to max health
@@ -45,8 +47,15 @@ public class Health : MonoBehaviour
         OnCurrentHealthChanged += (GameObject sender, Health throwAway, DamageType damageType) => CheckForDeath(sender, damageType);
     }
 
+    public void Initialize(float maxHealth)
+    {
+        this.maxHealth = maxHealth;
+        currentHealth = this.MaxHealth;
+    }
+
     public void TakeDamage(GameObject sender, float damageAmount, DamageType damageType)
     {
+        if (IsInvulnerable) return;
 
         //Get the real damage amount based on the object's resistance to this damage type
         float realDamageAmount = damageAmount;

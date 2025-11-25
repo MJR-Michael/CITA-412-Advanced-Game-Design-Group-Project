@@ -44,7 +44,7 @@ public class PoisonArea : MonoBehaviour
             foreach (var player in playersInArea)
             {
                 if (player != null)
-                    player.TakeDamage(damagePerSecond * Time.deltaTime);
+                    player.TakeDamage(gameObject, damagePerSecond * Time.deltaTime, DamageType.Unknown);
             }
             yield return null;
         }

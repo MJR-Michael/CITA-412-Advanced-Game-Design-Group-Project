@@ -230,7 +230,12 @@ public class InputManager : MonoBehaviour
         return controls.Player.Interact.ReadValue<float>() == 1f? true : false;
     }
 
-    public float GetPrimaryFireInput()
+    public bool GetPrimaryFireInputPressedThisFrame()
+    {
+        return controls.Player.PrimaryFire.WasPressedThisFrame();
+    }
+
+    public float GetPrimaryFireInputDown()
     {
         return controls.Player.PrimaryFire.ReadValue<float>();
     }

@@ -7,9 +7,9 @@ public class DodgeRoll : MonoBehaviour
     private FirstPersonController fpsController;
     public Player player;
 
-    public float rollSpeed = 15f;
-    public float rollDistance = 5f;
-    public float rollCooldown = 1f;
+    float rollSpeed;
+    float rollDistance;
+    float rollCooldown;
 
     private bool canRoll = true;
     private bool isRolling = false;     //functionally useless unless we have if statements that occur during the dodgeroll, or if we're playing animations.
@@ -17,6 +17,7 @@ public class DodgeRoll : MonoBehaviour
     void Start()
     {
         fpsController = GetComponent<FirstPersonController>();
+        player = GetComponent<Player>();
     }
 
     void Update()
@@ -37,6 +38,13 @@ public class DodgeRoll : MonoBehaviour
 
             StartCoroutine(Roll(direction));
         }
+    }
+
+    public void Initialize(float rollSpeed, float rollDistance, float rollCooldown)
+    {
+        this.rollSpeed = rollSpeed;
+        this.rollDistance = rollDistance;
+        this.rollCooldown = rollCooldown;
     }
 
     private IEnumerator Roll(Vector3 direction)
