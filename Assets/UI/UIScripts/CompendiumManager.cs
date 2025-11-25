@@ -2,7 +2,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro; // if using TextMeshPro
 
-public class CodexManager : MonoBehaviour
+public class CompendiumManager : MonoBehaviour
 {
     [Header("References")]
     public CompendiumUpdater compendiumUpdater;
