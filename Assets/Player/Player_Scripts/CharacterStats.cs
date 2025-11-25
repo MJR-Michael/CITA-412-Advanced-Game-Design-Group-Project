@@ -9,6 +9,16 @@ public class CharacterStats : MonoBehaviour
 
     private List<IAugment> activeAugments = new List<IAugment>();
 
+    public void InitializeWeapon(WeaponBase weapon)
+    {
+        this.weapon = weapon;
+    }
+
+    public void InitializeAbilities(List<AbilityBase> abilities)
+    {
+        this.allAbilities = abilities;
+    }
+
     public void AddAugment(IAugment augment)
     {
         activeAugments.Add(augment);

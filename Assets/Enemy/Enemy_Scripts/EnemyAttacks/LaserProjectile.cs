@@ -28,7 +28,7 @@ public class LaserProjectile : MonoBehaviour, IProjectile
     {
         if (other.CompareTag("Player") && other.TryGetComponent(out Player player))
         {
-            player.TakeDamage(damage);
+            player.TakeDamage(gameObject, damage, DamageType.Projectile);
             Destroy(gameObject);
         }
     }
