@@ -554,6 +554,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 144054499021192955, guid: 8306af03d5fba76f4b5a7634e32bad57, type: 3}
       insertIndex: 3
       addedObject: {fileID: 1470526153}
+    - targetCorrespondingSourceObject: {fileID: 144054499021192955, guid: 8306af03d5fba76f4b5a7634e32bad57, type: 3}
+      insertIndex: 4
+      addedObject: {fileID: 1470526155}
   m_SourcePrefab: {fileID: 100100000, guid: 8306af03d5fba76f4b5a7634e32bad57, type: 3}
 --- !u!1 &1470526152 stripped
 GameObject:
@@ -588,6 +591,32 @@ MeshRenderer:
   m_CorrespondingSourceObject: {fileID: 453194197519973583, guid: 8306af03d5fba76f4b5a7634e32bad57, type: 3}
   m_PrefabInstance: {fileID: 1470526151}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &1470526155
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1470526152}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a7cf2fcf8d1d8861db067edd0d09d8af, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::TestNetworkHealth
+  _networkRules: {fileID: 0}
+  _visitiblityRules: {fileID: 0}
+  _isSetup: 0
+  _prefabId: -2147483648
+  _componentIndex: -2147483648
+  _shouldBePooled: 0
+  _parent: {fileID: 0}
+  _invertedPathToNearestParent: 
+  _directChildren: []
+  _health:
+    _value: 100
+    _ownerAuth: 0
+    _sendIntervalInSeconds: 0
+  _localHealth: 100
 --- !u!1 &1529009407
 GameObject:
   m_ObjectHideFlags: 0
